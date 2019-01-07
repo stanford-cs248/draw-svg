@@ -280,13 +280,13 @@ The program only stores a single set of mipmaps for each image, so the `rasteriz
 
 At this point, zooming in and out of your image should produce nicely filtered results! To test this functionality, try zooming out on `basic/test7.svg`.
 
-#### Threading SVG Rasterizer
+#### Parallelizing the SVG Rasterizer
 
-So far your rasterization program has been running single-threaded. In this task you will thread your program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, but we highly recommend you to use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you. You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Your implementation should be faster than the reference solution in order to receive an extra credit for this task. Note that the reference solution is implemented with a naive tiling idea to thread a rasterizer. More hints on parallelization [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee).
+So far your rasterization program has been running single-threaded (on one core of your CPU). In this task you will parallelize the program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, for example you can use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you (Or C++ style std::thread). You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Note that the reference solution is implemented with a simple screen tiling scheme to assign different tiles of the image to different cores. Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that very ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code.  More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee).
 
 #### Alpha Compositing
 
-Up until this point your were invoking a reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
+Up until this point your were invoking the CS148 staff reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
 
 While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
 
@@ -294,7 +294,7 @@ When you are done, you should be able to correctly draw the tests in `/alpha`.
 
 #### Implement More Advanced Shapes 
 
-We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. Subdivision is something you will dig into in great detail in the next assignment. You can see subdivision in action as you step though the test files we provided.
+We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. (Subdivision is something you will dig into in great detail in Assignment 2). You can see subdivision in action as you step though the test files we provided.
 
 In addition to what you have implemented already, the [SVG Basic Shapes](http://www.w3.org/TR/SVG/shapes.html) also include circles and ellipses. We may support these features by converting them to triangulated polygons. But if we zoom in on the edges, there will be a point at which the approximation breaks down and the image no longer will look like a smooth curve. Triangulating more finely can be costly as a large number of triangles may be necessary to get a good approximation. Is there a better way to sample these shapes? For example, implement `drawEllipse` in `drawsvg.cpp`.
 
@@ -303,7 +303,6 @@ In addition to what you have implemented already, the [SVG Basic Shapes](http://
 
 - As always, start early. There is no official checkpoint, so don't fall behind!
 - Be careful with memory allocation, as too many or too frequent heap allocations will severely degrade performance.
-- While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. It is generally wise to stay away from as many features as possible, and make sure you fully understand the features you do use.
 
 ### Resources and Notes
 
@@ -314,4 +313,4 @@ In addition to what you have implemented already, the [SVG Basic Shapes](http://
 
 ### Acknowledgement
 
-CS248 course staff would like to thank Professor Keenan Crane and Carnegie Mellon University's course assistants for providing assignment materials.
+CS248 course staff would like to thank Professor Keenan Crane and his course assistants for their work helping to develop the assignment.
