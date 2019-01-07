@@ -5,7 +5,7 @@
 In this project, you will implement a simple software rasterizer that draws points, lines, triangles, and bitmap images. When you are done, you will have a viewer that supports the basic features of the Scalable Vector Graphics (SVG) format that is now widely used on the internet.
 
 ## Due date
-The assignment is due Apr 19th at 11:59:59 PM.
+The assignment is due Jan XX at 11:59:59 PM.
 
 ## Submission instruction
 Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
@@ -203,9 +203,9 @@ Also observe that after enabling supersampled rendering, something might have go
 
 **Possible Extra Credit Extensions:**
 
-- Implement [Morphological anti-aliasing](http://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) (MLAA), rather than supersampling. It's shocking how well this works. MLAA is a technique used throughout the gaming community to avoid the high cost of supersampling but still avoid objectionable image artifacts caused by aliasing. (A more advanced version of MLAA is [here](http://www.iryoku.com/mlaa/)).
+- Implement [Morphological anti-aliasing](https://dl.acm.org/citation.cfm?id=1572787) (MLAA), rather than supersampling. It's shocking how well this works. MLAA is a technique used throughout the gaming community to avoid the high cost of supersampling but still avoid objectionable image artifacts caused by aliasing. (More advanced versions of MLAA are described [here](http://www.iryoku.com/mlaa/) and [here](https://software.intel.com/en-us/articles/conservative-morphological-anti-aliasing-20)).
 - Implement [jittered sampling](http://graphics.pixar.com/library/MultiJitteredSampling/paper.pdf) to improve image quality when supersampling.
-- Implement higher quality resampling filters than a box and analyze their impact on image quality.
+- Implement higher quality resampling filters than a box filter and analyze their impact on image quality.  For example, try a truncated Gaussian filter.
 
 #### Task 3: Implementing Modeling and Viewing Transforms
 
