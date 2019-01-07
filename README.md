@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this project, you will implement a simple software rasterizer that draws points, lines, triangles, and bitmap images. When you are done, you will have a viewer that supports the basic features of the Scalable Vector Graphics (SVG) format that is now widely used on the internet.
+In this project, you will implement a simple software rasterizer that draws points, lines, triangles, and bitmap images. When you are done, you will have a viewer that supports basic features of the [Scalable Vector Graphics](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (SVG) format that is now widely used on the internet.
 
 ## Due date
 The assignment is due Jan XX at 11:59:59 PM.
