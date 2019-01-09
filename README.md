@@ -59,6 +59,8 @@ These 3 steps (1) create an out-of-source build directory, (2) configure the pro
 
 #### Windows Build Instructions
 
+Before you start make sure you install **Desktop development with C++** in Visual Studio. You can find the installation instructions [here](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=vs-2017). 
+
 You need to install the latest version of [CMake](http://www.cmake.org/) and [Visual Studio](https://www.visualstudio.com/). Visual Studio Community is free. After installing these programs, replace `SOURCE_DIR` to the cloned directory (`DrawSVG/` in our case), and `BUILD_DIR` to `SOURCE_DIR/build`.
 
 ![Sample locations](misc/cmake_initial_setup.png?raw=true)
@@ -292,7 +294,7 @@ While the application will always clear the render target buffer to the canvas c
 
 When you are done, you should be able to correctly draw the tests in `/alpha`.
 
-#### Implement More Advanced Shapes 
+#### Implement More Advanced Shapes
 
 We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. (Subdivision is something you will dig into in great detail in Assignment 2). You can see subdivision in action as you step though the test files we provided.
 
