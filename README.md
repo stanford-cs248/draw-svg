@@ -15,21 +15,19 @@ Zip your assignment directory (please delete build directory to reduce the file 
 We will be distributing assignments with git. You can find the repository for this assignment at https://github.com/cs248-spring-2018/DrawSVG.git. If you are unfamiliar with git, here is what you need to do to get the starter code:
 
 ```
-$ git clone https://github.com/cs248-spring-2018/DrawSVG.git
+$ git clone https://github.com/stanford-cs248/draw-svg.git
 ```
 
-If you are using Windows, you can use [TortoiseGit](https://tortoisegit.org/). After installing it, right-click on the directory of your choice and click `Git Clone...` to perform the same operation (put `https://github.com/cs248-spring-2018/DrawSVG.git` inside of `URL` box).
+If you are using Windows, you can use [TortoiseGit](https://tortoisegit.org/). After installing it, right-click on the directory of your choice and click `Git Clone...` to perform the same operation (put `https://github.com/stanford-cs248/draw-svg.git` inside of `URL` box).
 This will create a folder with all the source files.
 
 ### Build Instructions
 
-In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux or Windows.
-The project can be run by SSH'ing to rice.stanford.edu with your SUNet ID, password, and two-step authentication using MobaXterm (remember to turn on X11 forwarding). If you choose to do so, you can skip over to [this step](https://github.com/cs248-spring-2018/DrawSVG#to-build-your-code-for-this-assignment).
+In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. The project can be run by SSH'ing to rice.stanford.edu with your SUNet ID, password, and two-step authentication using MobaXterm (remember to turn on X11 forwarding). It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux or Windows.
 
 #### OS X/Linux Build Instructions
 
 If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`.  You may also need the freetype package `$ brew install freetype`.
-
 
 If you are working on Linux, you should be able to install dependencies with your system's package manager as needed (you may need cmake and freetype, and possibly others).
 
@@ -59,24 +57,21 @@ These 3 steps (1) create an out-of-source build directory, (2) configure the pro
 
 #### Windows Build Instructions
 
-Before you start make sure you install **Desktop development with C++** in Visual Studio. You can find the installation instructions [here](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=vs-2017). 
+Before you start  
 
-You need to install the latest version of [CMake](http://www.cmake.org/) and [Visual Studio](https://www.visualstudio.com/). Visual Studio Community is free. After installing these programs, replace `SOURCE_DIR` to the cloned directory (`DrawSVG/` in our case), and `BUILD_DIR` to `SOURCE_DIR/build`.
+You need to install the latest version of [CMake](http://www.cmake.org/) and [Visual Studio](https://www.visualstudio.com/). Visual Studio Community is free. Make sure you install **Desktop development with C++** in Visual Studio. You can find the installation instructions [here](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=vs-2017). Already have Visual Studio installed and don't have that workload/aren't sure? See how to modify workloads [here](https://docs.microsoft.com/en-us/visualstudio/install/modify-visual-studio?view=vs-2017#modify-workloads). After installing these programs, replace `SOURCE_DIR` to the cloned directory (`draw-svg/` in our case, NOT `src/`), and `BUILD_DIR` to `draw-svg/build`.
 
 ![Sample locations](misc/cmake_initial_setup.png?raw=true)
 
-Then, press `Configure` button, select proper version of Visual Studio (**You should probably select Win64**), and you should see `Configuring done` message. Then, press `Generate` button and you should see `Generating done`.
+Then, press `Configure` button, select proper version of Visual Studio (you should probably select Win64, Visual Studio 15 will work with Visual Studio 17), and you should see `Configuring done` message. Then, press `Generate` button and you should see `Generating done`.
 
 ![Sample locations](misc/cmake_final_setup.png?raw=true)
-
 
 This should create a `build` directory with a Visual Studio solution file in it named `drawsvg.sln`. You can double-click this file to open the solution in Visual Studio.
 
 If you plan on using Visual Studio to debug your program, you can change `drawsvg` project in the Solution Explorer as the startup project by right-clicking on it and selecting `Set as StartUp Project`. You can also set the commandline arguments to the project by right-clicking `drawsvg` project again, selecting `Properties`, going into the `Debugging` tab, and setting the value in `Command Arguments`. If you want to run the program with the basic svg folder, you can set this command argument to `../../svg/basic`. After setting all these, you can hit F5\press `Local Windows Debugger` button to build your program and run it with the debugger.
 
 You should also change the build mode to `Release` from `Debug` occasionally by clicking the Solution Configurations drop down menu on the top menu bar, which will make your program run faster. Note that you will have to set `Command Arguments` again if you change the build mode. Note that your application must run properly in both debug and release build.
-
-
 
 ### Using the Mini-SVG Viewer App
 
