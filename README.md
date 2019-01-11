@@ -10,9 +10,11 @@ The assignment is due Jan 24 at 11:59:59 PM.
 ## Submission instruction
 Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
 
+One submission per team.
+
 ## Getting started
 
-We will be distributing assignments with git. You can find the repository for this assignment at https://github.com/cs248-spring-2018/DrawSVG.git. If you are unfamiliar with git, here is what you need to do to get the starter code:
+We will be distributing assignments with git. You can find the repository for this assignment at https://github.com/stanford-cs248/draw-svg.git. If you are unfamiliar with git, here is what you need to do to get the starter code:
 
 ```
 $ git clone https://github.com/stanford-cs248/draw-svg.git
@@ -246,6 +248,18 @@ When you are done, you should be able to draw `basic/test7.svg`.
 #### Task 5: Draw Something!!!
 
 Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something! You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. However, be aware that our starter code and your renderer implementation only support a subset of the features defined in the SVG specification, and these applications may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools.) Also, it is not very hard to write SVG files directly since they are just XML files. Please name this file `task5.svg`.
+
+#### Writeup 
+
+Add a writeup.txt to your project with the following information:
+
+SuNET ID's of the people working on the project
+
+The tasks you completed
+
+(Optional) Extra Credits you completed
+
+(Optional) Comments and/or considerations
 
 ### Extra Credits:
 
