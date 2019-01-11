@@ -10,7 +10,7 @@ The assignment is due Jan 24 at 11:59:59 PM.
 ## Submission instruction
 Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
 
-One submission per team.
+One submission per team, you are allowed to work in teams of up to 2 people or individually.
 
 ## Getting started
 
