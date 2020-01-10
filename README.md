@@ -29,7 +29,7 @@ In order to ease the process of running on different platforms, we will be using
 
 #### OS X/Linux Build Instructions
 
-If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`.  You may also need the freetype package `$ brew install freetype`.
+If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`.  Note that the following command assumes you've already installed the Homebrew package manager available at: <http://brew.sh/>. You may also need the freetype package `$ brew install freetype`.
 
 If you are working on Linux, you should be able to install dependencies with your system's package manager as needed (you may need cmake and freetype, and possibly others).
 
@@ -58,8 +58,6 @@ $ make
 These 3 steps (1) create an out-of-source build directory, (2) configure the project using CMake, and (3) compile the project. If all goes well, you should see an executable `drawsvg` in the build directory. As you work, simply typing `make` in the build directory will recompile the project.
 
 #### Windows Build Instructions
-
-Before you start  
 
 You need to install the latest version of [CMake](http://www.cmake.org/) and [Visual Studio](https://www.visualstudio.com/). Visual Studio Community is free. Make sure you install **Desktop development with C++** in Visual Studio. You can find the installation instructions [here](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=vs-2017). Already have Visual Studio installed and don't have that workload/aren't sure? See how to modify workloads [here](https://docs.microsoft.com/en-us/visualstudio/install/modify-visual-studio?view=vs-2017#modify-workloads). After installing these programs, replace `SOURCE_DIR` to the cloned directory (`draw-svg/` in our case, NOT `src/`), and `BUILD_DIR` to `draw-svg/build`.
 
@@ -324,4 +322,4 @@ In addition to what you have implemented already, the [SVG Basic Shapes](http://
 
 ### Acknowledgement
 
-CS248 course staff would like to thank Professor Keenan Crane and his course assistants for their work helping to develop the assignment.
+CS248 course staff would like to thank Keenan Crane and his course assistants for their contributions to this assignment.
