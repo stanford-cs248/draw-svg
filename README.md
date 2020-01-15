@@ -50,7 +50,7 @@ $ sudo apt-get install xorg-dev
 ##### To build your code for this assignment on OS X or Linux:
 
 ```
-$ cd DrawSVG && mkdir build && cd build
+$ cd draw-svg && mkdir build && cd build
 $ cmake ..
 $ make
 ```
