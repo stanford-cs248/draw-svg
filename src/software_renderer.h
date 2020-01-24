@@ -14,7 +14,8 @@
 #include "texture.h"
 #include "svg_renderer.h"
 
-namespace CS248 { // CS248
+namespace CS248
+{ // CS248
 
 #ifdef USE_PTHREAD
 double Get_Current_Time();
@@ -23,108 +24,111 @@ double Initialize_Timer();
 
 class SoftwareRendererRef;
 
-class SoftwareRenderer : public SVGRenderer {
- public:
+class SoftwareRenderer : public SVGRenderer
+{
+public:
+	SoftwareRenderer() : sample_rate(1) {}
 
-  SoftwareRenderer( ) : sample_rate (1) { }
+	// Free used resources
+	virtual ~SoftwareRenderer() {}
 
-  // Free used resources
-  virtual ~SoftwareRenderer( ) { }
+	// Draw an svg input to render target
+	virtual void draw_svg(SVG &svg) = 0;
 
-  // Draw an svg input to render target
-  virtual void draw_svg( SVG& svg ) = 0;
+	// Set sample rate
+	virtual void set_sample_rate(size_t sample_rate) = 0;
 
-  // Set sample rate
-  virtual void set_sample_rate( size_t sample_rate ) = 0;
-  
-  // Set render target
-  virtual void set_render_target( unsigned char* render_target,
-                                  size_t width, size_t height ) = 0;
+	// Set render target
+	virtual void set_render_target(unsigned char *render_target,
+								   size_t width, size_t height) = 0;
 
-  // Clear render target
-  inline void clear_target() {
-    memset(render_target, 255, 4 * target_w * target_h);
-  }
+	// Clear render target
+	inline void clear_target()
+	{
+		memset(render_target, 255, 4 * target_w * target_h);
+	}
 
-  // Set texture sampler
-  inline void set_tex_sampler( Sampler2D* sampler ) {
-    this->sampler = sampler;
-  }
+	// Set texture sampler
+	inline void set_tex_sampler(Sampler2D *sampler)
+	{
+		this->sampler = sampler;
+	}
 
-  // Set svg to screen transformation
-  inline void set_canvas_to_screen( Matrix3x3 canvas_to_screen ) {
-    this->canvas_to_screen = canvas_to_screen;
-  }
+	// Set svg to screen transformation
+	inline void set_canvas_to_screen(Matrix3x3 canvas_to_screen)
+	{
+		this->canvas_to_screen = canvas_to_screen;
+	}
 
- protected:
+protected:
+	// Sample rate (square root of samples per pixel)
+	size_t sample_rate;
 
-  // Sample rate (square root of samples per pixel)
-  size_t sample_rate;
+	// Render target memory location
+	unsigned char *render_target;
 
-  // Render target memory location
-  unsigned char* render_target; 
+	// Target buffer dimension (in pixels)
+	size_t target_w;
+	size_t target_h;
 
-  // Target buffer dimension (in pixels)
-  size_t target_w; size_t target_h;
+	// Texture sampler being used
+	Sampler2D *sampler;
 
-  // Texture sampler being used
-  Sampler2D* sampler;
-
-  // SVG coordinates to screen space coordinates
-  Matrix3x3 canvas_to_screen;
+	// SVG coordinates to screen space coordinates
+	Matrix3x3 canvas_to_screen;
 
 }; // class SoftwareRenderer
 
-
-class SoftwareRendererImp : public SoftwareRenderer {
+class SoftwareRendererImp : public SoftwareRenderer
+{
 public:
-
-	SoftwareRendererImp(SoftwareRendererRef *ref = NULL) : SoftwareRenderer(), ref(ref) { }
+	SoftwareRendererImp(SoftwareRendererRef *ref = NULL) : SoftwareRenderer(), ref(ref) {}
 
 	// draw an svg input to render target
-	void draw_svg(SVG& svg);
+	void draw_svg(SVG &svg);
 
 	// set sample rate
 	void set_sample_rate(size_t sample_rate);
 
 	// set render target
-	void set_render_target(unsigned char* target_buffer,
-		size_t width, size_t height);
+	void set_render_target(unsigned char *target_buffer,
+						   size_t width, size_t height);
 
-	std::vector<unsigned char> sample_buffer; int w; int h;
-	void fill_sample(int sx, int sy, const Color& color);
-	void fill_pixel(int x, int y, const Color& color);
+	std::vector<unsigned char> sample_buffer;
+	int w;
+	int h;
+	void fill_sample(int sx, int sy, const Color &color);
+	void fill_pixel(int x, int y, const Color &color);
 
 private:
-
 	// Primitive Drawing //
 
 	// Draws an SVG element
-	void draw_element(SVGElement* element);
+	void draw_element(SVGElement *element);
 
 	// Draws a point
-	void draw_point(Point& p);
+	void draw_point(Point &p);
 
 	// Draw a line
-	void draw_line(Line& line);
+	void draw_line(Line &line);
 
 	// Draw a polyline
-	void draw_polyline(Polyline& polyline);
+	void draw_polyline(Polyline &polyline);
 
 	// Draw a rectangle
-	void draw_rect(Rect& rect);
+	void draw_rect(Rect &rect);
 
 	// Draw a polygon
-	void draw_polygon(Polygon& polygon);
+	void draw_polygon(Polygon &polygon);
 
 	// Draw a ellipse
-	void draw_ellipse(Ellipse& ellipse);
+	void draw_ellipse(Ellipse &ellipse);
 
 	// Draws a bitmap image
-	void draw_image(Image& image);
+	void draw_image(Image &image);
 
 	// Draw a group
-	void draw_group(Group& group);
+	void draw_group(Group &group);
 
 	// Rasterization //
 
@@ -133,19 +137,19 @@ private:
 
 	// rasterize a line
 	void rasterize_line(float x0, float y0,
-		float x1, float y1,
-		Color color);
+						float x1, float y1,
+						Color color);
 
 	// rasterize a triangle
 	void rasterize_triangle(float x0, float y0,
-		float x1, float y1,
-		float x2, float y2,
-		Color color);
+							float x1, float y1,
+							float x2, float y2,
+							Color color);
 
 	// rasterize an image
 	void rasterize_image(float x0, float y0,
-		float x1, float y1,
-		Texture& tex);
+						 float x1, float y1,
+						 Texture &tex);
 
 	// resolve samples to render target
 	void resolve(void);
@@ -153,10 +157,9 @@ private:
 	SoftwareRendererRef *ref;
 }; // class SoftwareRendererImp
 
-
-class SoftwareRendererRef : public SoftwareRenderer {
+class SoftwareRendererRef : public SoftwareRenderer
+{
 public:
-
 	SoftwareRendererRef(int thread_count);
 
 	virtual ~SoftwareRendererRef();
@@ -175,26 +178,31 @@ public:
 #ifdef USE_PTHREAD
 	std::queue<int> queue;
 
-	static void *threaded_run(void* data)
+	static void *threaded_run(void *data)
 	{
 		THREAD_DATA *thread_data = (THREAD_DATA *)data;
 		SoftwareRendererRef *ref = thread_data->ref;
-		while (1) {
+		while (1)
+		{
 			pthread_mutex_lock(&ref->queue_lock);
-			while (ref->queue.empty()) {
+			while (ref->queue.empty())
+			{
 				ref->active_threads--;
-				if (ref->active_threads == 0) pthread_cond_signal(&ref->done_condition);
+				if (ref->active_threads == 0)
+					pthread_cond_signal(&ref->done_condition);
 				ref->inactive_threads++;
 				pthread_cond_wait(&ref->todo_condition, &ref->queue_lock);
 				ref->active_threads++;
 				ref->inactive_threads--;
 			}
 
-			int id=ref->queue.front();
+			int id = ref->queue.front();
 			ref->queue.pop();
 			pthread_mutex_unlock(&ref->queue_lock);
-			if(id == -1) pthread_exit(0);
-			else ref->draw_svg_threaded(&ref->thread_data[id]);
+			if (id == -1)
+				pthread_exit(0);
+			else
+				ref->draw_svg_threaded(&ref->thread_data[id]);
 		}
 		return 0;
 	}
@@ -202,14 +210,14 @@ public:
 	void draw_svg_threaded(THREAD_DATA *thread_data);
 #endif
 
-	void draw_svg(SVG& svg);
+	void draw_svg(SVG &svg);
 
 	// set sample rate
 	void set_sample_rate(size_t sample_rate);
 
 	// set render target
-	void set_render_target(unsigned char* target_buffer,
-		size_t width, size_t height);
+	void set_render_target(unsigned char *target_buffer,
+						   size_t width, size_t height);
 
 	// Exposing/reimplementing these functions for CS248
 
@@ -218,39 +226,38 @@ public:
 
 	// rasterize a line
 	void rasterize_line_helper(float x0, float y0,
-		float x1, float y1, int width, int height,
-		Color color, SoftwareRendererImp* imp);
+							   float x1, float y1, int width, int height,
+							   Color color, SoftwareRendererImp *imp);
 
 private:
-
 	// Primitive Drawing //
 
 	// Draws an SVG element
-	void draw_element(SVGElement* element, void *thread_data = NULL);
+	void draw_element(SVGElement *element, void *thread_data = NULL);
 
 	// Draws a point
-	void draw_point(Point& p, void *thread_data = NULL);
+	void draw_point(Point &p, void *thread_data = NULL);
 
 	// Draw a line
-	void draw_line(Line& line, void *thread_data = NULL);
+	void draw_line(Line &line, void *thread_data = NULL);
 
 	// Draw a polyline
-	void draw_polyline(Polyline& polyline, void *thread_data = NULL);
+	void draw_polyline(Polyline &polyline, void *thread_data = NULL);
 
 	// Draw a rectangle
-	void draw_rect(Rect& rect, void *thread_data = NULL);
+	void draw_rect(Rect &rect, void *thread_data = NULL);
 
 	// Draw a polygon
-	void draw_polygon(Polygon& polygon, void *thread_data = NULL);
+	void draw_polygon(Polygon &polygon, void *thread_data = NULL);
 
 	// Draw a ellipse
-	void draw_ellipse(Ellipse& ellipse, void *thread_data = NULL);
+	void draw_ellipse(Ellipse &ellipse, void *thread_data = NULL);
 
 	// Draws a bitmap image
-	void draw_image(Image& image, void *thread_data = NULL);
+	void draw_image(Image &image, void *thread_data = NULL);
 
 	// Draw a group
-	void draw_group(Group& group, void *thread_data = NULL);
+	void draw_group(Group &group, void *thread_data = NULL);
 
 	// Rasterization //
 
@@ -259,27 +266,29 @@ private:
 
 	// rasterize a line
 	void rasterize_line(float x0, float y0,
-		float x1, float y1,
-		Color color, void *thread_data = NULL);
+						float x1, float y1,
+						Color color, void *thread_data = NULL);
 
 	// rasterize a triangle
 	void rasterize_triangle(float x0, float y0,
-		float x1, float y1,
-		float x2, float y2,
-		Color color, void *thread_data = NULL);
+							float x1, float y1,
+							float x2, float y2,
+							Color color, void *thread_data = NULL);
 
 	// rasterize an image
 	void rasterize_image(float x0, float y0,
-		float x1, float y1,
-		Texture& tex, void *thread_data = NULL);
+						 float x1, float y1,
+						 Texture &tex, void *thread_data = NULL);
 
 	// resolve samples to render target
 	void resolve(void);
 
 	// Helpers //
-	std::vector<unsigned char> sample_buffer; int w; int h;
-	void fill_sample(int sx, int sy, const Color& c, void *thread_data = NULL);
-	void fill_pixel(int x, int y, const Color& c, void *thread_data = NULL);
+	std::vector<unsigned char> sample_buffer;
+	int w;
+	int h;
+	void fill_sample(int sx, int sy, const Color &c, void *thread_data = NULL);
+	void fill_pixel(int x, int y, const Color &c, void *thread_data = NULL);
 
 #ifdef USE_PTHREAD
 	std::vector<pthread_t> threads;
@@ -294,7 +303,6 @@ private:
 	double resolution;
 
 }; // class SoftwareRendererRef
-
 
 } // namespace CS248
 
