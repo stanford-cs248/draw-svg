@@ -150,6 +150,9 @@ private:
 	// resolve samples to render target
 	void resolve(void);
 
+	// task5 alpha compositing
+	Color alpha_blending(Color pixel_color, Color color);
+
 	SoftwareRendererRef *ref;
 }; // class SoftwareRendererImp
 
@@ -164,8 +167,8 @@ public:
 	// draw an svg input to render target
 	struct THREAD_DATA
 	{
-		SoftwareRendererRef *ref;
-		SVG *svg;
+		SoftwareRendererRef* ref;
+		SVG* svg;
 		int x0, y0;
 		int x1, y1;
 		Matrix3x3 transformation;
@@ -175,10 +178,10 @@ public:
 #ifdef USE_PTHREAD
 	std::queue<int> queue;
 
-	static void *threaded_run(void* data)
+	static void* threaded_run(void* data)
 	{
-		THREAD_DATA *thread_data = (THREAD_DATA *)data;
-		SoftwareRendererRef *ref = thread_data->ref;
+		THREAD_DATA* thread_data = (THREAD_DATA*)data;
+		SoftwareRendererRef* ref = thread_data->ref;
 		while (1) {
 			pthread_mutex_lock(&ref->queue_lock);
 			while (ref->queue.empty()) {
@@ -190,19 +193,22 @@ public:
 				ref->inactive_threads--;
 			}
 
-			int id=ref->queue.front();
+			int id = ref->queue.front();
 			ref->queue.pop();
 			pthread_mutex_unlock(&ref->queue_lock);
-			if(id == -1) pthread_exit(0);
+			if (id == -1) pthread_exit(0);
 			else ref->draw_svg_threaded(&ref->thread_data[id]);
 		}
 		return 0;
 	}
 
-	void draw_svg_threaded(THREAD_DATA *thread_data);
+	void draw_svg_threaded(THREAD_DATA* thread_data);
 #endif
 
 	void draw_svg(SVG& svg);
+
+	// Clear render target
+	inline void clear_target();
 
 	// set sample rate
 	void set_sample_rate(size_t sample_rate);
@@ -226,60 +232,67 @@ private:
 	// Primitive Drawing //
 
 	// Draws an SVG element
-	void draw_element(SVGElement* element, void *thread_data = NULL);
+	void draw_element(SVGElement* element, void* thread_data = NULL);
 
 	// Draws a point
-	void draw_point(Point& p, void *thread_data = NULL);
+	void draw_point(Point& p, void* thread_data = NULL);
 
 	// Draw a line
-	void draw_line(Line& line, void *thread_data = NULL);
+	void draw_line(Line& line, void* thread_data = NULL);
 
 	// Draw a polyline
-	void draw_polyline(Polyline& polyline, void *thread_data = NULL);
+	void draw_polyline(Polyline& polyline, void* thread_data = NULL);
 
 	// Draw a rectangle
-	void draw_rect(Rect& rect, void *thread_data = NULL);
+	void draw_rect(Rect& rect, void* thread_data = NULL);
 
 	// Draw a polygon
-	void draw_polygon(Polygon& polygon, void *thread_data = NULL);
+	void draw_polygon(Polygon& polygon, void* thread_data = NULL);
 
 	// Draw a ellipse
-	void draw_ellipse(Ellipse& ellipse, void *thread_data = NULL);
+	void draw_ellipse(Ellipse& ellipse, void* thread_data = NULL);
 
 	// Draws a bitmap image
-	void draw_image(Image& image, void *thread_data = NULL);
+	void draw_image(Image& image, void* thread_data = NULL);
 
 	// Draw a group
-	void draw_group(Group& group, void *thread_data = NULL);
+	void draw_group(Group& group, void* thread_data = NULL);
 
 	// Rasterization //
 
 	// rasterize a point
-	void rasterize_point(float x, float y, Color color, void *thread_data = NULL);
+	void rasterize_point(float x, float y, Color color, void* thread_data = NULL);
 
 	// rasterize a line
 	void rasterize_line(float x0, float y0,
 		float x1, float y1,
-		Color color, void *thread_data = NULL);
+		Color color, void* thread_data = NULL);
 
 	// rasterize a triangle
 	void rasterize_triangle(float x0, float y0,
 		float x1, float y1,
 		float x2, float y2,
-		Color color, void *thread_data = NULL);
+		Color color, void* thread_data = NULL);
+
+	void rasterize_ellipse(double cx, double cy,
+		double rx, double ry,
+		Color color, void* thread_data = NULL);
 
 	// rasterize an image
 	void rasterize_image(float x0, float y0,
 		float x1, float y1,
-		Texture& tex, void *thread_data = NULL);
+		Texture& tex, void* thread_data = NULL);
 
 	// resolve samples to render target
 	void resolve(void);
 
 	// Helpers //
 	std::vector<unsigned char> sample_buffer; int w; int h;
-	void fill_sample(int sx, int sy, const Color& c, void *thread_data = NULL);
-	void fill_pixel(int x, int y, const Color& c, void *thread_data = NULL);
+	void fill_sample(float sx, float sy, const Color& c, void* thread_data = NULL);
+	void fill_pixel(int x, int y, const Color& c, void* thread_data = NULL);
+
+	// SSAA render target
+	std::vector<unsigned char> supersample_target;
 
 #ifdef USE_PTHREAD
 	std::vector<pthread_t> threads;

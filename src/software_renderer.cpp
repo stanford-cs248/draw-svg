@@ -305,5 +305,12 @@ void SoftwareRendererImp::resolve( void ) {
 
 }
 
+Color SoftwareRendererImp::alpha_blending(Color pixel_color, Color color)
+{
+  // Task 5
+  // Implement alpha compositing
+  return pixel_color;
+}
+
 
 } // namespace CS248
