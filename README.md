@@ -1,16 +1,17 @@
 # Stanford CS248 Assignment 1: A Simple SVG Rasterizer
 
+![Teaser](misc/teaser.png)
+
 ## Overview
 
 In this project, you will implement a simple software rasterizer that draws points, lines, triangles, and bitmap images. When you are done, you will have a viewer that supports basic features of the [Scalable Vector Graphics](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (SVG) format that is now widely used on the internet.
 
 ## Due date
-The assignment is due Jan 23 at 11:59:59 PM.
+The assignment is due Jan 28th at 11:59:59 PM.
 
 ## Submission instruction
-Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
-
-One submission per team, you are allowed to work in teams of up to 2 people or individually. Please **ONLY** have one submission per team.
+Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, 
+The tasks you completed, the extra credits you completed (optional) and comments and/or considerations you want to let us know (optional). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
 
 ## Getting started
 
@@ -73,6 +74,13 @@ If you plan on using Visual Studio to debug your program, you must change `draws
 
 You should also change the build mode to `Release` from `Debug` occasionally by clicking the Solution Configurations drop down menu on the top menu bar, which will make your program run faster. Note that you will have to set `Command Arguments` again if you change the build mode. Note that your application must run properly in both debug and release build.
 
+Tips for building on a x64 Windows system:
+
+If you encounter linking errors (e.g. LNK4272: library machine type 'x86' conflicts with target machine type 'x64', LNK1104: cannot open file freetype.lib.), please try make the following changes to your draw-svg project properties.
+```
+Properties -> Linker -> Input -> edit -> change freetype.lib to freetype_win64.lib
+```
+
 ### Using the Mini-SVG Viewer App
 
 When you have successfully built your code, you will get an executable named **drawsvg**. The **drawsvg** executable takes exactly one argument from the command line. You may load a single SVG file by specifying its path. For example, to load the example file `svg/basic/test1.svg` :
@@ -114,7 +122,7 @@ A table of all the keyboard controls in the **draw** application is provided bel
 
 ### What You Need to Do
 
-The assignment is divided into four major tasks, which are described below in the order the course staff suggests you attempt them. You are of course allowed to do the assignment in any order you choose. Do not forget the writeup!
+The assignment is divided into five major tasks, which are described below in the order the course staff suggests you attempt them. You are of course allowed to do the assignment in any order you choose. Do not forget the writeup!
 
 #### Getting Acquainted with the Starter Code
 
@@ -178,6 +186,10 @@ Your implementation should:
 - Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, we encourage exploration of even more efficient implementations, such as ones that employ "early out" optimizations discussed in lecture.
 - When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in `render_target`.
 
+Be careful! Not all the triangles in the svg files have consistent windings. Having consistent windings of edges (either counter-clockwise or clockwise) is critical for ensuring your inside triangle algorithm works. Giving the following example, triangle 1 has consistent windings while triangle 2 does not.
+
+![Triangle windings](misc/triangles.png?raw=true)
+
 Once you have successfully implemented triangle drawing, you will able to draw a large number of examples. When loading an SVG, the provided code triangulates convex polyhedra into a list of triangles for you, so by implementing support for rasterizing triangles, the viewer now supports drawing any of these shapes as well. (When parsing the SVG, we convert rectangles and polygons specified in the file into lists of triangles.)
 
 When you are done, you should be able to draw `basic/test3.svg`, `basic/test4.svg`, and `basic/test5.svg`.
@@ -214,7 +226,7 @@ Recall that an SVG object consists of a hierarchy of shape elements. Each elemen
 
 Please modify `draw_svg()` and `draw_element()` to implement the hierarchy of transforms specified in the SVG object. (You can do this in no more than a few lines of code.)
 
-When you are done, you should be able to draw `basic/test6.svg`.
+When you are done, you should be able to draw `basic/test6.svg` and `basic/test8.svg`.
 
 **Hint: If there is an SVGElement which is not in a group, the modeling transform should be the relationship between its local coordinate space and the canvas space. If it is in a group, the modeling transform should be the relationship between its local coordinate space and its parent element's local coordinate space. Look at how the transformation matrix in software renderer is applied, and think about how you can modify this to take into account each SVGElement's transform.**
 
@@ -239,27 +251,36 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 - You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sampler_nearest()`), bilinear (`sampler_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
 - As discussed in class, please assume that image pixels correspond to samples at half-integer coordinates in texture space.
 - The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. In this task, you will sample from level 0 of the hierarchy: `Texture::mipmap[0]`.
-- You can choose to clamp the border (edge) pixels with white color as in GL_CLAMP_TO_BORDER (the reference solution implements this), or clamp texture values to the nearest valid image pixel as in GL_CLAMP_TO_EDGE. We encourage you to implement the behavior of GL_CLAMP_TO_EDGE, but you will receive full credit with either implementation. (NOTE: Clamping to border is easier than clamping to edge!).
+- You should clamp the border (edge) pixels to the nearest valid image pixel as in GL_CLAMP_TO_EDGE.
 
 When you are done, you should be able to draw `basic/test7.svg`.
 
-#### Task 5: Draw Something!!!
+#### Task 5: Alpha Compositing
 
-Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something! You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. However, be aware that our starter code and your renderer implementation only support a subset of the features defined in the SVG specification, and these applications may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools.) Also, it is not very hard to write SVG files directly since they are just XML files. Please name this file `task5.svg`.
+Up until this point your were invoking a reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
 
-#### Writeup 
+While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
 
-Add a writeup.txt to your project with the following information:
+Once you finished, you should be able to correctly draw the test svgs in `/alpha`.
 
-SuNET ID's of the people working on the project
+#### Task 6: Draw Something!!!
 
-The tasks you completed
-
-(Optional) Extra Credits you completed
-
-(Optional) Comments and/or considerations
+Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something! You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. However, be aware that our starter code and your renderer implementation only support a subset of the features defined in the SVG specification, and these applications may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools.) Also, it is not very hard to write SVG files directly since they are just XML files. Please name this file `task6.svg`.
 
 ### Extra Credits:
+
+#### Implementing Triangle Edge Rules
+
+This extra credit task aims to extend your implementation of triangle rasterization. In some cases, samples lie on the edge of a triangle, then the triangle edge rules are used to determine whether the sample should be treated as inside the triangle or not.
+
+Here, we introduce two different types of edges one triangle may have.
+- A top edge is an edge containing vertices with the highest Y values on screen, that is exactly horizontal and is above the other edges.
+- A left edge is an edge that is not exactly horizontal and is on the left side of the triangle. Given a triangle with consistent counter-clockwise windings, left edges are always oriented downwards. A triangle can have one or two left edges.
+
+If a sample lies on the top edge or the left edge of a triangle, then it should be treated as inside the triangle. Otherwise it should not.
+
+Detailed description can be found here:
+https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules
 
 #### Drawing Lines
 
@@ -292,14 +313,6 @@ At this point, zooming in and out of your image should produce nicely filtered r
 #### Parallelizing the SVG Rasterizer
 
 So far your rasterization program has been running single-threaded (on one core of your CPU). In this task you will parallelize the program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, for example you can use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you (Or C++ style std::thread). You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Note that the reference solution is implemented with a simple screen tiling scheme to assign different tiles of the image to different cores. Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that very ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code.  More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee).
-
-#### Alpha Compositing
-
-Up until this point your were invoking the CS148 staff reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
-
-While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
-
-When you are done, you should be able to correctly draw the tests in `/alpha`.
 
 #### Implement More Advanced Shapes
 
