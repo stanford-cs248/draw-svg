@@ -174,7 +174,7 @@ At this time the starter code does not correctly handle transparent points. In o
 
 **Now that you understand the basics of drawing elements, let's get to work actually drawing more interesting elements than points!**
 
-#### Task 1: Drawing Triangles
+#### Task 1: Drawing Triangles (19 pts)
 
 In this task, you will implement `rasterize_triangle()` in `software_renderer.cpp`.
 
@@ -193,7 +193,7 @@ Once you have successfully implemented triangle drawing, you will able to draw a
 
 When you are done, you should be able to draw `basic/test3.svg`, `basic/test4.svg`, and `basic/test5.svg`.
 
-#### Task 2: Anti-Aliasing Using Supersampling
+#### Task 2: Anti-Aliasing Using Supersampling (19 pts)
 
 In this task, you will extend your rasterizer to anti-alias triangle edges via supersampling. In response to the user changing the screen sampling rate (the = and - keys), the application will call `set_sample_rate()` . The parameter `sample_rate` defines the sampling rate in each dimension, so a value of 2 would correspond to a sample density of 4 samples per pixel. In this case, the samples lying within the top-left pixel of the screen would be located at locations (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), and (0.75, 0.75).
 
@@ -215,7 +215,7 @@ Also observe that after enabling supersampled rendering, something might have go
 - Implement [jittered sampling](http://graphics.pixar.com/library/MultiJitteredSampling/paper.pdf) to improve image quality when supersampling.
 - Implement higher quality resampling filters than a box filter and analyze their impact on image quality.  For example, try a truncated Gaussian filter.
 
-#### Task 3: Implementing Modeling and Viewing Transforms
+#### Task 3: Implementing Modeling and Viewing Transforms (19 pts)
 
 ##### Part 1: Modeling Transforms
 
@@ -239,7 +239,7 @@ When user actions require the viewport be changed, the application will call `up
 
 Once you have correctly implemented `set_viewbox()`, your solution will respond to mouse controls in the same way as the reference implementation.
 
-#### Task 4: Drawing Scaled Images
+#### Task 4: Drawing Scaled Images (19 pts)
 
 In this task, you will implement `rasterize_image()` in `software_renderer.cpp`.
 
@@ -254,7 +254,7 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 
 When you are done, you should be able to draw `basic/test7.svg`.
 
-#### Task 5: Alpha Compositing
+#### Task 5: Alpha Compositing (19 pts)
 
 Up until this point your were invoking a reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
 
@@ -262,13 +262,13 @@ While the application will always clear the render target buffer to the canvas c
 
 Once you finished, you should be able to correctly draw the test svgs in `/alpha`.
 
-#### Task 6: Draw Something!!!
+#### Task 6: Draw Something!!! (5 pts)
 
 Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something! You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. However, be aware that our starter code and your renderer implementation only support a subset of the features defined in the SVG specification, and these applications may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools.) Also, it is not very hard to write SVG files directly since they are just XML files. Please name this file `task6.svg`.
 
 ### Extra Credits:
 
-#### Implementing Triangle Edge Rules
+#### Implementing Triangle Edge Rules (1 pts)
 
 This extra credit task aims to extend your implementation of triangle rasterization. In some cases, samples lie on the edge of a triangle, then the triangle edge rules are used to determine whether the sample should be treated as inside the triangle or not.
 
@@ -281,7 +281,7 @@ If a sample lies on the top edge or the left edge of a triangle, then it should 
 Detailed description can be found here:
 https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules
 
-#### Drawing Lines
+#### Drawing Lines (1 pts)
 
 In this task you will add line drawing functionality by implementing the function `rasterize_line()` in `software_renderer.cpp` instead of calling a reference solution.
 
@@ -298,7 +298,7 @@ When you are done, your solution should be able to correctly render `basic/test2
 - If you compare your initial Bresenham results with the reference implementation, you will notice that the reference solution generates smooth lines. For example, you could modify your Bresenham implementation to perform [Xiaolin Wu's line algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm).
 - Add support for specifying a line width.
 
-#### Anti-Aliasing Image Elements Using Trilinear Filtering
+#### Anti-Aliasing Image Elements Using Trilinear Filtering (1 pts)
 
 In this task you will improve your anti-aliasing of image elements by adding trilinear filtering. This will involve generating mipmaps for image elements at SVG load time and then modifying your sampling code from Task 4 to implement trilinear filtering using the mipmap. Your implementation is only required to work for images that have power-of-two dimensions in each direction.
 
@@ -309,11 +309,11 @@ The program only stores a single set of mipmaps for each image, so the `rasteriz
 
 At this point, zooming in and out of your image should produce nicely filtered results! To test this functionality, try zooming out on `basic/test7.svg`.
 
-#### Parallelizing the SVG Rasterizer
+#### Parallelizing the SVG Rasterizer (1 pts)
 
 So far your rasterization program has been running single-threaded (on one core of your CPU). In this task you will parallelize the program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, for example you can use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you (Or C++ style std::thread). You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Note that the reference solution is implemented with a simple screen tiling scheme to assign different tiles of the image to different cores. Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that very ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code.  More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee).
 
-#### Implement More Advanced Shapes
+#### Implement More Advanced Shapes (1 pts)
 
 We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. (Subdivision is something you will dig into in great detail in Assignment 2). You can see subdivision in action as you step though the test files we provided.
 
