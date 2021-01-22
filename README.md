@@ -10,8 +10,7 @@ In this project, you will implement a simple software rasterizer that draws poin
 The assignment is due Jan 28th at 11:59:59 PM.
 
 ## Submission instruction
-Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, 
-The tasks you completed, the extra credits you completed (optional) and comments and/or considerations you want to let us know (optional). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
+Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, the tasks you completed, the extra credits you completed (optional) and comments and/or considerations you want to let us know (optional). You can click on the Dashboard tab on the left bar to select Interactive Computer Graphics.
 
 ## Getting started
 
@@ -51,7 +50,7 @@ $ sudo apt-get install xorg-dev
 ##### To build your code for this assignment on OS X or Linux:
 
 ```
-$ cd DrawSVG && mkdir build && cd build
+$ cd draw-svg && mkdir build && cd build
 $ cmake ..
 $ make
 ```
@@ -138,7 +137,7 @@ Another important method on the `SoftwareRendererImp` class is `set_render_targe
 
 You are given starter code that already implements drawing of 2D points. To see how this works, begin by taking a look at `draw_svg()` in `software_renderer.cpp`. The method accepts an SVG file, and draws all elements in the SVG file via a sequence of calls to `draw_element()`. For each element `draw_element()` inspects the type of the element, and then calls the appropriate draw function. In the case of points, that function is `draw_point()`.
 
-The position of each point is defined in a local coordinate frame, so `draw_point()` first transforms the input point into its screen-space position (see line `p_screen = transform(p)`). This transform is set at the beginning of `draw_svg()`. In the starter code, this transform converts from the svg canvas' coordinate system to screen coordinates. You will need to handle more complex transforms to support more complex SVG files and implement mouse viewing controls later in the assignment.
+The position of each point is defined in a local coordinate frame, so `draw_point()` first transforms the input point into its screen-space position (see Vector2D `p_screen = transform(p)`). This transform is set at the beginning of `draw_svg()`. In the starter code, this transform converts from the svg canvas' coordinate system to screen coordinates. You will need to handle more complex transforms to support more complex SVG files and implement mouse viewing controls later in the assignment.
 
 The function `rasterize_point()` is responsible for actually drawing the point. In this assignment we define screen space for an output image of size `(target_w, target_h)` as follows:
 
@@ -158,8 +157,8 @@ int sy = (int) floor(y);
 Of course, the code should not attempt to modify the render target buffer at invalid pixel locations.
 
 ```
-if ( sx < 0 || sx > target_w ) return;
-if ( sy < 0 || sy > target_h ) return;
+if ( sx < 0 || sx >= target_w ) return;
+if ( sy < 0 || sy >= target_h ) return;
 ```
 
 If the points happen to be on screen, we fill in the pixel with the RGBA color associated with the point.
