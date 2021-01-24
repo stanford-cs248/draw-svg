@@ -59,9 +59,6 @@ set(CS248_DRAWSVG_HEADER
 option(DRAWSVG_BUILD_HARDWARE_RENDERER  "Build hardware implementation"  ON)
 include(hardware/hardware.cmake)
 
-# Import drawsvg reference
-include(reference/reference.cmake)
-
 #-------------------------------------------------------------------------------
 # Add executable
 #-------------------------------------------------------------------------------
@@ -70,8 +67,8 @@ add_executable( drawsvg
     ${CS248_DRAWSVG_HEADER}
 )
 
-# Link drawsvg executable (static link reference solution)
-target_link_libraries( drawsvg drawsvg_hdwr debug drawsvg_ref-debug optimized drawsvg_ref
+# Link drawsvg executable 
+target_link_libraries( drawsvg drawsvg_hdwr debug optimized
     ${FREETYPE_LIBRARIES}
     ${PTHREAD_LIBRARIES}
     ${OPENGL_LIBRARIES}
@@ -87,7 +84,7 @@ if (APPLE) # Frameworks required on osx
     ${COREVIDEO_LIBRARIES}
   )
 else(UNIX)  #LINUX
-target_link_libraries( drawsvg drawsvg_hdwr debug drawsvg_ref-debug optimized drawsvg_ref
+target_link_libraries( drawsvg drawsvg_hdwr debug optimized
     ${CS248_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${GLFW_LIBRARIES}

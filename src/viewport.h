@@ -48,15 +48,6 @@ class ViewportImp : public Viewport {
 }; // class ViewportImp
 
 
-class ViewportRef : public Viewport {
- public:
-  
-  virtual void set_viewbox( float x, float y, float size );
-  virtual void update_viewbox( float dx, float dy, float scale );
-
-}; // class ViewportRef
-
-
 } // namespace CS248
 
 #endif // CS248_VIEWPORT_H

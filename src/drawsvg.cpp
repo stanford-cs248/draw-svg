@@ -52,24 +52,23 @@ void DrawSVG::init() {
   hardware_renderer = new HardwareRenderer();
 
   // software renderer implementations
-  software_renderer_ref = new SoftwareRendererRef(16);
-  software_renderer_imp = new SoftwareRendererImp((SoftwareRendererRef *)software_renderer_ref);
+  software_renderer_imp = new SoftwareRendererImp();
+  software_renderer_ref = new SoftwareRendererImp();
   software_renderer = software_renderer_imp; // use imp at launch
 
   // texture sampler implementations
   sampler_imp = new Sampler2DImp();
-  sampler_ref = new Sampler2DRef();
+  sampler_ref = new Sampler2DImp();
   sampler = sampler_imp; // use imp at launch
 
   software_renderer_imp->set_tex_sampler(sampler_imp);
-  software_renderer_ref->set_tex_sampler(sampler_ref);
 
   // generate mipmaps & set initial viewports
   for (size_t i = 0; i < tabs.size(); ++i) {
 
 	// NOTE: CS248 changes for students not to implement viewports
     viewport_imp.push_back(new ViewportImp());
-    viewport_ref.push_back(new ViewportRef());
+    viewport_ref.push_back(new ViewportImp());
 
     // auto adjust
     auto_adjust(i);

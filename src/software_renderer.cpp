@@ -35,7 +35,7 @@ void SoftwareRendererImp::fill_pixel(int x, int y, const Color &color) {
 	pixel_color.b = render_target[4 * (x + y * target_w) + 2] * inv255;
 	pixel_color.a = render_target[4 * (x + y * target_w) + 3] * inv255;
 
-	pixel_color = ref->alpha_blending_helper(pixel_color, color);
+	pixel_color = alpha_blending(pixel_color, color);
 
 	render_target[4 * (x + y * target_w)] = (uint8_t)(pixel_color.r * 255);
 	render_target[4 * (x + y * target_w) + 1] = (uint8_t)(pixel_color.g * 255);
@@ -273,8 +273,8 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           float x1, float y1,
                                           Color color) {
 
-  // Extra credit (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, target_w, target_h, color, this);
+  // This was a extra credit
+  // You have to implement it by yourself now 
 
 }
 
