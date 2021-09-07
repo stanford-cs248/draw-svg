@@ -37,6 +37,7 @@ set(CS248_DRAWSVG_SOURCE
     software_renderer.cpp
     drawsvg.cpp
     main.cpp
+    renderer_utils.cpp
 )
 
 if (WIN32)
