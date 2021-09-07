@@ -319,7 +319,7 @@ namespace CS248
     int maxX = triangle.getMaxX();
     int minY = triangle.getMinY();
     int maxY = triangle.getMaxY();
-    std::cout << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
+
     for (int sx = 0; sx <= target_w; sx++)
     {
       for (int sy = 0; sy <= target_h; sy++)
