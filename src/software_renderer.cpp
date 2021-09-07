@@ -315,14 +315,17 @@ namespace CS248
     auto triangle = utils::Triangle(x0, y0, x1, y1, x2, y2);
 
     triangle.makeCounterClockwise();
+
+    // Triangle check optimization: Check only for bounding box
+    // https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/overview-rasterization-algorithm
     int minX = triangle.getMinX();
     int maxX = triangle.getMaxX();
     int minY = triangle.getMinY();
     int maxY = triangle.getMaxY();
 
-    for (int sx = 0; sx <= target_w; sx++)
+    for (int sx = minX; sx <= maxX; sx++)
     {
-      for (int sy = 0; sy <= target_h; sy++)
+      for (int sy = minY; sy <= maxY; sy++)
       {
         if (triangle.isInside(sx, sy, target_w, target_h))
         {
