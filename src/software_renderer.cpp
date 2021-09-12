@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "triangulation.h"
+#include "utilities.h"
 
 using namespace std;
 
@@ -266,7 +267,6 @@ void SoftwareRendererImp::rasterize_point( float x, float y, Color color ) {
   render_target[4 * (sx + sy * target_w) + 1] = (uint8_t)(color.g * 255);
   render_target[4 * (sx + sy * target_w) + 2] = (uint8_t)(color.b * 255);
   render_target[4 * (sx + sy * target_w) + 3] = (uint8_t)(color.a * 255);
-
 }
 
 void SoftwareRendererImp::rasterize_line( float x0, float y0,
@@ -285,6 +285,27 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
   // Task 1: 
   // Implement triangle rasterization (you may want to call fill_sample here)
 
+
+  utilities::Triangle tri(
+    Vector2D(x0, y0),
+    Vector2D(x1, y1),
+    Vector2D(x2, y2));
+
+  auto range = tri.get_range();
+
+  for (int sx = (int)range.from.x; sx <= (int)range.to.x; sx++) {
+      for (int sy = (int)range.from.y; sy <= (int)range.to.y; sy++) {
+        bool is_out = sx < 0 || target_w <= sx || sy < 0 || target_h <= sy;
+        if (is_out) continue;
+
+        if (tri.is_inside(Vector2D((double)sx + 0.5,(double)sy + 0.5))) {
+          render_target[4 * (sx + sy * target_w)] = (uint8_t)(color.r * 255);
+          render_target[4 * (sx + sy * target_w) + 1] = (uint8_t)(color.g * 255);
+          render_target[4 * (sx + sy * target_w) + 2] = (uint8_t)(color.b * 255);
+          render_target[4 * (sx + sy * target_w) + 3] = (uint8_t)(color.a * 255);
+        }
+      }
+    }
 }
 
 void SoftwareRendererImp::rasterize_image( float x0, float y0,
