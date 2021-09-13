@@ -6,7 +6,7 @@
             "type": "lldb",
             "request": "launch",
             // Resolved by CMake Tools:
-            "program": "${cwd} ${command:cmake.launchTargetPath}",
+            "program": "${command:cmake.launchTargetPath}",
             "args": [
                 "../svg/basic"
             ],
