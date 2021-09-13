@@ -1,12 +1,44 @@
 {
     "version": "2.0.0",
-    "label": "cmake",
-    "type": "shell",
-    "options": {
-        "cwd": "${workspaceRoot}/build"
-    },
-    "command": "./drawsvg",
-    "args": [
-        "../svg/basic",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "cmake:build",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "make",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "cmake:configure (Release)",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "rm -rf build && mkdir build && cd build && cmake ..",
+            "problemMatcher": [],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "cmake:configure (Debug)",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "rm -rf build && mkdir build && cd build && cmake -D CS248_BUILD_DEBUG=ON -D BUILD_DEBUG=ON ..",
+            "problemMatcher": [],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            }
+        }
     ],
 }
