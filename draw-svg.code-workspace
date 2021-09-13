@@ -11,6 +11,6 @@
 			"chrono": "cpp",
 			"limits": "cpp"
 		},
-		"C_Cpp.default.cppStandard": "c++11"
+		"C_Cpp.default.cppStandard": "gnu++11"
 	}
 }

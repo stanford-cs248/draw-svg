@@ -1,0 +1,12 @@
+{
+    "version": "2.0.0",
+    "label": "cmake",
+    "type": "shell",
+    "options": {
+        "cwd": "${workspaceRoot}/build"
+    },
+    "command": "./drawsvg",
+    "args": [
+        "../svg/basic",
+    ],
+}
