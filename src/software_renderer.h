@@ -149,6 +149,8 @@ private:
 
 	// resolve samples to render target
 	void resolve(void);
+	// SSAA render target
+	std::vector<unsigned char> supersample_target;
 
 	// task5 alpha compositing
 	Color alpha_blending(Color pixel_color, Color color);

@@ -76,7 +76,7 @@ void SoftwareRendererImp::set_sample_rate( size_t sample_rate ) {
   // Task 2: 
   // You may want to modify this for supersampling support
   this->sample_rate = sample_rate;
-
+  this->supersample_target.resize(4 * target_w * target_h * sample_rate * sample_rate);
 }
 
 void SoftwareRendererImp::set_render_target( unsigned char* render_target,
@@ -87,7 +87,7 @@ void SoftwareRendererImp::set_render_target( unsigned char* render_target,
   this->render_target = render_target;
   this->target_w = width;
   this->target_h = height;
-
+  this->supersample_target.resize(4 * target_w * target_h * sample_rate * sample_rate);
 }
 
 void SoftwareRendererImp::draw_element( SVGElement* element ) {
@@ -256,17 +256,24 @@ void SoftwareRendererImp::rasterize_point( float x, float y, Color color ) {
   // fill in the nearest pixel
   int sx = (int)floor(x);
   int sy = (int)floor(y);
-
+  
   // check bounds
   if (sx < 0 || sx >= target_w) return;
   if (sy < 0 || sy >= target_h) return;
 
-  // fill sample - NOT doing alpha blending!
-  // TODO: Call fill_pixel here to run alpha blending
-  render_target[4 * (sx + sy * target_w)] = (uint8_t)(color.r * 255);
-  render_target[4 * (sx + sy * target_w) + 1] = (uint8_t)(color.g * 255);
-  render_target[4 * (sx + sy * target_w) + 2] = (uint8_t)(color.b * 255);
-  render_target[4 * (sx + sy * target_w) + 3] = (uint8_t)(color.a * 255);
+  int line = target_w * sample_rate;
+  for (int posX = 0; posX < sample_rate; posX++) {
+    for (int posY = 0; posY < sample_rate; posY++) {
+      int base_offset = (sx + sy * line) * sample_rate;
+      int supersample_offset = posX + posY * line;
+      int supersample_color_offset = 4 * (base_offset + supersample_offset);
+
+      supersample_target[supersample_color_offset] = (uint8_t)(color.r * 255);
+      supersample_target[supersample_color_offset + 1] = (uint8_t)(color.g * 255);
+      supersample_target[supersample_color_offset + 2] = (uint8_t)(color.b * 255);
+      supersample_target[supersample_color_offset + 3] = (uint8_t)(color.a * 255);
+    }
+  }
 }
 
 void SoftwareRendererImp::rasterize_line( float x0, float y0,
@@ -274,8 +281,73 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           Color color) {
 
   // Extra credit (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, target_w, target_h, color, this);
+  double dx = abs(x1 - x0), dy = abs(y1 - y0);
+  int line = target_w * sample_rate;
+  double d = 1.0 / sample_rate;
 
+  if (dx >= dy) {
+    double F = 2 * (dy - dx);
+    int x_direction = x0 <= x1 ? 1 : -1, y_direction = y0 <= y1 ? 1 : -1;
+    int y = (int)y0;
+    for (int x = (int)x0; x * x_direction <= x1 * x_direction; x += x_direction) {
+      if (F <= 0) {
+        F += 2 * dy;
+      } else {
+        F += 2 * (dy - dx);
+        y += y_direction;
+      }
+      for (int posX = 0; posX < sample_rate; posX++) {
+        for (int posY = 0; posY < sample_rate; posY++) {
+          float sx = x + d * posX + d / 2;
+          float sy = y + d * posY + d / 2;
+
+          // check bounds
+          if (sx < 0 || sx >= target_w) continue;
+          if (sy < 0 || sy >= target_h) continue;
+
+          int base_offset = (x + y * line) * sample_rate;
+          int supersample_offset = posX + posY * line;
+          int supersample_color_offset = 4 * (base_offset + supersample_offset);
+
+          supersample_target[supersample_color_offset] = (uint8_t)(color.r * 255);
+          supersample_target[supersample_color_offset + 1] = (uint8_t)(color.g * 255);
+          supersample_target[supersample_color_offset + 2] = (uint8_t)(color.b * 255);
+          supersample_target[supersample_color_offset + 3] = (uint8_t)(color.a * 255);
+        }
+      }
+    }
+  } else {
+    double F = 2 * (dx - dy);
+    int x_direction = x0 <= x1 ? 1 : -1, y_direction = y0 <= y1 ? 1 : -1;
+    int x = (int)x0;
+    for (int y = (int)y0; y * y_direction <= y1 * y_direction; y += y_direction) {
+      if (F <= 0) {
+        F += 2 * dx;
+      } else {
+        F += 2 * (dx - dy);
+        x += x_direction;
+      }
+      for (int posX = 0; posX < sample_rate; posX++) {
+        for (int posY = 0; posY < sample_rate; posY++) {
+          float sx = x + d * posX + d / 2;
+          float sy = y + d * posY + d / 2;
+
+          // check bounds
+          if (sx < 0 || sx >= target_w) continue;
+          if (sy < 0 || sy >= target_h) continue;
+
+          int base_offset = (x + y * line) * sample_rate;
+          int supersample_offset = posX + posY * line;
+          int supersample_color_offset = 4 * (base_offset + supersample_offset);
+
+          supersample_target[supersample_color_offset] = (uint8_t)(color.r * 255);
+          supersample_target[supersample_color_offset + 1] = (uint8_t)(color.g * 255);
+          supersample_target[supersample_color_offset + 2] = (uint8_t)(color.b * 255);
+          supersample_target[supersample_color_offset + 3] = (uint8_t)(color.a * 255);
+        }
+      }
+    }
+  }
 }
 
 void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
@@ -284,28 +356,37 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
                                               Color color ) {
   // Task 1: 
   // Implement triangle rasterization (you may want to call fill_sample here)
-
-
   utilities::Triangle tri(
     Vector2D(x0, y0),
     Vector2D(x1, y1),
     Vector2D(x2, y2));
 
   auto range = tri.get_range();
-
+  double d = 1.0 / sample_rate;
+  int line = target_w * sample_rate;
   for (int sx = (int)range.from.x; sx <= (int)range.to.x; sx++) {
-      for (int sy = (int)range.from.y; sy <= (int)range.to.y; sy++) {
-        bool is_out = sx < 0 || target_w <= sx || sy < 0 || target_h <= sy;
-        if (is_out) continue;
+    for (int sy = (int)range.from.y; sy <= (int)range.to.y; sy++) {
+      bool is_out = sx < 0 || target_w <= sx || sy < 0 || target_h <= sy;
+      if (is_out) continue;
 
-        if (tri.is_inside(Vector2D((double)sx + 0.5,(double)sy + 0.5))) {
-          render_target[4 * (sx + sy * target_w)] = (uint8_t)(color.r * 255);
-          render_target[4 * (sx + sy * target_w) + 1] = (uint8_t)(color.g * 255);
-          render_target[4 * (sx + sy * target_w) + 2] = (uint8_t)(color.b * 255);
-          render_target[4 * (sx + sy * target_w) + 3] = (uint8_t)(color.a * 255);
+      for (int posX = 0; posX < sample_rate; posX++) {
+        for (int posY = 0; posY < sample_rate; posY++) {
+          double x = sx + d * posX + d / 2;
+          double y = sy + d * posY + d / 2;
+          if (tri.is_inside(Vector2D(x, y))) {
+            int base_offset = (sx + sy * line) * sample_rate;
+            int supersample_offset = posX + posY * line;
+            int supersample_color_offset = 4 * (base_offset + supersample_offset);
+
+            supersample_target[supersample_color_offset] = (uint8_t)(color.r * 255);
+            supersample_target[supersample_color_offset + 1] = (uint8_t)(color.g * 255);
+            supersample_target[supersample_color_offset + 2] = (uint8_t)(color.b * 255);
+            supersample_target[supersample_color_offset + 3] = (uint8_t)(color.a * 255);
+          }
         }
       }
     }
+  }
 }
 
 void SoftwareRendererImp::rasterize_image( float x0, float y0,
@@ -322,16 +403,39 @@ void SoftwareRendererImp::resolve( void ) {
   // Task 2: 
   // Implement supersampling
   // You may also need to modify other functions marked with "Task 2".
-  return;
+  int line = target_w * sample_rate;
+  for (int sx = 1; sx <= target_w; sx++) {
+    for (int sy = 1; sy <= target_h; sy++) {
+      int rgba[4] = {0, 0, 0, 0};
+      for (int posX = 0; posX < sample_rate; posX++) {
+        for (int posY = 0; posY < sample_rate; posY++) {
+          int base_offset = (sx + sy * line) * sample_rate;
+          int supersample_offset = posX + posY * line;
+          int supersample_color_offset = 4 * (base_offset + supersample_offset);
 
+          for (int i = 0; i < 4; i++) {
+            rgba[i] += supersample_target[supersample_color_offset + i];
+          }
+        }
+      }
+
+      int render_target_offset = 4 * (sx + sy * target_w);
+      for (int i = 0; i < 4; i++) {
+        if (rgba[i] / (sample_rate * sample_rate) == 255) {
+          continue;
+        }
+        render_target[render_target_offset + i] = rgba[i] / (sample_rate * sample_rate);
+      }
+    }
+  }
+
+  fill(supersample_target.begin(), supersample_target.end(), 255);
 }
-
 Color SoftwareRendererImp::alpha_blending(Color pixel_color, Color color)
 {
   // Task 5
   // Implement alpha compositing
   return pixel_color;
 }
-
 
 } // namespace CS248
