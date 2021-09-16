@@ -39,6 +39,19 @@
                 "kind": "none",
                 "isDefault": true
             }
+        },
+        {
+            "type": "shell",
+            "label": "cmake:run",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "command": "./drawsvg ../svg/basic",
+            "problemMatcher": [],
+            "group": {
+                "kind": "run",
+                "isDefault": true
+            }
         }
     ],
 }

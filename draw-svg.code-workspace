@@ -9,7 +9,12 @@
 			"queue": "cpp",
 			"algorithm": "cpp",
 			"chrono": "cpp",
-			"limits": "cpp"
+			"limits": "cpp",
+			"ios": "cpp",
+			"vector": "cpp",
+			"cstdlib": "cpp",
+			"sstream": "cpp",
+			"iostream": "cpp"
 		},
 		"C_Cpp.default.cppStandard": "gnu++11",
 	},
