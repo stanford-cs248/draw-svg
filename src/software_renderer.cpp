@@ -281,12 +281,12 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           Color color) {
 
   // Extra credit (delete the line below and implement your own)
-  double dx = abs(x1 - x0), dy = abs(y1 - y0);
+  int dx = abs(x1 - x0), dy = abs(y1 - y0);
   int line = target_w * sample_rate;
-  double d = 1.0 / sample_rate;
+  int d = 1.0 / sample_rate;
 
   if (dx >= dy) {
-    double F = 2 * dy - dx;
+    int F = 2 * dy - dx;
     int x_direction = x0 <= x1 ? 1 : -1, y_direction = y0 <= y1 ? 1 : -1;
     int y = (int)y0;
     for (int x = (int)x0; x * x_direction <= x1 * x_direction; x += x_direction) {
@@ -317,7 +317,7 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
       }
     }
   } else {
-    double F = 2 * dx - dy;
+    int F = 2 * dx - dy;
     int x_direction = x0 <= x1 ? 1 : -1, y_direction = y0 <= y1 ? 1 : -1;
     int x = (int)x0;
     for (int y = (int)y0; y * y_direction <= y1 * y_direction; y += y_direction) {
