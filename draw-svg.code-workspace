@@ -14,7 +14,8 @@
 			"vector": "cpp",
 			"cstdlib": "cpp",
 			"sstream": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"__locale": "cpp"
 		},
 		"C_Cpp.default.cppStandard": "gnu++11",
 	},

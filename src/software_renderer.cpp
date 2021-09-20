@@ -49,10 +49,10 @@ void SoftwareRendererImp::draw_svg( SVG& svg ) {
 
   // set top level transformation
   transformation = canvas_to_screen;
-
   // draw all elements
   for ( size_t i = 0; i < svg.elements.size(); ++i ) {
     draw_element(svg.elements[i]);
+    transformation = canvas_to_screen;
   }
 
   // draw canvas outline
@@ -94,7 +94,8 @@ void SoftwareRendererImp::draw_element( SVGElement* element ) {
 
 	// Task 3 (part 1):
 	// Modify this to implement the transformation stack
-
+  auto origin_transformation = transformation;
+  transformation = transformation * element->transform;
 	switch (element->type) {
 	case POINT:
 		draw_point(static_cast<Point&>(*element));
@@ -123,7 +124,7 @@ void SoftwareRendererImp::draw_element( SVGElement* element ) {
 	default:
 		break;
 	}
-
+  transformation = origin_transformation;
 }
 
 
@@ -280,6 +281,10 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           float x1, float y1,
                                           Color color) {
 
+  /** TODO:
+   * https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm
+   * 위 알고리즘으로 Anti-Aliasing을 할 수 있다고 함.
+   */
   // Extra credit (delete the line below and implement your own)
   int dx = abs(x1 - x0), dy = abs(y1 - y0);
   int line = target_w * sample_rate;
