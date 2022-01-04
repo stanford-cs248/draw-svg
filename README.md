@@ -123,6 +123,19 @@ A table of all the keyboard controls in the **draw** application is provided bel
 
 The assignment is divided into five major tasks, which are described below in the order the course staff suggests you attempt them. You are of course allowed to do the assignment in any order you choose. Do not forget the writeup!
 
+### Grading
+
+Draw-svg is made by humans, and will be graded by humans. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a difference to the human eye (we're looking for eye-level differences, not pixel level differences). If you are unsure about grading, feel free to ask on ed.
+
+### Friendly Advice from your TAs 
+
+- As always, start early. There is a lot to implement in this assignment, so don't fall behind!
+- Open `./draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
+- Be careful with memory allocation, as too many or too frequent heap allocations will severely degrade performance.
+- Be careful with types (e.g. float, double, int, uint8_t), casting, and using the right functions for each type. Take note of the `uint8_to_float` and `float_to_uint8` functions in `texture.cpp`, which you may find helpful for later tasks.
+- While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. Later assignments will require you to use C++ classes and objects, so take the time to learn the new features C++ introduces. 
+- Currently, draw-svg does not support rendering `<circle>` svg elements (which is different from `<ellipse>`).
+
 #### Getting Acquainted with the Starter Code
 
 Before you start, here are some basic information on the structure of the starter code.
