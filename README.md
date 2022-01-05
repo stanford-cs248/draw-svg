@@ -233,7 +233,10 @@ It's reasonable to think of supersampled rendering as rendering an image that is
 
 When you are done, try increasing the supersampling rate in the viewer, and bask in the glory of having much smoother triangle edges.
 
-Also observe that after enabling supersampled rendering, something might have gone very wrong with the rasterization of points and lines. (Hint: they probably appear to get thinner!) **Please modify your implementation of `fill_pixel()` which get called in rasterizing points and lines so that supersampled rendering of these primitives preserves their thickness across different supersampling rates.** (Note that the line helper function calls your `fill_pixel()`. A solution that does not anti-alias points and lines is acceptable.)
+Also observe that after enabling supersampled rendering, something might have gone very wrong with the rasterization of points and lines. (Hint: they probably appear to get thinner!) **Please modify your implementation of `fill_pixel()` which get called in rasterizing points and lines so that supersampled rendering of these primitives preserves their thickness across different supersampling rates.** (Note that the line helper function calls your `fill_pixel()`. 
+
+**Hint: Consider having separate functions `fill_pixel()` for filling a "pixel" and `fill_sample()` for filling a "sample."**
+A solution that does not anti-alias points and lines is acceptable.)
 
 #### Task 3: Implementing Modeling and Viewing Transforms (12 pts)
 
