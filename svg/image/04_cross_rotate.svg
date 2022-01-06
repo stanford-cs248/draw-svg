@@ -49,7 +49,7 @@
     </rdf:RDF>
   </metadata>
     <image
-       transform="rotate(30 0 0)"
+       transform="translate(128 -54) rotate(45 0 0)"
        y="0"
        x="0"
        id="image4375"
