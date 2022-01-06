@@ -67,6 +67,9 @@ class SoftwareRenderer : public SVGRenderer {
   // Target buffer dimension (in pixels)
   size_t target_w; size_t target_h;
 
+  // SVG outline bbox (in pixels)
+	Vector2D svg_bbox_top_left, svg_bbox_bottom_right;
+
   // Texture sampler being used
   Sampler2D* sampler;
 
@@ -279,9 +282,7 @@ private:
 		Color color, void* thread_data = NULL);
 
 	// rasterize an image
-	void rasterize_image(float x0, float y0,
-		float x1, float y1,
-		Texture& tex, void* thread_data = NULL);
+	void rasterize_image(Image& image);
 
 	// resolve samples to render target
 	void resolve(void);

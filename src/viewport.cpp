@@ -7,8 +7,8 @@ namespace CS248 {
 void ViewportImp::set_viewbox( float x, float y, float span ) {
 
   // Task 3 (part 2): 
-  // Set svg to normalized device coordinate transformation. Your input
-  // arguments are defined as SVG canvans coordinates.
+  // Set svg to normalized device coordinate transformation. 
+  // Your input arguments are defined as SVG canvans coordinates.
 
   this->x = x;
   this->y = y;

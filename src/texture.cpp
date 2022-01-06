@@ -33,7 +33,8 @@ void Sampler2DImp::generate_mips(Texture& tex, int startLevel) {
   // color that differs from its neighbours'. You should instead fill
   // with the correct data!
 
-  // Extra credit: Implement this
+  // Advanced Task
+  // Implement mipmap for trilinear filtering
 
   // check start level
   if ( startLevel >= tex.mipmap.size() ) {
@@ -104,7 +105,8 @@ Color Sampler2DImp::sample_trilinear(Texture& tex,
                                      float u, float v, 
                                      float u_scale, float v_scale) {
 
-  // Extra credit: Implement trilinear filtering
+  // Advanced Task
+  // Implement trilinear filtering
 
   // return magenta for invalid level
   return Color(1,0,1,1);

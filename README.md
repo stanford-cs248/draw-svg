@@ -142,7 +142,7 @@ Draw-svg is made by humans, and will be graded by humans. We are not asking for 
 
 Before you start, here are some basic information on the structure of the starter code.
 
-Most of your work will be constrained to implementing part of the class `SoftwareRendererImp` in `software_renderer.cpp`. The most important method is `draw_svg` which (not surprisingly) accepts an SVG object to draw. An SVG file defines its canvas (which defines a 2D coordinate space), and specifies a list of shape elements (such as points, lines, triangles, and images) that should be drawn on that canvas. Each shape element has a number of style parameters (e.g., color) as well as a modeling transform used to determine the element's position on the canvas. You can find the definition of the SVG class (and all the associated `SVGElements`) in `svg.h`. Notice that one type of `SVGElement` is a group that itself contains child elements. Therefore, you should think of an SVG file as defining a tree of shape elements. (Interior nodes of the tree are groups, and leaves are shapes.)
+Most of your work will be constrained to implementing part of the class `SoftwareRendererImp` in `software_renderer.h` and `software_renderer.cpp`. The most important method is `draw_svg` which (not surprisingly) accepts an SVG object to draw. An SVG file defines its canvas (which defines a 2D coordinate space), and specifies a list of shape elements (such as points, lines, triangles, and images) that should be drawn on that canvas. Each shape element has a number of style parameters (e.g., color) as well as a modeling transform used to determine the element's position on the canvas. You can find the definition of the SVG class (and all the associated `SVGElements`) in `svg.h`. Notice that one type of `SVGElement` is a group that itself contains child elements. Therefore, you should think of an SVG file as defining a tree of shape elements. (Interior nodes of the tree are groups, and leaves are shapes.)
 
 Another important method on the `SoftwareRendererImp` class is `set_render_target()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `target_w` and `target_h`). This buffer is often called the "render target" in many applications, since it is the "target" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
 
@@ -235,7 +235,7 @@ It's reasonable to think of supersampled rendering as rendering an image that is
 
 When you are done, try increasing the supersampling rate in the viewer, and bask in the glory of having much smoother triangle edges.
 
-Also observe that after enabling supersampled rendering, something might have gone very wrong with the rasterization of points and lines. (Hint: they probably appear to get thinner!) **Please modify your implementation of `fill_pixel()` which get called in rasterizing points and lines so that supersampled rendering of these primitives preserves their thickness across different supersampling rates.** (Note that the line helper function calls your `fill_pixel()`. 
+Also observe that after enabling supersampled rendering, something might have gone very wrong with the rasterization of points and lines. (They probably appear to get thinner!) **Please modify your implementation of `fill_pixel()` which get called in rasterizing points and lines so that supersampled rendering of these primitives preserves their thickness across different supersampling rates.** (Note that the line helper function calls your `fill_pixel()`. 
 
 **Hint: Consider having separate functions `fill_pixel()` for filling a "pixel" and `fill_sample()` for filling a "sample."**
 A solution that does not anti-alias points and lines is acceptable.)
@@ -250,7 +250,7 @@ Recall that an SVG object consists of a hierarchy of shape elements. Each elemen
 
 Please modify `draw_svg()` and `draw_element()` to implement the hierarchy of transforms specified in the SVG object. (You can do this in no more than a few lines of code.)
 
-When you are done, you should be able to draw `basic/test6.svg` and `basic/test8.svg`.
+When you are done, you should be able to draw `basic/test6.svg` and `basic/test7.svg`.
 
 **Hint: If there is an SVGElement which is not in a group, the modeling transform should be the relationship between its local coordinate space and the canvas space. If it is in a group, the modeling transform should be the relationship between its local coordinate space and its parent element's local coordinate space. Look at how the transformation matrix in software renderer is applied, and think about how you can modify this to take into account each SVGElement's transform.**
 
@@ -277,7 +277,7 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 - The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. In this task, you will sample from level 0 of the hierarchy: `Texture::mipmap[0]`.
 - You should clamp the border (edge) pixels to the nearest valid image pixel as in GL_CLAMP_TO_EDGE.
 
-When you are done, you should be able to draw `basic/test7.svg`.
+When you are done, you should be able to draw the test svgs in `/image`. (Note you need to finish advanced task to support `/image/04_cross_rotate.svg`)
 
 #### Task 5: Alpha Compositing (10 pts)
 
@@ -304,7 +304,7 @@ Naive editing of the test SVG by changing colors, duplicating or deleting elemen
 
 Please name this file `task6.svg`.
 
-### Going Further: Credits With Advanced Tasks
+### Going Further: Advanced Tasks
 
 #### Drawing Smooth Lines with Line Width
 
@@ -339,17 +339,24 @@ In this task you will improve your anti-aliasing of image elements by adding tri
 
 The program only stores a single set of mipmaps for each image, so the `rasterize_image()` routine (both your implementation and the reference solution) will use whichever mipmaps have been generated most recently using the `'` and `;` keys. Be sure you are testing with your own mipmaps and not the reference ones.
 
-At this point, zooming in and out of your image should produce nicely filtered results! To test this functionality, try zooming out on `basic/test7.svg`.
+At this point, zooming in and out of your image should produce nicely filtered results! To test this functionality, try zooming out on svgs in `/image`.
+
+#### Image Elements With Rotation (1 pts)
+
+In this task you will improve your image rendering to render image elements that are rotated. Note that the key difference is that you can not assume the uv coordinates are axis-aligned with the screen space coordinates. How can we compute the uv coordinates with the transformation of the image element? 
+You should be able to render `/image/04_cross_rotate.svg` after completing this step.
 
 #### Implement More Advanced SVG Shape Element (1 pts)
 
 We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. (Subdivision is something you will dig into in great detail in Assignment 2). You can see subdivision in action as you step though the test files we provided.
 
-In addition to what you have implemented already, the [SVG Basic Shapes](http://www.w3.org/TR/SVG/shapes.html) also include circles and ellipses. We may support these features by converting them to triangulated polygons. But if we zoom in on the edges, there will be a point at which the approximation breaks down and the image no longer will look like a smooth curve. Triangulating more finely can be costly as a large number of triangles may be necessary to get a good approximation. Is there a better way to sample these shapes? For example, implement `drawEllipse` in `software_renderer.cpp` and test on `basic/test9.svg`
+In addition to what you have implemented already, the [SVG Basic Shapes](http://www.w3.org/TR/SVG/shapes.html) also include circles and ellipses. We may support these features by converting them to triangulated polygons. But if we zoom in on the edges, there will be a point at which the approximation breaks down and the image no longer will look like a smooth curve. Triangulating more finely can be costly as a large number of triangles may be necessary to get a good approximation. Is there a better way to sample these shapes? For example, implement `draw_ellipse` in `software_renderer.cpp` and test on `basic/test8.svg`
 
 #### Parallelizing the SVG Rasterizer (1 pts)
 
-So far your rasterization program has been running single-threaded (on one core of your CPU). In this task you will parallelize the program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, for example you can use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you (Or C++ style std::thread). You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Note that the reference solution is implemented with a simple screen tiling scheme to assign different tiles of the image to different cores. Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that very ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code.  More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee). 
+So far your rasterization program has been running single-threaded (on one core of your CPU). In this task you will parallelize the program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, for example you can use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you (Or C++ style std::thread). 
+<!-- You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Note that the reference solution is implemented with a simple screen tiling scheme to assign different tiles of the image to different cores.-->
+Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that very ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code.  More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee). 
 
 ### Resources and Notes
 

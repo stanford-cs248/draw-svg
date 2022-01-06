@@ -16,7 +16,7 @@ namespace CS248 {
 
 // fill a sample location with color
 void SoftwareRendererImp::fill_sample(int sx, int sy, const Color &color) {
-
+  // Task 2: implement this function
 }
 
 // fill samples in the entire pixel specified by pixel coordinates
@@ -49,17 +49,21 @@ void SoftwareRendererImp::draw_svg( SVG& svg ) {
   // set top level transformation
   transformation = canvas_to_screen;
 
+  // canvas outline
+  Vector2D a = transform(Vector2D(0, 0)); a.x--; a.y--;
+  Vector2D b = transform(Vector2D(svg.width, 0)); b.x++; b.y--;
+  Vector2D c = transform(Vector2D(0, svg.height)); c.x--; c.y++;
+  Vector2D d = transform(Vector2D(svg.width, svg.height)); d.x++; d.y++;
+
+  svg_bbox_top_left = Vector2D(a.x+1, a.y+1);
+  svg_bbox_bottom_right = Vector2D(d.x-1, d.y-1);
+
   // draw all elements
-  for ( size_t i = 0; i < svg.elements.size(); ++i ) {
+  for (size_t i = 0; i < svg.elements.size(); ++i) {
     draw_element(svg.elements[i]);
   }
 
   // draw canvas outline
-  Vector2D a = transform(Vector2D(    0    ,     0    )); a.x--; a.y--;
-  Vector2D b = transform(Vector2D(svg.width,     0    )); b.x++; b.y--;
-  Vector2D c = transform(Vector2D(    0    ,svg.height)); c.x--; c.y++;
-  Vector2D d = transform(Vector2D(svg.width,svg.height)); d.x++; d.y++;
-
   rasterize_line(a.x, a.y, b.x, b.y, Color::Black);
   rasterize_line(a.x, a.y, c.x, c.y, Color::Black);
   rasterize_line(d.x, d.y, b.x, b.y, Color::Black);
@@ -225,11 +229,15 @@ void SoftwareRendererImp::draw_polygon( Polygon& polygon ) {
 
 void SoftwareRendererImp::draw_ellipse( Ellipse& ellipse ) {
 
-  // Extra credit 
+  // Advanced Task
+  // Implement ellipse rasterization
 
 }
 
 void SoftwareRendererImp::draw_image( Image& image ) {
+
+  // Advanced Task
+  // Render image element with rotation
 
   Vector2D p0 = transform(image.position);
   Vector2D p1 = transform(image.position + image.dimension);
@@ -273,9 +281,12 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           float x1, float y1,
                                           Color color) {
 
-  // Extra credit (delete the line below and implement your own)
+  // Task 0: 
+  // Implement Bresenham's algorithm (delete the line below and implement your own)
   ref->rasterize_line_helper(x0, y0, x1, y1, target_w, target_h, color, this);
 
+  // Advanced Task
+  // Drawing Smooth Lines with Line Width
 }
 
 void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
@@ -283,7 +294,10 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
                                               float x2, float y2,
                                               Color color ) {
   // Task 1: 
-  // Implement triangle rasterization (you may want to call fill_sample here)
+  // Implement triangle rasterization
+
+  // Advanced Task
+  // Implementing Triangle Edge Rules
 
 }
 
@@ -291,7 +305,7 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
                                            float x1, float y1,
                                            Texture& tex ) {
   // Task 4: 
-  // Implement image rasterization (you may want to call fill_sample here)
+  // Implement image rasterization
 
 }
 
