@@ -59,26 +59,28 @@ These 3 steps (1) create an out-of-source build directory, (2) configure the pro
 
 #### Windows Build Instructions
 
-You need to install the latest version of [CMake](http://www.cmake.org/) and [Visual Studio](https://www.visualstudio.com/). Visual Studio Community is free. Make sure you install **Desktop development with C++** in Visual Studio. You can find the installation instructions [here](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=vs-2017). Already have Visual Studio installed and don't have that workload/aren't sure? See how to modify workloads [here](https://docs.microsoft.com/en-us/visualstudio/install/modify-visual-studio?view=vs-2017#modify-workloads). After installing these programs, replace `SOURCE_DIR` to the cloned directory (`draw-svg/` in our case, NOT `src/`), and `BUILD_DIR` to `draw-svg/build`.
+You need to install the latest version of [CMake](http://www.cmake.org/) and [Visual Studio Community 2022](https://www.visualstudio.com/) (We have tested windows build with 2022). Make sure you install **Desktop development with C++** in Visual Studio. You can find the installation instructions [here](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=vs-2017). Already have Visual Studio installed and don't have that workload/aren't sure? See how to modify workloads [here](https://docs.microsoft.com/en-us/visualstudio/install/modify-visual-studio?view=vs-2017#modify-workloads). 
 
+After installing CMake and Visual Studio, let's start with building in CMake. Replace `SOURCE_DIR` to the cloned directory (`draw-svg/` in our case, NOT `src/`), and `BUILD_DIR` to `draw-svg/build`.
+<!-- 
 ![Sample locations](misc/cmake_initial_setup.png?raw=true)
+ -->
+Then, press `Configure` button, select **Visual Studio 17 2022** for generator and **x64** for platform, and you should see `Configuring done` message. Then, press `Generate` button and you should see `Generating done`.
 
-Then, press `Configure` button, select proper version of Visual Studio (you should probably select Win64, Visual Studio 15 will work with Visual Studio 17), and you should see `Configuring done` message. Then, press `Generate` button and you should see `Generating done`.
-
-![Sample locations](misc/cmake_final_setup.png?raw=true)
-
+<!-- ![Sample locations](misc/cmake_final_setup.png?raw=true)
+ -->
 This should create a `build` directory with a Visual Studio solution file in it named `drawsvg.sln`. You can double-click this file to open the solution in Visual Studio.
 
-If you plan on using Visual Studio to debug your program, you must change `drawsvg` project in the Solution Explorer sidebar as the startup project by right-clicking on it and selecting `Set as StartUp Project`. For setting the commandline arguments to the project, right-click `drawsvg` project again, select `Properties`, go into the `Debugging` tab, and set the value in `Command Arguments`. If you want to run the program with the basic svg folder, you can set this command argument to `../../svg/basic`. After setting all these, you can hit F5\press `Local Windows Debugger` button to build your program and run it with the debugger.
-
-You should also change the build mode to `Release` from `Debug` occasionally by clicking the Solution Configurations drop down menu on the top menu bar, which will make your program run faster. Note that you will have to set `Command Arguments` again if you change the build mode. Note that your application must run properly in both debug and release build.
-
-Tips for building on a x64 Windows system:
-
-If you encounter linking errors (e.g. LNK4272: library machine type 'x86' conflicts with target machine type 'x64', LNK1104: cannot open file freetype.lib.), please try make the following changes to your draw-svg project properties.
+Note: to avoid the linking error when building x64 (e.g. LNK4272: library machine type 'x86' conflicts with target machine type 'x64', LNK1104: cannot open file freetype.lib.), please make the following changes to your draw-svg project properties (right click `drawsvg` project in the Solution Explorer sidebar to open Properties).
 ```
 Properties -> Linker -> Input -> edit -> change freetype.lib to freetype_win64.lib
 ```
+
+If you plan on using Visual Studio to debug your program, you must change `drawsvg` project in the Solution Explorer sidebar as the startup project by right-clicking on it and selecting `Set as StartUp Project`. 
+
+For setting the commandline arguments to the project, right-click `drawsvg` project again, select `Properties`, go into the `Debugging` tab, and set the value in `Command Arguments`. If you want to run the program with the basic svg folder, you can set this command argument to `..\..\svg\basic`. After setting all these, you can hit F5\press `Local Windows Debugger` button to build your program and run it with the debugger.
+
+You should also change the build mode to `Release` from `Debug` occasionally by clicking the Solution Configurations drop down menu on the top menu bar, which will make your program run faster. Note that you will have to edit the Linker and set `Command Arguments` again if you change the build mode. Note that your application must run properly in both debug and release build.
 
 ### Using the Mini-SVG Viewer App
 
