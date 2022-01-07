@@ -123,7 +123,7 @@ A table of all the keyboard controls in the **draw** application is provided bel
 
 ### Grading
 
-The assignment is divided into seven basic tasks and six advanced tasks, which are described below in the order the course staff suggests you to attempt them.  Finishing the basic tasks will result in a grade of 92 points (out of 100 max) on the assignment. In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a solid A- letter grade in the course.  For students that have more time and really want to learn more graphics, you can earn extra points by tackling the advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we can always make exceptions for truly great work! ;-))
+The assignment is divided into seven basic tasks and seven advanced tasks, which are described below in the order the course staff suggests you to attempt them.  Finishing the basic tasks will result in a grade of 92 points (out of 100 max) on the assignment. In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a solid A- letter grade in the course.  For students that have more time and really want to learn more graphics, you can earn extra points by tackling the advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we can always make exceptions for truly great work! ;-))
 
 Draw-svg is made by humans, and will be graded by humans (the staff) looking at your results. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a major difference to the human eye (we're looking for eye-level differences, not pixel-level differences). If you are unsure about grading, feel free to ask on the class discussion board.
 
@@ -319,8 +319,8 @@ Here, we introduce two different types of edges one triangle may have.
 
 If a sample lies on the top edge or the left edge of a triangle, then it should be treated as inside the triangle. Otherwise it should not.
 
-Detailed description can be found here:
-https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules
+Detailed description can be found [here](https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules).
+
 
 #### Advanced Supersampling 
 
