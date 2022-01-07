@@ -10,7 +10,7 @@ In this project, you will implement a simple software rasterizer that draws poin
 The assignment is due Jan 20th at 11:59:59 PM.
 
 ## Submission instruction
-Zip your assignment directory (please delete the `build` directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission.** 
+Zip your assignment directory (please delete the `build` directory to reduce the file size), and upload your zipped file to [Gradescope](https://www.gradescope.com/). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission, please tag your teammates in your submission**. 
 
 ## Getting started
 
