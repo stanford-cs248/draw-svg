@@ -10,7 +10,7 @@ In this project, you will implement a simple software rasterizer that draws poin
 The assignment is due Jan 20th at 11:59:59 PM.
 
 ## Submission instruction
-Zip your assignment directory (please delete build directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu).Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission.** 
+Zip your assignment directory (please delete the `build` directory to reduce the file size), and upload your zipped file to [Canvas](https://canvas.stanford.edu). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission.** 
 
 ## Getting started
 
@@ -84,7 +84,7 @@ You should also change the build mode to `Release` from `Debug` occasionally by 
 
 ### Using the Mini-SVG Viewer App
 
-When you have successfully built your code, you will get an executable named **drawsvg**. The **drawsvg** executable takes exactly one argument from the command line. You may load a single SVG file by specifying its path. For example, to load the example file `svg/basic/test1.svg` :
+When you have successfully built your code, you will get an executable named **drawsvg**. The **drawsvg** executable takes exactly one argument from the command line. You may load a single SVG file by specifying its path. For example, to load the example file `svg/basic/test1.svg`:
 
 ```
 ./drawsvg ../svg/basic/test1.svg
@@ -92,7 +92,7 @@ When you have successfully built your code, you will get an executable named **d
 
 When you first run the application, you will see a picture of a flower made of a bunch of blue points. The starter code that you must modify is drawing these points. Now press the R key to toggle display to the staff's reference solution to this assignment.
 
-While looking at the reference solution, hold down your primary mouse button (left button) and drag the cursor to pan the view. Cursor location will be printed as a debugging utility to console when you click with your primary mouse button. You can also use scroll wheel to zoom the view. (You can always hit SPACE to reset the viewport to the default view conditions). You can also compare the output of your implementation with that of the reference implementation. To toggle the diff view, press D. We have also provided you with a "pixel-inspector" view to examine pixel-level details of the currently displayed implementation more clearly. The pixel inspector is toggled with the Z key.
+While looking at the reference solution, hold down your primary mouse button (left button) and drag the cursor to pan the view. Cursor location will be printed as a debugging utility to console when you click with your primary mouse button. You can also use scroll wheel to zoom the view. (You can always hit SPACE to reset the viewport to the default view conditions). You can also compare the output of your implementation with that of the reference implementation. To toggle the diff view, press 'D'. We have also provided you with a "pixel-inspector" view to examine pixel-level details of the currently displayed implementation more clearly. The pixel inspector is toggled with the 'Z' key.
 
 For convenience, `drawsvg` can also accept a path to a directory that contains multiple SVG files. To load files from `svg/basic`:
 
@@ -121,22 +121,20 @@ A table of all the keyboard controls in the **draw** application is provided bel
 | Normalize image diff view while pressed  | SHIFT |
 | Reset viewport to default position       | SPACE |
 
-### What You Need to Do
-
-The assignment is divided into seven basic tasks and six advanced tasks, which are described below in the order the course staff suggests you to attempt them. Note that only finishing the basic tasks will result in 92 pts in total which roughly correspond to A- for this class. You can earn extra credits by tackling the advanced tasks and the final grade for this assigment will be clamped at 100 pts. 
-
 ### Grading
 
-Draw-svg is made by humans, and will be graded by humans. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a difference to the human eye (we're looking for eye-level differences, not pixel level differences). If you are unsure about grading, feel free to ask on ed.
+The assignment is divided into seven basic tasks and six advanced tasks, which are described below in the order the course staff suggests you to attempt them.  Finishing the basic tasks will result in a grade of 92 points (out of 100 max) on the assignment. In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a solid A- letter grade in the course.  For students that have more time and really want to learn more graphics, you can earn extra points by tackling the advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we can always make exceptions for truly great work! ;-))
+
+Draw-svg is made by humans, and will be graded by humans (the staff) looking at your results. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a major difference to the human eye (we're looking for eye-level differences, not pixel-level differences). If you are unsure about grading, feel free to ask on the class discussion board.
 
 ### Friendly Advice from your TAs 
 
 - As always, start early. There is a lot to implement in this assignment, so don't fall behind!
 - Open `./draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
-- Be careful with memory allocation, as too many or too frequent heap allocations will severely degrade performance.
+- Be careful with memory allocation, as frequent heap allocations can severely degrade performance.
 - Be careful with types (e.g. float, double, int, uint8_t), casting, and using the right functions for each type. Take note of the `uint8_to_float` and `float_to_uint8` functions in `texture.cpp`, which you may find helpful for later tasks.
 - While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. Later assignments will require you to use C++ classes and objects, so take the time to learn the new features C++ introduces. 
-- Currently, draw-svg does not support rendering `<circle>` svg elements (which is different from `<ellipse>`).
+- Currently, `draw-svg` does not support rendering `<circle>` svg elements (which is different from `<ellipse>`).
 
 #### Getting Acquainted with the Starter Code
 
@@ -212,7 +210,7 @@ Your implementation should:
 
 - Sample triangle coverage using the methods discussed in class. There is an exact solution to the problem of sampling triangle coverage. The position of screen sample points--at half-integer coordinates in screen space--was described above.
 - To receive full credit in Task 1 your implementation should assume that a sample point on a triangle edge is covered by the triangle. Your implementation **DOES NOT** need to respect the triangle "edge rules" to avoid "double counting" as discussed in class. (but we encourage you to try!)
-- Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, we encourage exploration of even more efficient implementations, such as ones that employ "early out" optimizations discussed in lecture.
+- Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, you are free to explore more efficient implementations such as the incremental tile-based method described in class, or this [hierarchical rasterizer](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/abrash09_lrbrast.pdf). (You will likely find that for scenes with relatively small triangles, a simple bounding box based rasterizer is about as fast as more sophisticated techniques.)
 - When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in `render_target`.
 
 **Be careful! Note that the vertices may be in counter-clockwise or clockwise order when passed in. Using the cross-product to check orientation may be helpful.**
@@ -223,13 +221,13 @@ When you are done, you should be able to draw `basic/test3.svg`, `basic/test4.sv
 
 #### Task 2: Anti-Aliasing Using Supersampling (20 pts)
 
-In this task, you will extend your rasterizer to anti-alias triangle edges via supersampling. In response to the user changing the screen sampling rate (the = and - keys), the application will call `set_sample_rate()` . The parameter `sample_rate` defines the sampling rate in each dimension, so a value of 2 would correspond to a sample density of 4 samples per pixel. In this case, the samples lying within the top-left pixel of the screen would be located at locations (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), and (0.75, 0.75).
+In this task, you will extend your rasterizer to anti-alias triangle edges via supersampling. In response to the user changing the screen sampling rate (the '=' and '-' keys), the application will call `set_sample_rate()` . The parameter `sample_rate` defines the sampling rate in each dimension, so a value of 2 would correspond to a sample density of 4 samples per pixel. In this case, the samples lying within the top-left pixel of the screen would be located at locations (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), and (0.75, 0.75).
 
 ![Sample locations](misc/coord_4spp.png?raw=true)
 
 It's reasonable to think of supersampled rendering as rendering an image that is `sample_rate` times larger than the actual output image in each dimension, then resampling the larger rendered output down to the screen sampling rate after rendering is complete. To help you out, here is a sketch of an implementation. **Note: If you implemented your triangle rasterizer in terms of sampling coverage in screen-space coordinates (and not in terms of pixels), then the code changes to support supersampling should be fairly simple for triangles:**
 
-- When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question: when is the right time to perform this allocation in the code?
+- When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question for you to think about: when is the right time to perform this allocation in the code?
 - After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple unit-area box filter.
   Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
 
@@ -326,7 +324,7 @@ https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-program
 
 #### Advanced Supersampling 
 
-- (1 pts) Implement [Morphological anti-aliasing](https://dl.acm.org/citation.cfm?id=1572787) (MLAA), rather than supersampling. It's shocking how well this works. MLAA is a technique used throughout the gaming community to avoid the high cost of supersampling but still avoid objectionable image artifacts caused by aliasing. (More advanced versions of MLAA are described [here](http://www.iryoku.com/mlaa/) and [here](https://software.intel.com/en-us/articles/conservative-morphological-anti-aliasing-20)).
+- (1 pts) Implement [Morphological anti-aliasing](https://dl.acm.org/citation.cfm?id=1572787) (MLAA), rather than supersampling. It's shocking how well this works. MLAA is a technique used throughout the gaming community to avoid the high cost of supersampling but still avoid objectionable image artifacts caused by aliasing. (More advanced versions of MLAA are described [here](http://www.iryoku.com/mlaa/).)
 - (1 pts) Implement [jittered sampling](http://graphics.pixar.com/library/MultiJitteredSampling/paper.pdf) to improve image quality when supersampling.
 - (1 pts) Implement higher quality resampling filters than a box filter and analyze their impact on image quality. For example, try a truncated Gaussian filter. You need to do analysis in your writeup to receive the credit. 
 
