@@ -31,6 +31,8 @@ In order to ease the process of running on different platforms, we will be using
 
 If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`.  Note that the following command assumes you've already installed the Homebrew package manager available at: <http://brew.sh/>. You may also need the freetype package `$ brew install freetype`.
 
+**Note: if you are working on new MAC M1, please rename `draw-svg/src/reference/libdrawsvgref_osx_M1.a` to `draw-svg/src/reference/libdrawsvgref_osx.a` to replace the old file.**
+
 If you are working on Linux, you should be able to install dependencies with your system's package manager as needed (you may need cmake and freetype, and possibly others).
 
 ##### To install freetype on Linux:
@@ -130,7 +132,7 @@ Draw-svg is made by humans, and will be graded by humans (the staff) looking at 
 ### Friendly Advice from your TAs 
 
 - As always, start early. There is a lot to implement in this assignment, so don't fall behind!
-- Open `./draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
+- Open `draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
 - Be careful with memory allocation, as frequent heap allocations can severely degrade performance.
 - Be careful with types (e.g. float, double, int, uint8_t), casting, and using the right functions for each type. Take note of the `uint8_to_float` and `float_to_uint8` functions in `texture.cpp`, which you may find helpful for later tasks.
 - While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. Later assignments will require you to use C++ classes and objects, so take the time to learn the new features C++ introduces. 
