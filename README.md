@@ -111,7 +111,6 @@ A table of all the keyboard controls in the **draw** application is provided bel
 | Command                                  |  Key  |
 | ---------------------------------------- | :---: |
 | Go to tab                                | 1 ~ 9 |
-| Switch to sw renderer                    |   S   |
 | Toggle sw renderer impl (student soln/ref soln) |   R   |
 | Regenerate mipmaps for current tab (student soln) |   ;   |
 | Regenerate mipmaps for current tab (ref soln) |   '   |
@@ -275,14 +274,14 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 - You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sampler_nearest()`), bilinear (`sampler_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
 - As discussed in class, please assume that image pixels correspond to samples at half-integer coordinates in texture space.
 - The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. **In this task, you will only sample from level 0 of the hierarchy: `Texture::mipmap[0]`.** 
-- You should clamp the border (edge) pixels to the nearest valid image pixel as in GL_CLAMP_TO_EDGE.
+- You should clamp the border (edge) pixels to the nearest valid image pixel as in [GL_CLAMP_TO_EDGE](https://open.gl/textures), i.e. the coordinate will simply be clamped between 0 and 1.
 - Our reference solution is implemented using **trilinear filtering**. To make it work correctly, make sure you press `'` to regenerate mipmaps using reference solution instead of using the starter code in `Sampler2DImp::generate_mips()`. For this task, you do not need to modify `Sampler2DImp::generate_mips()` since you are only using the level 0 mipmap.  
 
 When you are done, you should be able to draw the test svgs in `/image`. (Note you need to finish advanced task to support `/image/04_cross_rotate.svg`)
 
 #### Task 5: Alpha Compositing (10 pts)
 
-Up until this point your were invoking a reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in the SVG specification.
+Up until this point your were invoking a reference solution to properly draw semi-transparent elements. Therefore, your job is to implement your own [Simple Alpha Blending](http://www.w3.org/TR/SVGTiny12/painting.html#CompositingSimpleAlpha) in `SoftwareRendererImp::alpha_blending()`.
 
 While the application will always clear the render target buffer to the canvas color at the beginning of a frame to opaque white ((255,255,255,255) in RGBA) before drawing any SVG element, your transparency implementation should make no assumptions about the state of the target at the beginning of a frame.
 
