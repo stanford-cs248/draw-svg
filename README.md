@@ -10,7 +10,12 @@ In this project, you will implement a simple software rasterizer that draws poin
 The assignment is due Jan 20th at 11:59:59 PM.
 
 ## Submission instruction
-Please zip the `draw-svg/src` folder in your assignment directory and upload your zipped file to [Gradescope](https://www.gradescope.com/). Please also include a brief writeup (can be a few lines), including all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission, please tag your teammates in your submission**. 
+Please zip the following files and upload your zipped file to [Gradescope](https://www.gradescope.com/). 
+* `draw-svg/src` folder 
+* task6.svg 
+* writeup (.txt, .doc, .pdf)
+
+The writeup should include all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission, please tag your teammates in your submission**. 
 
 ## Getting started
 
