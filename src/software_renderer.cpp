@@ -25,22 +25,22 @@ void SoftwareRendererImp::fill_pixel(int x, int y, const Color &color) {
 	// Task 2: Re-implement this function
 
 	// check bounds
-	if (x < 0 || x >= target_w) return;
-	if (y < 0 || y >= target_h) return;
+	if (x < 0 || x >= width) return;
+	if (y < 0 || y >= height) return;
 
 	Color pixel_color;
 	float inv255 = 1.0 / 255.0;
-	pixel_color.r = render_target[4 * (x + y * target_w)] * inv255;
-	pixel_color.g = render_target[4 * (x + y * target_w) + 1] * inv255;
-	pixel_color.b = render_target[4 * (x + y * target_w) + 2] * inv255;
-	pixel_color.a = render_target[4 * (x + y * target_w) + 3] * inv255;
+	pixel_color.r = pixel_buffer[4 * (x + y * width)] * inv255;
+	pixel_color.g = pixel_buffer[4 * (x + y * width) + 1] * inv255;
+	pixel_color.b = pixel_buffer[4 * (x + y * width) + 2] * inv255;
+	pixel_color.a = pixel_buffer[4 * (x + y * width) + 3] * inv255;
 
 	pixel_color = ref->alpha_blending_helper(pixel_color, color);
 
-	render_target[4 * (x + y * target_w)] = (uint8_t)(pixel_color.r * 255);
-	render_target[4 * (x + y * target_w) + 1] = (uint8_t)(pixel_color.g * 255);
-	render_target[4 * (x + y * target_w) + 2] = (uint8_t)(pixel_color.b * 255);
-	render_target[4 * (x + y * target_w) + 3] = (uint8_t)(pixel_color.a * 255);
+	pixel_buffer[4 * (x + y * width)] = (uint8_t)(pixel_color.r * 255);
+	pixel_buffer[4 * (x + y * width) + 1] = (uint8_t)(pixel_color.g * 255);
+	pixel_buffer[4 * (x + y * width) + 2] = (uint8_t)(pixel_color.b * 255);
+	pixel_buffer[4 * (x + y * width) + 3] = (uint8_t)(pixel_color.a * 255);
 
 }
 
@@ -69,7 +69,7 @@ void SoftwareRendererImp::draw_svg( SVG& svg ) {
   rasterize_line(d.x, d.y, b.x, b.y, Color::Black);
   rasterize_line(d.x, d.y, c.x, c.y, Color::Black);
 
-  // resolve and send to render target
+  // resolve and send to pixel buffer
   resolve();
 
 }
@@ -82,14 +82,14 @@ void SoftwareRendererImp::set_sample_rate( size_t sample_rate ) {
 
 }
 
-void SoftwareRendererImp::set_render_target( unsigned char* render_target,
+void SoftwareRendererImp::set_pixel_buffer( unsigned char* pixel_buffer,
                                              size_t width, size_t height ) {
 
   // Task 2: 
   // You may want to modify this for supersampling support
-  this->render_target = render_target;
-  this->target_w = width;
-  this->target_h = height;
+  this->pixel_buffer = pixel_buffer;
+  this->width = width;
+  this->height = height;
 
 }
 
@@ -265,15 +265,15 @@ void SoftwareRendererImp::rasterize_point( float x, float y, Color color ) {
   int sy = (int)floor(y);
 
   // check bounds
-  if (sx < 0 || sx >= target_w) return;
-  if (sy < 0 || sy >= target_h) return;
+  if (sx < 0 || sx >= width) return;
+  if (sy < 0 || sy >= height) return;
 
   // fill sample - NOT doing alpha blending!
   // TODO: Call fill_pixel here to run alpha blending
-  render_target[4 * (sx + sy * target_w)] = (uint8_t)(color.r * 255);
-  render_target[4 * (sx + sy * target_w) + 1] = (uint8_t)(color.g * 255);
-  render_target[4 * (sx + sy * target_w) + 2] = (uint8_t)(color.b * 255);
-  render_target[4 * (sx + sy * target_w) + 3] = (uint8_t)(color.a * 255);
+  pixel_buffer[4 * (sx + sy * width)] = (uint8_t)(color.r * 255);
+  pixel_buffer[4 * (sx + sy * width) + 1] = (uint8_t)(color.g * 255);
+  pixel_buffer[4 * (sx + sy * width) + 2] = (uint8_t)(color.b * 255);
+  pixel_buffer[4 * (sx + sy * width) + 3] = (uint8_t)(color.a * 255);
 
 }
 
@@ -283,7 +283,7 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
 
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, target_w, target_h, color, this);
+  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
 
   // Advanced Task
   // Drawing Smooth Lines with Line Width
@@ -309,7 +309,7 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
 
 }
 
-// resolve samples to render target
+// resolve samples to pixel buffer
 void SoftwareRendererImp::resolve( void ) {
 
   // Task 2: 

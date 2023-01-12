@@ -31,19 +31,19 @@ class SoftwareRenderer : public SVGRenderer {
   // Free used resources
   virtual ~SoftwareRenderer( ) { }
 
-  // Draw an svg input to render target
+  // Draw an svg input to pixel buffer
   virtual void draw_svg( SVG& svg ) = 0;
 
   // Set sample rate
   virtual void set_sample_rate( size_t sample_rate ) = 0;
   
-  // Set render target
-  virtual void set_render_target( unsigned char* render_target,
+  // Set pixel buffer
+  virtual void set_pixel_buffer( unsigned char* pixel_buffer,
                                   size_t width, size_t height ) = 0;
 
-  // Clear render target
-  inline void clear_target() {
-    memset(render_target, 255, 4 * target_w * target_h);
+  // Clear pixel buffer
+  inline void clear_buffer() {
+    memset(pixel_buffer, 255, 4 * width * height);
   }
 
   // Set texture sampler
@@ -61,11 +61,11 @@ class SoftwareRenderer : public SVGRenderer {
   // Sample rate (square root of samples per pixel)
   size_t sample_rate;
 
-  // Render target memory location
-  unsigned char* render_target; 
+  // Pixel buffer memory location
+  unsigned char* pixel_buffer; 
 
-  // Target buffer dimension (in pixels)
-  size_t target_w; size_t target_h;
+  // Pixel buffer dimension (in pixels)
+  size_t width; size_t height;
 
   // SVG outline bbox (in pixels)
 	Vector2D svg_bbox_top_left, svg_bbox_bottom_right;
@@ -84,17 +84,16 @@ public:
 
 	SoftwareRendererImp(SoftwareRendererRef *ref = NULL) : SoftwareRenderer(), ref(ref) { }
 
-	// draw an svg input to render target
+	// draw an svg input to pixel buffer
 	void draw_svg(SVG& svg);
 
 	// set sample rate
 	void set_sample_rate(size_t sample_rate);
 
-	// set render target
-	void set_render_target(unsigned char* target_buffer,
+	// set pixel buffer
+	void set_pixel_buffer(unsigned char* pixel_buffer,
 		size_t width, size_t height);
 
-	std::vector<unsigned char> sample_buffer; int w; int h;
 	void fill_sample(int sx, int sy, const Color& color);
 	void fill_pixel(int x, int y, const Color& color);
 
@@ -150,7 +149,7 @@ private:
 		float x1, float y1,
 		Texture& tex);
 
-	// resolve samples to render target
+	// resolve samples to pixel buffer
 	void resolve(void);
 
 	// task5 alpha compositing
@@ -167,7 +166,7 @@ public:
 
 	virtual ~SoftwareRendererRef();
 
-	// draw an svg input to render target
+	// draw an svg input to pixel buffer
 	struct THREAD_DATA
 	{
 		SoftwareRendererRef* ref;
@@ -210,14 +209,14 @@ public:
 
 	void draw_svg(SVG& svg);
 
-	// Clear render target
-	inline void clear_target();
+	// Clear pixel buffer
+	inline void clear_buffer();
 
 	// set sample rate
 	void set_sample_rate(size_t sample_rate);
 
-	// set render target
-	void set_render_target(unsigned char* target_buffer,
+	// set pixel buffer
+	void set_pixel_buffer(unsigned char* pixel_buffer,
 		size_t width, size_t height);
 
 	// Exposing/reimplementing these functions for CS248
@@ -284,16 +283,15 @@ private:
 	// rasterize an image
 	void rasterize_image(Image& image);
 
-	// resolve samples to render target
+	// resolve samples to pixel buffer
 	void resolve(void);
 
 	// Helpers //
-	std::vector<unsigned char> sample_buffer; int w; int h;
 	void fill_sample(float sx, float sy, const Color& c, void* thread_data = NULL);
 	void fill_pixel(int x, int y, const Color& c, void* thread_data = NULL);
 
-	// SSAA render target
-	std::vector<unsigned char> supersample_target;
+	// SSAA sample buffer
+	std::vector<unsigned char> sample_buffer;
 
 #ifdef USE_PTHREAD
 	std::vector<pthread_t> threads;
@@ -305,7 +303,6 @@ private:
 	int sqrt_thread_count;
 	std::vector<THREAD_DATA> thread_data;
 #endif
-	double resolution;
 
 }; // class SoftwareRendererRef
 

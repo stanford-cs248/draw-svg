@@ -93,10 +93,10 @@ void DrawSVG::resize( size_t width, size_t height ) {
   this->width  = width;
   this->height = height;
 
-  // resize render target
+  // resize pixel buffer
   framebuffer.resize( 4 * width * height);
-  software_renderer_imp->set_render_target(&framebuffer[0], width, height);
-  software_renderer_ref->set_render_target(&framebuffer[0], width, height);
+  software_renderer_imp->set_pixel_buffer(&framebuffer[0], width, height);
+  software_renderer_ref->set_pixel_buffer(&framebuffer[0], width, height);
 
   // re-adjust norm_to_screen
   float scale = min(width, height);
@@ -260,7 +260,7 @@ void DrawSVG::scroll_event( float offset_x, float offset_y ) {
 }
 
 void DrawSVG::clear( void ) {
-  software_renderer->clear_target();    
+  software_renderer->clear_buffer();    
 }
 
 void DrawSVG::newTab( SVG* svg ) {
