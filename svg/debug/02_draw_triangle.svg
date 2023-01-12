@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="487.211px" height="642.045px" viewBox="0 0 487.211 642.045" enable-background="new 0 0 487.211 642.045"
+	 xml:space="preserve">
+
+
+
+<!-- Feel free to change the x1,y1 x2,y2 x3,y3 points of the triangle -->
+
+<!-- Simple triangle that is CW -->
+<polygon fill="#1865ED" points="100,400 300,100 350,500"/>
+
+
+<!-- Simple triangle that is CCW -->
+<polygon fill="#A018ED" points="100,550 400,620 300,500 "/>
+
+
+<!-- Big Triangle -->
+<!-- Add you own example here! -->
+
+<!-- Small Triangle -->
+<!-- Add you own example here! -->
+
+<!-- Fat Triangle -->
+<!-- Add you own example here! -->
+
+<!-- Super Skinny Triangle -->
+<!-- Add you own example here! -->
+
+<!-- Right Triangle -->
+<!-- Add you own example here! -->
+
+<!-- Triangles that overlap -->
+<!-- Add you own example here! -->
+
+<!-- etc... -->
+
+
+</svg>

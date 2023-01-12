@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="272.863px" height="272.863px" viewBox="0 0 272.863 272.863" enable-background="new 0 0 272.863 272.863"
+	 xml:space="preserve">
+
+
+<!-- Feel free to change the x1, y1, x2, y2 points so that you can debug all possible line slopes -->
+<!-- Remember that the x1, y1, x2, y2 points must be within the bounds of the width and height -->
+
+<!-- Line with 0 slope -->
+<line fill="none" stroke="#000000" stroke-width="0.8" stroke-miterlimit="10" x1="151.591" y1="136.432" x2="272.863" y2="136.432"/>
+
+<!-- Line with infinite slope -->
+<line fill="none" stroke="#000000" stroke-width="0.8" stroke-miterlimit="10" x1="68.21" y1="68.21" x2="68.21" y2="204.63"/>
+
+
+<!-- Line with 0 < m < 1 -->
+<!-- Add you own example here! -->
+
+<!-- Line with 1 < m < infinity-->
+<!-- Add you own example here! -->
+
+<!-- Line with -1 < m < 0 -->
+<!-- Add you own example here! -->
+
+<!-- Line with -infinity < m < -1 -->
+<!-- Add you own example here! -->
+
+<!-- etc... -->
+
+</svg>
