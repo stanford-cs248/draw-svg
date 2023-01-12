@@ -6,21 +6,10 @@
 #include "CS248.h"
 #include "renderer.h"
 #include "svg.h"
-#include "hardware_renderer.h"
 #include "software_renderer.h"
+#include "GLFW/glfw3.h"
 
 namespace CS248 {
-
-/** 
- * The drawing methods of the renderer. The SVG renderer can use the 
- * the hardware renderer (OpenGL), or the software renderer. It
- * also has a mode that draws the difference between the two.
- */
-enum RenderMethod {
-  Hardware,
-  Software
-};
-
 
 /**
  * The SVG renderer draws SVG files.
@@ -30,13 +19,11 @@ class DrawSVG : public Renderer {
 
   /**
    * Constructor.
-   * Creates a new SVG renderer and use the given draw method. By default, 
-   * a newly created renderer instance will use the hardware renderer.
+   * Creates a new SVG renderer and use the given draw method.
    * \param method Draw method to use.
    */
   DrawSVG() : 
     leftDown (false),
-    method (Software),
     sample_rate (1),
     current_tab (0),
     show_diff (false),
@@ -74,25 +61,6 @@ class DrawSVG : public Renderer {
    */
   void clear( void );
 
-  /**
-   * Set a new render method.
-   */
-  inline void setRenderMethod( RenderMethod method ) {    
-    
-    this->method = method; 
-    
-    switch (method) {
-      case Hardware:
-        osd = "Hardware Renderer";
-        break;
-      case Software:
-        osd = "Software Renderer";
-        break;
-    }
-
-    redraw();
-  }
-
   /** 
    * Draw a SVG illustration.
    */
@@ -129,14 +97,8 @@ class DrawSVG : public Renderer {
   /* cursor position */
   float cursor_x; float cursor_y;
   
-  /* current render method */
-  RenderMethod method;
-
   /* info to post to viewer osd */
   std::string osd;
-
-  /* hardware renderer */
-  HardwareRenderer* hardware_renderer;
 
   /* software renderer */
   SoftwareRenderer* software_renderer;

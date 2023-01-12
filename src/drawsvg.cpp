@@ -14,8 +14,6 @@ DrawSVG::~DrawSVG() {
   viewport_imp.clear();
   viewport_ref.clear();
 
-  delete hardware_renderer;
-
   delete software_renderer_imp;
   delete software_renderer_ref;
 
@@ -29,27 +27,18 @@ string DrawSVG::info() {
 
   if (show_diff) return osd;
 
-  if (method == Hardware) {
-    osd = "Hardware Renderer";
+  osd = "Software Renderer ";
+  if (software_renderer == software_renderer_ref) {
+    osd += "- Reference";
   }
-
-  if (method == Software) {
-    osd = "Software Renderer ";
-    if (software_renderer == software_renderer_ref) {
-      osd += "- Reference";
-    }
-    if (sample_rate > 1) {
-      osd += "( " + to_string(sample_rate * sample_rate) + "x SSAA)";
-    }
+  if (sample_rate > 1) {
+    osd += "( " + to_string(sample_rate * sample_rate) + "x SSAA)";
   }
 
   return osd;
 }
 
 void DrawSVG::init() {
-
-  // hardware renderer
-  hardware_renderer = new HardwareRenderer();
 
   // software renderer implementations
   software_renderer_ref = new SoftwareRendererRef(16);
@@ -91,13 +80,7 @@ void DrawSVG::init() {
 
 void DrawSVG::render() {
 
-  if (method == Hardware ) {
-    redraw();
-  }
-
-  if( method == Software ) {
-    display_pixels( &framebuffer[0] );
-  }
+  display_pixels( &framebuffer[0] );
 
   if (show_zoom) {
     draw_zoom();
@@ -114,9 +97,6 @@ void DrawSVG::resize( size_t width, size_t height ) {
   framebuffer.resize( 4 * width * height);
   software_renderer_imp->set_render_target(&framebuffer[0], width, height);
   software_renderer_ref->set_render_target(&framebuffer[0], width, height);
-
-  // update hardware renderer
-  hardware_renderer->resize(width, height);
 
   // re-adjust norm_to_screen
   float scale = min(width, height);
@@ -165,7 +145,7 @@ void DrawSVG::char_event( unsigned int key ) {
       if (software_renderer == software_renderer_imp) {
         software_renderer = software_renderer_ref;
       } else {software_renderer = software_renderer_imp; }
-      setRenderMethod( Software );
+      redraw();
       break;
 
     // switch between iml and ref sampler
@@ -178,21 +158,10 @@ void DrawSVG::char_event( unsigned int key ) {
       regenerate_mipmap(current_tab); redraw();
       break;
 
-    // change render method
-    case 's': case 'S':
-      setRenderMethod( Software ); info();
-      break;
-    case 'h': case 'H':
-// NOTE: Hardware is disabled for CS248
-//      setRenderMethod( Hardware ); info();
-      break;
-
     // toggle diff
     case 'd': case 'D':
-      if (method == Software) {
-        show_diff = !show_diff; 
-        redraw();
-      }
+      show_diff = !show_diff; 
+      redraw();
       break;
 
     // toggle zoom
@@ -291,14 +260,7 @@ void DrawSVG::scroll_event( float offset_x, float offset_y ) {
 }
 
 void DrawSVG::clear( void ) {
-
-  if (method == Hardware ) {
-    hardware_renderer->clear_target();
-  }
-
-  if( method == Software ) {
-    software_renderer->clear_target();    
-  }
+  software_renderer->clear_target();    
 }
 
 void DrawSVG::newTab( SVG* svg ) {
@@ -445,21 +407,17 @@ void DrawSVG::draw_zoom() {
 
 
 void DrawSVG::inc_sample_rate() {
-  if (method == Software) {
-    sample_rate += sample_rate < 4 ? 1 : 0;
-    software_renderer_imp->set_sample_rate(sample_rate);
-    software_renderer_ref->set_sample_rate(sample_rate);
-    redraw();
-  }
+  sample_rate += sample_rate < 4 ? 1 : 0;
+  software_renderer_imp->set_sample_rate(sample_rate);
+  software_renderer_ref->set_sample_rate(sample_rate);
+  redraw();
 }
 
 void DrawSVG::dec_sample_rate() {
-  if (method == Software) {
-    sample_rate -= sample_rate > 1 ? 1 : 0;
-    software_renderer_imp->set_sample_rate(sample_rate);
-    software_renderer_ref->set_sample_rate(sample_rate);
-    redraw();
-  }
+  sample_rate -= sample_rate > 1 ? 1 : 0;
+  software_renderer_imp->set_sample_rate(sample_rate);
+  software_renderer_ref->set_sample_rate(sample_rate);
+  redraw();
 }
 
 void DrawSVG::redraw() {
@@ -471,22 +429,10 @@ void DrawSVG::redraw() {
   Matrix3x3 m_ref = norm_to_screen * viewport_ref[current_tab]->get_canvas_to_norm();
   software_renderer_imp->set_canvas_to_screen( m_imp ); 
   software_renderer_ref->set_canvas_to_screen( m_ref ); 
-  hardware_renderer->set_canvas_to_screen( m_ref );
 
-  switch (method) {
-
-    case Hardware:  
-      hardware_renderer->draw_svg(*tabs[current_tab]);
-      break;
-      
-    case Software: 
-
-      if (show_diff) { draw_diff(); return; }
-      software_renderer->draw_svg(*tabs[current_tab]);
-      display_pixels( &framebuffer[0] );
-      break;
-
-  }
+  if (show_diff) { draw_diff(); return; }
+  software_renderer->draw_svg(*tabs[current_tab]);
+  display_pixels( &framebuffer[0] );
 }
 
 void DrawSVG::regenerate_mipmap(size_t tab_index) {

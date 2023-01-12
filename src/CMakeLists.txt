@@ -33,7 +33,6 @@ set(CS248_DRAWSVG_SOURCE
     texture.cpp
     viewport.cpp
     triangulation.cpp
-#    hardware_renderer.cpp
     software_renderer.cpp
     drawsvg.cpp
     main.cpp
@@ -50,14 +49,9 @@ set(CS248_DRAWSVG_HEADER
     texture.h
     viewport.h
     triangulation.h
-    hardware_renderer.h
     software_renderer.h
     drawsvg.h
 )
-
-# Import hardware renderer
-option(DRAWSVG_BUILD_HARDWARE_RENDERER  "Build hardware implementation"  ON)
-include(hardware/hardware.cmake)
 
 # Import drawsvg reference
 include(reference/reference.cmake)
@@ -71,7 +65,7 @@ add_executable( drawsvg
 )
 
 # Link drawsvg executable (static link reference solution)
-target_link_libraries( drawsvg drawsvg_hdwr debug drawsvg_ref-debug optimized drawsvg_ref
+target_link_libraries( drawsvg debug drawsvg_ref-debug optimized drawsvg_ref
     ${FREETYPE_LIBRARIES}
     ${PTHREAD_LIBRARIES}
     ${OPENGL_LIBRARIES}
@@ -81,31 +75,31 @@ target_link_libraries( drawsvg drawsvg_hdwr debug drawsvg_ref-debug optimized dr
 )
 
 if (APPLE) # Frameworks required on osx
-  target_link_libraries(drawsvg  
+  target_link_libraries(drawsvg
     ${COCOA_LIBRARIES}
     ${IOKIT_LIBRARIES}
     ${COREVIDEO_LIBRARIES}
   )
 else(UNIX)  #LINUX
-target_link_libraries( drawsvg drawsvg_hdwr debug drawsvg_ref-debug optimized drawsvg_ref
+target_link_libraries( drawsvg debug drawsvg_ref-debug optimized drawsvg_ref
     ${CS248_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${FREETYPE_LIBRARIES}
     ${PTHREAD_LIBRARIES}
     ${OPENGL_LIBRARIES}
-    -fopenmp 
-    -lXi 
-    -lXxf86vm 
-    -lXinerama 
-    -lXcursor 
-    -lXfixes 
-    -lXrandr 
-    -lXext 
-    -lXrender 
-    -lX11 
-    -lpthread 
-    -lxcb 
+    -fopenmp
+    -lXi
+    -lXxf86vm
+    -lXinerama
+    -lXcursor
+    -lXfixes
+    -lXrandr
+    -lXext
+    -lXrender
+    -lX11
+    -lpthread
+    -lxcb
     -lXau
 )
 endif()
