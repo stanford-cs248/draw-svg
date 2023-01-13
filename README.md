@@ -135,6 +135,8 @@ Draw-svg is made by humans, and will be graded by humans (the staff) looking at 
 
 ### Friendly Advice from your TAs 
 
+- On canvas we have a short introductory video for the assingment, it will walk through some of the starting code and functionality.
+- You can edit `.svg` files directly. Take a look at `svg/debug/` folder to see two simple files that you can edit to test the functionality of task 0 and task 1. Feel free to add in your own debugging tests here (these are not graded and merely here to help you).
 - As always, start early. There is a lot to implement in this assignment, so don't fall behind!
 - Open `draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
 - Be careful with memory allocation, as frequent heap allocations can severely degrade performance.
@@ -148,9 +150,9 @@ Before you start, here are some basic information on the structure of the starte
 
 **You only need to add code to class `SoftwareRendererImp`, `ViewportImp` and `Sampler2DImp` throughout this assignment.** (If you decided to modify other code with a reason, please clarify that in your writeup). The most important method is `SoftwareRendererImp::draw_svg` which (not surprisingly) accepts an SVG object to draw. An SVG file defines its canvas (which defines a 2D coordinate space), and specifies a list of shape elements (such as points, lines, triangles, and images) that should be drawn on that canvas. Each shape element has a number of style parameters (e.g., color) as well as a modeling transform used to determine the element's position on the canvas. You can find the definition of the SVG class (and all the associated `SVGElements`) in `svg.h`. Notice that one type of `SVGElement` is a group that itself contains child elements. Therefore, you should think of an SVG file as defining a tree of shape elements. (Interior nodes of the tree are groups, and leaves are shapes.)
 
-Another important method on the `SoftwareRendererImp` class is `set_render_target()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `target_w` and `target_h`). This buffer is often called the "render target" in many applications, since it is the "target" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
+Another important method on the `SoftwareRendererImp` class is `set_pixel_buffer()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `target_w` and `target_h`). This buffer is often called the "pixel buffer" in many applications, since it is the "buffer" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
 
-`set_render_target()` is called whenever the user resizes the application window.
+`set_pixel_buffer()` is called whenever the user resizes the application window.
 
 #### A Simple Example: Drawing Points
 
@@ -183,10 +185,10 @@ if ( sy < 0 || sy >= target_h ) return;
 If the points happen to be on screen, we fill in the pixel with the RGBA color associated with the point.
 
 ```
-  render_target[4 * (sx + sy * target_w)    ] = (uint8_t) (color.r * 255);
-  render_target[4 * (sx + sy * target_w) + 1] = (uint8_t) (color.g * 255);
-  render_target[4 * (sx + sy * target_w) + 2] = (uint8_t) (color.b * 255);
-  render_target[4 * (sx + sy * target_w) + 3] = (uint8_t) (color.a * 255);
+  pixel_buffer[4 * (sx + sy * target_w)    ] = (uint8_t) (color.r * 255);
+  pixel_buffer[4 * (sx + sy * target_w) + 1] = (uint8_t) (color.g * 255);
+  pixel_buffer[4 * (sx + sy * target_w) + 2] = (uint8_t) (color.b * 255);
+  pixel_buffer[4 * (sx + sy * target_w) + 3] = (uint8_t) (color.a * 255);
 ```
 
 At this time the starter code does not correctly handle transparent points. In order to handle transparent points, you should call `fill_pixel()`, which handles alpha blending for you.
@@ -217,7 +219,7 @@ Your implementation should:
 - Sample triangle coverage using the methods discussed in class. There is an exact solution to the problem of sampling triangle coverage. The position of screen sample points--at half-integer coordinates in screen space--was described above.
 - To receive full credit in Task 1 your implementation should assume that a sample point on a triangle edge is covered by the triangle. Your implementation **DOES NOT** need to respect the triangle "edge rules" to avoid "double counting" as discussed in class. (but we encourage you to try!)
 - Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, you are free to explore more efficient implementations such as the incremental tile-based method described in class, or this [hierarchical rasterizer](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/abrash09_lrbrast.pdf). (You will likely find that for scenes with relatively small triangles, a simple bounding box based rasterizer is about as fast as more sophisticated techniques.)
-- When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in `render_target`.
+- When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in `pixel_buffer`.
 
 **Be careful! Note that the vertices may be in counter-clockwise or clockwise order when passed in. Using the cross-product to check orientation may be helpful.**
 
@@ -233,7 +235,7 @@ In this task, you will extend your rasterizer to anti-alias triangle edges via s
 
 It's reasonable to think of supersampled rendering as rendering an image that is `sample_rate` times larger than the actual output image in each dimension, then resampling the larger rendered output down to the screen sampling rate after rendering is complete. To help you out, here is a sketch of an implementation. **Note: If you implemented your triangle rasterizer in terms of sampling coverage in screen-space coordinates (and not in terms of pixels), then the code changes to support supersampling should be fairly simple for triangles:**
 
-- When rasterizing primitives such as triangles, rather than directly updating `render_target`, your rasterization should update the contents of a larger buffer (perhaps call it `supersample_target`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question for you to think about: when is the right time to perform this allocation in the code?
+- When rasterizing primitives such as triangles, rather than directly updating `pixel_buffer`, your rasterization should update the contents of a larger buffer (perhaps call it `sample_buffer`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question for you to think about: when is the right time to perform this allocation in the code?
 - After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple unit-area box filter.
   Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
 
