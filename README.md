@@ -305,7 +305,7 @@ Once you finished, you should be able to correctly draw the test svgs in `/alpha
 
 Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something!
 
-You can create an SVG file in popular design tools like Adobe Illustrator or [Inkscape](https://inkscape.org/) and export SVG files, or use a variety of editors online. Since an SVG file is just an XML file, you could even use a text editor to create an SVG manually or write code to generate one.
+You can create an SVG file in popular design tools like Adobe Illustrator or [Inkscape](https://inkscape.org/) and export SVG files, or use a variety of editors online. Since an SVG file is just an XML file, you could even use a text editor to create an SVG manually or write code to generate one.  (Recall we gave you good links to the SVG file format description at the top of this handout.)
 
 __Be aware that the starter code and your renderer implementation only support a **subset** of the features defined in the SVG specification (check `svg.cpp`), and applications like Adobe Illustrator or Inkscape may not always encode shapes you draw with the primitives this assignment supports.__ (For example, you may need to convert complicated paths to the basic primitives in these tools. This [Path to Polygon Converter](https://betravis.github.io/shape-tools/path-to-polygon/) might be of use.)
 
