@@ -2,20 +2,28 @@
 
 ![Teaser](misc/teaser.png)
 
+## Due date
+The assignment is due Jan 26th at 11:59:59 PM.
+
 ## Overview
 
-In this project, you will implement a simple software rasterizer that draws points, lines, triangles, and bitmap images. When you are done, you will have a viewer that supports basic features of the [Scalable Vector Graphics](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (SVG) format that is now widely used on the internet.
+In this project, you will implement a simple software rasterizer that draws points, lines, triangles, and bitmap images. When you are done, you will have a viewer that supports basic features of the [Scalable Vector Graphics](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (SVG) format that is now widely used on the internet.  Although you don't need to understand the SVG file format for this assignment, you might be interested in learning more about the SVG specification and it's capabilities, here are two good references:
+ * [Mozilla SVG Tutorial](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial)
+ * [W3C's SVG Primer](https://www.w3.org/Graphics/SVG/IG/resources/svgprimer.html#overview)
 
-## Due date
-The assignment is due Jan 20th at 11:59:59 PM.
+## Submission Instructions
 
-## Submission instruction
+**Each team only needs one submission, please tag your teammates in your submission**. 
+
 Please zip the following files and upload your zipped file to [Gradescope](https://www.gradescope.com/). 
 * `draw-svg/src` folder 
 * task6.svg 
 * writeup (.txt, .doc, .pdf)
 
-The writeup should include all the SUNET ids of the members on your team, the tasks you completed and comments and/or considerations you want to let us know (optional). **One team only needs one submission, please tag your teammates in your submission**. 
+The writeup should include:
+ * The names and SUNET ids of all team members (up to 2)
+ * A list of work done by each team member (who was responsible for what, or mention that everyone co-programmed everything if that's the case)
+ * A brief description the tasks you completed and comments and/or considerations you want the graders to know about in terms of what extra tasks were attempted and how to run the code so see the results of those extra tasks.  
 
 ## Getting started
 
@@ -91,15 +99,15 @@ You should also change the build mode to `Release` from `Debug` occasionally by 
 
 ### Using the Mini-SVG Viewer App
 
-When you have successfully built your code, you will get an executable named **drawsvg**. The **drawsvg** executable takes exactly one argument from the command line. You may load a single SVG file by specifying its path. For example, to load the example file `svg/basic/test1.svg`:
+When you have successfully built your code, you will get an executable named **drawsvg**. The **drawsvg** executable takes exactly one argument from the command line, the name of an SVG file (or a directory of SVG files). For example, to load the example file `svg/basic/test1.svg`:
 
 ```
 ./drawsvg ../svg/basic/test1.svg
 ```
 
-When you first run the application, you will see a picture of a flower made of a bunch of blue points. The starter code that you must modify is drawing these points. Now press the R key to toggle display to the staff's reference solution to this assignment.
+When you first run the application, you will see a picture of a flower made of a bunch of blue points. The starter code that you must modify is drawing these points. Now press the `R` key to toggle the display of the staff's reference solution to this assignment.
 
-While looking at the reference solution, hold down your primary mouse button (left button) and drag the cursor to pan the view. Cursor location will be printed as a debugging utility to console when you click with your primary mouse button. You can also use scroll wheel to zoom the view. (You can always hit SPACE to reset the viewport to the default view conditions). You can also compare the output of your implementation with that of the reference implementation. To toggle the diff view, press 'D'. We have also provided you with a "pixel-inspector" view to examine pixel-level details of the currently displayed implementation more clearly. The pixel inspector is toggled with the 'Z' key.
+While looking at the reference solution, hold down your primary mouse button (left button) and drag the cursor to pan the view. The cursor's location will be printed as a debugging utility to the console when you click with your primary mouse button. You can also use the scroll wheel to zoom the view. (Hit SPACE to reset the viewport to the default view conditions.) You can also compare the output of your implementation with that of the reference implementation. To toggle the diff view, press 'D'. We have also provided you with a "pixel-inspector" view to examine pixel-level details of the currently displayed implementation more clearly in a zoom view. The pixel inspector is toggled with the 'Z' key.
 
 For convenience, `drawsvg` can also accept a path to a directory that contains multiple SVG files. To load files from `svg/basic`:
 
@@ -129,19 +137,19 @@ A table of all the keyboard controls in the **draw** application is provided bel
 
 ### Grading
 
-The assignment is divided into seven basic tasks and seven advanced tasks, which are described below in the order the course staff suggests you to attempt them.  Finishing the basic tasks will result in a grade of 92 points (out of 100 max) on the assignment. In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a solid A- letter grade in the course.  For students that have more time and really want to learn more graphics, you can earn extra points by tackling the advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we can always make exceptions for truly great work! ;-))
+__The assignment is divided into seven basic tasks and seven advanced tasks, which are described below in the order the course staff suggests you to attempt them. Finishing the basic tasks will result in a grade of 92 points (out of 100 max) on the assignment.__ In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a solid A- letter grade for this part of course. In other words, IT'S OKAY TO NOT SHOOT FOR 100.  Students that have more time, really want to learn more graphics, or want to earn an "A" or "A+" on the assignment, can earn extra points by tackling more advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we are open to making exceptions to this clamp-to-100 policy truly great work! ;-))
 
-Draw-svg is made by humans, and will be graded by humans (the staff) looking at your results. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a major difference to the human eye (we're looking for eye-level differences, not pixel-level differences). If you are unsure about grading, feel free to ask on the class discussion board.
+__What is a "correct" solution:__  Draw-svg is made by humans, and will be graded by humans (the staff) looking at your results. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a major difference to the human eye (we're looking for eye-level differences, not pixel-level differences). If you are unsure about grading, feel free to ask on the class discussion board.
 
-### Friendly Advice from your TAs 
+### Friendly Advice from your CAs 
 
-- On canvas we have a short introductory video for the assingment, it will walk through some of the starting code and functionality.
-- You can edit `.svg` files directly. Take a look at `svg/debug/` folder to see two simple files that you can edit to test the functionality of task 0 and task 1. Feel free to add in your own debugging tests here (these are not graded and merely here to help you).
-- As always, start early. There is a lot to implement in this assignment, so don't fall behind!
+- On canvas we have posted a short introductory video for the assingment, it will walk through some of the starting code and functionality. We recommend you watch it as you get started
+- You can edit `.svg` files directly in a text editor. Take a look at `svg/debug/` folder to see two simple files that you can edit to test the functionality of task 0 and task 1. Feel free to add in your own debugging tests here (these are not graded and merely here to help you).
+- Start early. There is a lot to implement in this assignment, so don't fall behind!
 - Open `draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
-- Be careful with memory allocation, as frequent heap allocations can severely degrade performance.
+- Be careful with memory allocation, as frequent heap allocations can severely reduce rendering performance.
 - Be careful with types (e.g. float, double, int, uint8_t), casting, and using the right functions for each type. Take note of the `uint8_to_float` and `float_to_uint8` functions in `texture.cpp`, which you may find helpful for later tasks.
-- While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. Later assignments will require you to use C++ classes and objects, so take the time to learn the new features C++ introduces. 
+- While C has many pitfalls, C++ introduces even more wonderful ways to shoot yourself in the foot. Later assignments will require you to use C++ classes and objects, so take the time to learn C++'s basic feature now. 
 - Currently, `draw-svg` does not support rendering `<circle>` svg elements (which is different from `<ellipse>`).
 
 #### Getting Acquainted with the Starter Code
@@ -150,13 +158,13 @@ Before you start, here are some basic information on the structure of the starte
 
 **You only need to add code to class `SoftwareRendererImp`, `ViewportImp` and `Sampler2DImp` throughout this assignment.** (If you decided to modify other code with a reason, please clarify that in your writeup). The most important method is `SoftwareRendererImp::draw_svg` which (not surprisingly) accepts an SVG object to draw. An SVG file defines its canvas (which defines a 2D coordinate space), and specifies a list of shape elements (such as points, lines, triangles, and images) that should be drawn on that canvas. Each shape element has a number of style parameters (e.g., color) as well as a modeling transform used to determine the element's position on the canvas. You can find the definition of the SVG class (and all the associated `SVGElements`) in `svg.h`. Notice that one type of `SVGElement` is a group that itself contains child elements. Therefore, you should think of an SVG file as defining a tree of shape elements. (Interior nodes of the tree are groups, and leaves are shapes.)
 
-Another important method on the `SoftwareRendererImp` class is `set_pixel_buffer()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `width` and `height`). This buffer is often called the "pixel buffer" in many applications, since it is the "buffer" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
+Another important method on the `SoftwareRendererImp` class is `set_pixel_buffer()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `width` and `height`). **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
 
 `set_pixel_buffer()` is called whenever the user resizes the application window.
 
 #### A Simple Example: Drawing Points
 
-You are given starter code that already implements drawing of 2D points. To see how this works, begin by taking a look at `draw_svg()` in `software_renderer.cpp`. The method accepts an SVG file, and draws all elements in the SVG file via a sequence of calls to `draw_element()`. For each element `draw_element()` inspects the type of the element, and then calls the appropriate draw function. In the case of points, that function is `draw_point()`.
+You are given starter code that already implements drawing of 2D points. To see how this works, begin by taking a look at `draw_svg()` in `software_renderer.cpp`. The method accepts an SVG file, and draws all elements in the SVG file via a sequence of calls to `draw_element()`. For each element, `draw_element()` inspects the type of the element, and then calls the appropriate draw function in the code. In the case of points, that function is `draw_point()`.
 
 The position of each point is defined in a local coordinate frame, so `draw_point()` first transforms the input point into its screen-space position (see Vector2D `p_screen = transform(p)`). This transform is set at the beginning of `draw_svg()`. In the starter code, this transform converts from the svg canvas' coordinate system to screen coordinates. You will need to handle more complex transforms to support more complex SVG files and implement mouse viewing controls later in the assignment.
 
@@ -175,14 +183,14 @@ int sx = (int) floor(x);
 int sy = (int) floor(y);
 ```
 
-Of course, the code should not attempt to modify the render buffer at invalid pixel locations.
+Of course, the code should not attempt to modify the pixel buffer at invalid pixel locations.
 
 ```
 if ( sx < 0 || sx >= width ) return;
 if ( sy < 0 || sy >= height ) return;
 ```
 
-If the points happen to be on screen, we fill in the pixel with the RGBA color associated with the point.
+If the points happen to be on screen, the start code fills in the pixel with the RGBA color associated with the point.
 
 ```
   pixel_buffer[4 * (sx + sy * width)    ] = (uint8_t) (color.r * 255);
@@ -195,12 +203,11 @@ At this time the starter code does not correctly handle transparent points. In o
 
 **Now that you understand the basics of drawing elements, let's get to work actually drawing more interesting elements than points!**
 
-
 #### Task 0: Warm Up: Drawing Lines (5 pts)
 
 In this task you will add line drawing functionality by implementing the function `rasterize_line()` in `software_renderer.cpp` instead of calling a reference solution.
 
-We discussed a few ways to think about rasterizing a line. (Recall we talked about possible rules for what samples are considered to be "covered" by the line, and we discussed algorithms for efficiently determining what samples meet that criteria. Since line drawing is very well documented on the web, you may consult the web and use any algorithm you wish. However, your solution should:
+In lecture we discussed a few ways to think about rasterizing a line. (Recall we talked about possible rules for what samples are considered to be "covered" by the line, and we discussed algorithms for efficiently determining what samples meet that criteria. Since line drawing is very well documented on the web, you may consult the web and use any algorithm you wish. However, your solution should:
 
 - Handle non-integer vertex coordinates passed to `rasterize_line()`.
 - Handle lines of any slope.
@@ -208,7 +215,7 @@ We discussed a few ways to think about rasterizing a line. (Recall we talked abo
 
 We encourage you to start with an implementation of [Bresenham's algorithm](http://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html). When you are done, your solution should be able to correctly render `basic/test2.svg`.
 
-**Note: If you compare your initial Bresenham results with the reference implementation, you will notice that the reference solution generates smooth lines. For example, you can modify your Bresenham implementation to perform [Xiaolin Wu's line algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm) which counts as extra credit. Otherwise, you may want to comment out your implementation and proceed with the `rasterize_line_helper()` for the following tasks to minimize the difference on the boundary when compared to reference.** 
+**Note: If you compare your initial Bresenham results with the reference implementation, you will notice that the reference solution generates smooth lines. You can modify your Bresenham implementation to perform [Xiaolin Wu's line algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm) which counts as extra credit. Otherwise, you may want to comment out your implementation and proceed with the `rasterize_line_helper()` for the following tasks to minimize the difference on the boundary when compared to reference.** 
 
 #### Task 1: Drawing Triangles (20 pts)
 
@@ -218,7 +225,7 @@ Your implementation should:
 
 - Sample triangle coverage using the methods discussed in class. There is an exact solution to the problem of sampling triangle coverage. The position of screen sample points--at half-integer coordinates in screen space--was described above.
 - To receive full credit in Task 1 your implementation should assume that a sample point on a triangle edge is covered by the triangle. Your implementation **DOES NOT** need to respect the triangle "edge rules" to avoid "double counting" as discussed in class. (but we encourage you to try!)
-- Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, you are free to explore more efficient implementations such as the incremental tile-based method described in class, or this [hierarchical rasterizer](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/abrash09_lrbrast.pdf). (You will likely find that for scenes with relatively small triangles, a simple bounding box based rasterizer is about as fast as more sophisticated techniques.)
+- Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen. To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle. However, you are free to explore more efficient implementations such as the incremental tile-based method described in class, or this [hierarchical rasterizer](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/abrash09_lrbrast.pdf). (You will likely find that for scenes with relatively small triangles, a simple bounding box based rasterizer is about as fast as the more sophisticated techniques.)
 - When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in `pixel_buffer`.
 
 **Be careful! Note that the vertices may be in counter-clockwise or clockwise order when passed in. Using the cross-product to check orientation may be helpful.**
@@ -233,10 +240,10 @@ In this task, you will extend your rasterizer to anti-alias triangle edges via s
 
 ![Sample locations](misc/coord_4spp.png?raw=true)
 
-It's reasonable to think of supersampled rendering as rendering an image that is `sample_rate` times larger than the actual output image in each dimension, then resampling the larger rendered output down to the screen sampling rate after rendering is complete. To help you out, here is a sketch of an implementation. **Note: If you implemented your triangle rasterizer in terms of sampling coverage in screen-space coordinates (and not in terms of pixels), then the code changes to support supersampling should be fairly simple for triangles:**
+It is reasonable to think of supersampled rendering as rendering an image that is `sample_rate` times larger than the actual output image in each dimension, followed by resampling the larger rendered output down to the screen sampling rate after rendering is complete. To help you out, here is a sketch of an implementation. **Note: If you implemented your triangle rasterizer in terms of sampling coverage in screen-space coordinates (and not in terms of pixels), then the code changes to support supersampling should be fairly simple for triangles:**
 
-- When rasterizing primitives such as triangles, rather than directly updating `pixel_buffer`, your rasterization should update the contents of a larger buffer (perhaps call it `sample_buffer`) that holds the per-super-sample results. Yes, you will have to allocate/free this buffer yourself. Question for you to think about: when is the right time to perform this allocation in the code?
-- After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the render target. Please implement resampling using a simple unit-area box filter.
+- When rasterizing primitives such as triangles, rather than directly updating `pixel_buffer`, your rasterization should update the contents of a larger buffer (call it `sample_buffer`) that holds the per-supersample results. Yes, you will have to allocate/free this buffer yourself. Question for you to think about: when is the right time to perform this allocation in the code?
+- After rendering is complete, your implementation must resample the supersampled results buffer to obtain sample values for the render target. This is often called "resolving" the supersample buffer into the final pixel buffer. Please implement resampling using a simple unit-area box filter (e.g. average all sample values in a pixel to obtain the per-pixel sample value).
   Note that the function `SoftwareRendererImp::resolve()` is called by `draw_svg()` after the SVG file has been drawn. Thus it's a very convenient place to perform resampling.
 
 When you are done, try increasing the supersampling rate in the viewer, and bask in the glory of having much smoother triangle edges.
@@ -252,13 +259,13 @@ A solution that does not anti-alias points and lines is acceptable.)
 
 It is common (and often very useful) to describe objects and shapes in their own local coordinate spaces and then build up more complicated objects by positioning many individual components in a single coordinate space. In this task you will extend the renderer to properly interpret the hierarchy of modeling transforms expressed in SVG files.
 
-Recall that an SVG object consists of a hierarchy of shape elements. Each element in an SVG is associated with a modeling transform (see `SVGElement.transform` in `svg.h`) that defines the relationship between the object's local coordinate space and the parent element's coordinate space. At present, the implementation of `draw_element()`ignores these modeling transforms, so the only SVG objects your renderer has been able to correctly draw were objects that contained only identity modeling transforms.
+Recall that an SVG object consists of a hierarchy of shape elements. Each element in an SVG is associated with a modeling transform (see `SVGElement.transform` in `svg.h`) that defines the relationship between the object's local coordinate space and the parent element's coordinate space. At present, the implementation of `draw_element()` ignores these modeling transforms, so the only SVG objects your renderer has been able to correctly draw were objects that had identity modeling transforms.
 
 Please modify `draw_element()` to implement the hierarchy of transforms specified in the SVG object. (You can do this in no more than a few lines of code.)
 
 When you are done, you should be able to draw `basic/test6.svg` and `basic/test7.svg`.
 
-**Hint: If there is an SVGElement which is not in a group, the modeling transform should be the relationship between its local coordinate space and the canvas space. If it is in a group, the modeling transform should be the relationship between its local coordinate space and its parent element's local coordinate space. Look at how the transformation matrix in software renderer is applied, and think about how you can modify this to take into account each SVGElement's transform.**
+**Hint: If there is an `SVGElement` which is not in a group, the modeling transform should be the relationship between its local coordinate space and the canvas space. If it is in a group, the modeling transform should be the relationship between its local coordinate space and its parent element's local coordinate space. Look at how the transformation matrix in software renderer is applied, and think about how you can modify this to take into account each SVGElement's transform.**
 
 ##### Part 2: Viewing Transform (6 pts)
 
@@ -278,11 +285,11 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 
 - The image element should cover all screen samples inside the specified rectangle.
 - For each image, texture space spans a [0-1]^2 domain as described in class. That is, given the example above, the mapping from screen-space to texture-space is as follows: `(x0, y0)` in screen space maps to image texture coordinate `(0, 0)` and `(x1, y1)` maps to `(1, 1)`.
-- You may wish to look at the implementation of input texture images in `texture.h/.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sampler_nearest()`), bilinear (`sampler_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
+- You may wish to look at the implementation of input texture images in `texture.h` and `texture.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sampler_nearest()`), bilinear (`sampler_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
 - As discussed in class, please assume that image pixels correspond to samples at half-integer coordinates in texture space.
 - The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. **In this task, you will only sample from level 0 of the hierarchy: `Texture::mipmap[0]`.** 
-- You should clamp the border (edge) pixels to the nearest valid image pixel as in [GL_CLAMP_TO_EDGE](https://open.gl/textures), i.e. the coordinate will simply be clamped between 0 and 1.
-- Our reference solution is implemented using **trilinear filtering**. To make it work correctly, make sure you press `'` to regenerate mipmaps using reference solution instead of using the starter code in `Sampler2DImp::generate_mips()`. For this task, you do not need to modify `Sampler2DImp::generate_mips()` since you are only using the level 0 mipmap.  
+- When bilinear filtering requires access to pixel data that is "off the edge of the image" (e.g, pixel coordinates x=-1,y=-1), please treat the value of these missing pixels as being the same the nearest valid image pixel as in [GL_CLAMP_TO_EDGE](https://open.gl/textures).
+- Our reference solution is implemented using **trilinear filtering**. To make it work correctly, make sure you press `'` to regenerate mipmaps using the reference solution instead of using the starter code in `Sampler2DImp::generate_mips()`. For this task, your code do not need to modify `Sampler2DImp::generate_mips()` since you are only using the level 0 mipmap.  
 
 When you are done, you should be able to draw the test svgs in `/image`. (Note you need to finish advanced task to support `/image/04_cross_rotate.svg`)
 
@@ -298,27 +305,29 @@ Once you finished, you should be able to correctly draw the test svgs in `/alpha
 
 Now that you have implemented a few basic features of the SVG format, it is time to get creative and draw something!
 
-You can create an SVG file in popular design tools like Adobe Illustrator or Inkscape and export SVG files, or use a variety of editors online. Since an SVG file is just an XML file, you could even use a text editor or write a script to generate the text!
+You can create an SVG file in popular design tools like Adobe Illustrator or [Inkscape](https://inkscape.org/) and export SVG files, or use a variety of editors online. Since an SVG file is just an XML file, you could even use a text editor to create an SVG manually or write code to generate one.
 
-Be aware that our starter code and your renderer implementation only support a **subset** of the features defined in the SVG specification (check svg.cpp), and applications like Adobe Illustrator or Inkscape may not always encode shapes with the primitives we support. (You may need to convert complicated paths to the basic primitives in these tools. This [Path to Polygon Converter](https://betravis.github.io/shape-tools/path-to-polygon/) might be of use.)
+__Be aware that the starter code and your renderer implementation only support a **subset** of the features defined in the SVG specification (check `svg.cpp`), and applications like Adobe Illustrator or Inkscape may not always encode shapes you draw with the primitives this assignment supports.__ (For example, you may need to convert complicated paths to the basic primitives in these tools. This [Path to Polygon Converter](https://betravis.github.io/shape-tools/path-to-polygon/) might be of use.)
 
-If you're using InkScape, and you save your drawing in InkScape as an `InkScape` svg or `Plain` svg, the entire drawing will appear black in DrawSVG.
+If you're using Inkscape, and you save your drawing in InkScape as an `Inkscape` svg or `Plain` svg, the entire drawing may appear black in DrawSVG.
 To work around this, you should instead save it as an `Optimized SVG`. In the resulting dialog, be sure to select `Convert CSS attributes to XML attributes`, and *deselect* `Shorten color values`.
 
-If you're using Illustrator, and you get errors with opening your generated SVG file in DrawSVG, make sure your `<svg>` tag contains a `width` and `height` field, with set values. Look at the test case SVGs in the `svg/` folder for reference. 
+If you're using Adobe Illustrator, and you get errors with opening your generated SVG file in DrawSVG, make sure your `<svg>` tag contains a `width` and `height` field, with set values. Look at the test case SVGs in the `svg/` folder for reference. 
 
-Naive editing of the test SVG by changing colors, duplicating or deleting elements may result in point deductions.
+You will not get credit for task 6 by simply editing an SVG file in the starter code by changing colors, duplicating or deleting elements.
 
 Please name this file `task6.svg`.
 
 ### Going Further: Advanced Tasks
+
+Here is a list of tasks you can attempt for fun, and to add to your point total.
 
 #### Drawing Smooth Lines with Line Width
 
 - (1 pts) If you compare your initial Bresenham results with the reference implementation, you will notice that the reference solution generates smooth lines. For example, you could modify your Bresenham implementation to perform [Xiaolin Wu's line algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm). 
 - (1 pts) Add support for specifying a line width.
 
-#### Implementing Triangle Edge Rules (1 pts)
+#### Implementing Triangle Edge Rules (1 pt)
 
 This extra credit task aims to extend your implementation of triangle rasterization. In some cases, samples lie on the edge of a triangle, then the triangle edge rules are used to determine whether the sample should be treated as inside the triangle or not.
 
@@ -330,14 +339,13 @@ If a sample lies on the top edge or the left edge of a triangle, then it should 
 
 Detailed description can be found [here](https://docs.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules).
 
-
 #### Advanced Supersampling 
 
 - (1 pts) Implement [Morphological anti-aliasing](https://dl.acm.org/citation.cfm?id=1572787) (MLAA), rather than supersampling. It's shocking how well this works. MLAA is a technique used throughout the gaming community to avoid the high cost of supersampling but still avoid objectionable image artifacts caused by aliasing. (More advanced versions of MLAA are described [here](http://www.iryoku.com/mlaa/).)
 - (1 pts) Implement [jittered sampling](http://graphics.pixar.com/library/MultiJitteredSampling/paper.pdf) to improve image quality when supersampling.
 - (1 pts) Implement higher quality resampling filters than a box filter and analyze their impact on image quality. For example, try a truncated Gaussian filter. You need to do analysis in your writeup to receive the credit. 
 
-#### Anti-Aliasing Image Elements Using Trilinear Filtering (1 pts)
+#### Anti-Aliasing Image Elements Using Trilinear Filtering (1 pt)
 
 In this task you will improve your anti-aliasing of image elements by adding trilinear filtering. This will involve generating mipmaps for image elements at SVG load time and then modifying your sampling code from Task 4 to implement trilinear filtering using the mipmap. Your implementation is only required to work for images that have power-of-two dimensions in each direction.
 
@@ -348,22 +356,26 @@ The program only stores a single set of mipmaps for each image, so the `rasteriz
 
 At this point, zooming in and out of your image should produce nicely filtered results! To test this functionality, try zooming out on svgs in `/image`.
 
-#### Image Elements With Rotation (1 pts)
+#### Image Elements With Rotation (1 pt)
 
-In this task you will improve your image rendering to render image elements that are rotated. Note that the key difference is that you can not assume the uv coordinates are axis-aligned with the screen space coordinates. How can we compute the uv coordinates with the transformation of the image element? 
+In this task you will improve your image rendering to render image elements that are rotated. Note that the key difference is that you can not assume the uv coordinates are axis-aligned with the screen space coordinates. The question you have to answer is: how can we compute the uv coordinates from the curret sample point's (x,y) given the transformation of the image element? 
 You should be able to render `/image/04_cross_rotate.svg` after completing this step.
 
-#### Implement More Advanced SVG Shape Element (1 pts)
+### Gradiant blend fills (1 pt)
+
+Instead of solid color fills you could implement [linear or radial gradiants](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Gradients) for your elements.  You will have to improve the start code's SVG parser to obtain this information from the SVG file.
+
+#### Implement More Advanced SVG Shape Element (1 pt)
 
 We have provided you with a couple of examples of subdividing complex, smooth complex shapes into much simpler triangles in `/subdiv`. (Subdivision is something you will dig into in great detail in Assignment 2). You can see subdivision in action as you step though the test files we provided.
 
 In addition to what you have implemented already, the [SVG Basic Shapes](http://www.w3.org/TR/SVG/shapes.html) also include circles and ellipses. We may support these features by converting them to triangulated polygons. But if we zoom in on the edges, there will be a point at which the approximation breaks down and the image no longer will look like a smooth curve. Triangulating more finely can be costly as a large number of triangles may be necessary to get a good approximation. Is there a better way to sample these shapes? For example, implement `draw_ellipse` in `software_renderer.cpp` and test on `basic/test8.svg`
 
-#### Parallelizing the SVG Rasterizer (1 pts)
+#### Parallelizing the SVG Rasterizer (1 pt)
 
 So far your rasterization program has been running single-threaded (on one core of your CPU). In this task you will parallelize the program - most likely by modifying `SoftwareRendererImp` class. You can use whatever threading library you wish, for example you can use [POSIX Threads/pthreads](https://en.wikipedia.org/wiki/POSIX_Threads) as we already included this library for you (Or C++ style std::thread). 
 <!-- You can set `CS248_BUILD_THREADED` flag to `ON` in your cmake file to see a reference solution in action (and performance number whenever you invoke a render function). Note that the reference solution is implemented with a simple screen tiling scheme to assign different tiles of the image to different cores.-->
-Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that very ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code.  More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee). 
+Your implementation should be noticably faster than the reference solution in order to receive an extra credit for this task. Note that ambitious students might consider further parallelizing the renderer using SIMD vector instructions---testing multiple sample points against the triangle in parallel. You might want to see [ISPC](https://ispc.github.io/) as a language for writing SIMD code. More hints on rasterizer performance and parallelization can be found here [here](https://software.intel.com/en-us/articles/rasterization-on-larrabee). 
 
 ### Resources and Notes
 
