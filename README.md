@@ -150,7 +150,7 @@ Before you start, here are some basic information on the structure of the starte
 
 **You only need to add code to class `SoftwareRendererImp`, `ViewportImp` and `Sampler2DImp` throughout this assignment.** (If you decided to modify other code with a reason, please clarify that in your writeup). The most important method is `SoftwareRendererImp::draw_svg` which (not surprisingly) accepts an SVG object to draw. An SVG file defines its canvas (which defines a 2D coordinate space), and specifies a list of shape elements (such as points, lines, triangles, and images) that should be drawn on that canvas. Each shape element has a number of style parameters (e.g., color) as well as a modeling transform used to determine the element's position on the canvas. You can find the definition of the SVG class (and all the associated `SVGElements`) in `svg.h`. Notice that one type of `SVGElement` is a group that itself contains child elements. Therefore, you should think of an SVG file as defining a tree of shape elements. (Interior nodes of the tree are groups, and leaves are shapes.)
 
-Another important method on the `SoftwareRendererImp` class is `set_pixel_buffer()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `target_w` and `target_h`). This buffer is often called the "pixel buffer" in many applications, since it is the "buffer" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
+Another important method on the `SoftwareRendererImp` class is `set_pixel_buffer()`, which provides your code a buffer corresponding to the output image (it also provides width and height of the buffer in pixels, which are stored locally as `width` and `height`). This buffer is often called the "pixel buffer" in many applications, since it is the "buffer" of rendering commands. **We use the term pixel here on purpose because the values in this buffer are the values that will be displayed on screen.** Pixel values are stored in row-major format, and each pixel is an 8-bit RGBA value (32 bits in total). Your implementation needs to fill in the contents of this buffer when it is asked to draw an SVG file.
 
 `set_pixel_buffer()` is called whenever the user resizes the application window.
 
@@ -160,11 +160,11 @@ You are given starter code that already implements drawing of 2D points. To see 
 
 The position of each point is defined in a local coordinate frame, so `draw_point()` first transforms the input point into its screen-space position (see Vector2D `p_screen = transform(p)`). This transform is set at the beginning of `draw_svg()`. In the starter code, this transform converts from the svg canvas' coordinate system to screen coordinates. You will need to handle more complex transforms to support more complex SVG files and implement mouse viewing controls later in the assignment.
 
-The function `rasterize_point()` is responsible for actually drawing the point. In this assignment we define screen space for an output image of size `(target_w, target_h)` as follows:
+The function `rasterize_point()` is responsible for actually drawing the point. In this assignment we define screen space for an output image of size `(width, height)` as follows:
 
 - `(0, 0)` corresponds to the top-left of the output image
-- `(target_w, target_h)` corresponds to the bottom-right of the output image
-- **Please assume that screen sample positions are located at half-integer coordinates in screen space. That is, the top-left sample point is at coordinate (0.5, 0.5), and the bottom-right sample point is at coordinate (target_w-0.5, target_h-0.5).**
+- `(width, height)` corresponds to the bottom-right of the output image
+- **Please assume that screen sample positions are located at half-integer coordinates in screen space. That is, the top-left sample point is at coordinate (0.5, 0.5), and the bottom-right sample point is at coordinate (width-0.5, height-0.5).**
 
 ![Sample locations](misc/coord_1spp.png?raw=true)
 
@@ -175,20 +175,20 @@ int sx = (int) floor(x);
 int sy = (int) floor(y);
 ```
 
-Of course, the code should not attempt to modify the render target buffer at invalid pixel locations.
+Of course, the code should not attempt to modify the render buffer at invalid pixel locations.
 
 ```
-if ( sx < 0 || sx >= target_w ) return;
-if ( sy < 0 || sy >= target_h ) return;
+if ( sx < 0 || sx >= width ) return;
+if ( sy < 0 || sy >= height ) return;
 ```
 
 If the points happen to be on screen, we fill in the pixel with the RGBA color associated with the point.
 
 ```
-  pixel_buffer[4 * (sx + sy * target_w)    ] = (uint8_t) (color.r * 255);
-  pixel_buffer[4 * (sx + sy * target_w) + 1] = (uint8_t) (color.g * 255);
-  pixel_buffer[4 * (sx + sy * target_w) + 2] = (uint8_t) (color.b * 255);
-  pixel_buffer[4 * (sx + sy * target_w) + 3] = (uint8_t) (color.a * 255);
+  pixel_buffer[4 * (sx + sy * width)    ] = (uint8_t) (color.r * 255);
+  pixel_buffer[4 * (sx + sy * width) + 1] = (uint8_t) (color.g * 255);
+  pixel_buffer[4 * (sx + sy * width) + 2] = (uint8_t) (color.b * 255);
+  pixel_buffer[4 * (sx + sy * width) + 3] = (uint8_t) (color.a * 255);
 ```
 
 At this time the starter code does not correctly handle transparent points. In order to handle transparent points, you should call `fill_pixel()`, which handles alpha blending for you.
