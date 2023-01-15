@@ -285,8 +285,31 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
   // Implement Bresenham's algorithm (delete the line below and implement your own)
   ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
 
-  // Advanced Task
-  // Drawing Smooth Lines with Line Width
+  // STUDENT IMPLEMENTATION
+  // // Determine vertical rasterization
+  // if (x0 == x1) {
+  //   // Fill vertical line from top to bottom (start at higher spot)
+  //   float start_y = (y0 <= y1) ? y0: y1;
+  //   float end_y = (y0 <= y1) ? y1: y0;
+  //   for (float y = start_y; y <= end_y; y++) {
+  //     rasterize_point(x0, y, color);
+  //   }
+  //   return;
+  // }
+
+  // // For all other lines, rasterize from left to right
+  // float start_x = (x0 < x1) ? x0 : x1;
+  // float end_x = (x0 < x1) ? x1 : x0;
+  // float curr_y = (x0 < x1) ? y0 : y1;
+
+  // float slope = (y1 - y0) / (x1 - x0);
+  // // Iterate through each x-coordinate point in line
+  // for (float x = start_x; x <= end_x; x++) {
+  //   rasterize_point(x, curr_y, color);
+  //   curr_y += slope;
+  // }
+
+  // TODO: Advanced Task, Drawing Smooth Lines with Line Width
 }
 
 void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
@@ -295,6 +318,75 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
                                               Color color ) {
   // Task 1: 
   // Implement triangle rasterization
+
+  // Determine box boundaries
+  float start_x = std::min({x0, x1, x2});
+  float start_y = std::min({y0, y1, y2});
+  float end_x = std::max({x0, x1, x2});
+  float end_y = std::max({y0, y1, y2});
+
+  // Legs of triangle
+  Vector2D legA(x1 - x0, y1 - y0);
+  Vector2D legB(x2 - x1, y2 - y1);
+  Vector2D legC(x0 - x2, y0 - y2);
+
+  // Determine leg order (to account for counter-clockwise or clockwise)
+  Vector2D leg0 = (cross(legA, legB) >= 0) ? legA: Vector2D(x0 - x1, y0 - y1) ;
+  Vector2D leg1 = (cross(legB, legC) >= 0) ? legB: Vector2D(x1 - x2, y1 - y2) ;
+  Vector2D leg2 = (cross(legC, legA) >= 0) ? legC: Vector2D(x2 - x0, y2 - y0) ;
+  // Vector2D leg0, leg1, leg2;
+  // bool flipped0, flipped1, flipped2;
+  // if (cross(legA, legB) >= 0) {
+  //   leg0 = legA;
+  //   flipped0 = false;
+  // } else {
+  //   leg0 = Vector2D(x0 - x1, y0 - y1);
+  //   flipped0 = true;
+  // }
+
+  // if (cross(legB, legC) >= 0) {
+  //   leg1 = legB;
+  //   flipped1 = false;
+  // } else {
+  //   leg1 = Vector2D(x1 - x2, y1 - y2);
+  //   flipped1 = true;
+  // }
+
+  // if (cross(legC, legA) >= 0) {
+  //   leg2 = legC;
+  //   flipped2 = false;
+  // } else {
+  //   Vector2D(x2 - x0, y2 - y0);
+  //   flipped2 = true;
+  // }
+
+  // Perpendicular legs of triangle
+  // Vector2D leg0N(y1 - y0, -(x1 - x0));
+  // Vector2D leg1N(y2 - y1, -(x2 - x1));
+  // Vector2D leg2N(y0 - y2, -(x0 - x2));
+
+  Vector2D leg0N(leg0.y, -leg0.x);
+  Vector2D leg1N(leg1.y, -leg1.x);
+  Vector2D leg2N(leg2.y, -leg2.x);
+  
+  // Iterate over points in box boundary
+  for (float y = start_y; y <= end_y; y++) {
+    for (float x = start_x; x <= end_x; x++) {
+      // Determine if point is inside of triangle
+      Vector2D pt_vec0 = Vector2D(x - x0, y - y0);
+      Vector2D pt_vec1 = Vector2D(x - x1, y - y1);
+      Vector2D pt_vec2 = Vector2D(x - x2, y - y2);
+      // Vector2D pt_vec0 = (flipped0) ? Vector2D(x - x1, y - y1) : Vector2D(x - x0, y - y0);
+      // Vector2D pt_vec1 = (flipped1) ? Vector2D(x - x2, y - y2) : Vector2D(x - x1, y - y1);
+      // Vector2D pt_vec2 = (flipped2) ? Vector2D(x - x0, y - y0) : Vector2D(x - x2, y - y2);
+      // // Rasterize if inside AND on line
+      if (dot(pt_vec0, leg0N) <= 0 && 
+          dot(pt_vec1, leg1N) <= 0 && 
+          dot(pt_vec2, leg2N) <= 0) {
+            rasterize_point(x, y, color);
+      }
+    }
+  }
 
   // Advanced Task
   // Implementing Triangle Edge Rules
