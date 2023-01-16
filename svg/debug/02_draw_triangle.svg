@@ -9,19 +9,23 @@
 
 <!-- Feel free to change the x1,y1 x2,y2 x3,y3 points of the triangle -->
 
-<!-- Simple triangle that is CW -->
-<polygon fill="#1865ED" points="100,400 300,100 350,500"/>
+<!-- Simple triangle that is CW (Blue) -->
+<!-- <polygon fill="#1865ED" points="100,400 300,100 350,500"/> -->
 
 
-<!-- Simple triangle that is CCW -->
-<polygon fill="#A018ED" points="100,550 400,620 300,500 "/>
+<!-- Simple triangle that is CCW (Purple) -->
+<!-- <polygon fill="#A018ED" points="100,550 400,620 300,500 "/> -->
 
 
 <!-- Big Triangle -->
 <!-- Add you own example here! -->
 
-<!-- Small Triangle -->
-<!-- Add you own example here! -->
+<!-- Small Triangle (Red) -->
+<!-- Same, but different point order -->
+<polygon fill="#1865ed" points="50,100 100,50 70,150"/>
+<polygon fill="#1865ed" points="200,50 170,150 150,100"/>
+<polygon fill="#1865ed" points="270,150 250,100 300,50"/>
+<polygon fill="#1865ed" points="370,150 400,50 350,100"/>
 
 <!-- Fat Triangle -->
 <!-- Add you own example here! -->

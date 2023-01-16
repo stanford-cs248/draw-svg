@@ -11,18 +11,56 @@ using namespace std;
 
 namespace CS248 {
 
-
 // Implements SoftwareRenderer //
 
 // fill a sample location with color
 void SoftwareRendererImp::fill_sample(int sx, int sy, const Color &color) {
   // Task 2: implement this function
+  // Fill pixel but account for thickness
+  // Make sure to preserve across different sampling rates
+
+  // TODO: Actually fix
+
+  // TODO: Look into whether locations/rasterization calls are screen/pixel loc
+
+  // check bounds
+	if (sx < 0 || sx >= width) return;
+	if (sy < 0 || sy >= height) return;
+
+	Color pixel_color;
+	float inv255 = 1.0 / 255.0;
+
+  // iterate 
+  for (int dy = 0; dy < this->sample_rate; dy++) {
+    for (int dx = 0; dx < this->sample_rate; dx++) {
+      
+    }
+  }
+
+	pixel_color.r = pixel_buffer[4 * (x + y * width)] * inv255;
+	pixel_color.g = pixel_buffer[4 * (x + y * width) + 1] * inv255;
+	pixel_color.b = pixel_buffer[4 * (x + y * width) + 2] * inv255;
+	pixel_color.a = pixel_buffer[4 * (x + y * width) + 3] * inv255;
+
+	pixel_color = ref->alpha_blending_helper(pixel_color, color);
+
+	pixel_buffer[4 * (x + y * width)] = (uint8_t)(pixel_color.r * 255);
+	pixel_buffer[4 * (x + y * width) + 1] = (uint8_t)(pixel_color.g * 255);
+	pixel_buffer[4 * (x + y * width) + 2] = (uint8_t)(pixel_color.b * 255);
+	pixel_buffer[4 * (x + y * width) + 3] = (uint8_t)(pixel_color.a * 255);
+
 }
 
 // fill samples in the entire pixel specified by pixel coordinates
 void SoftwareRendererImp::fill_pixel(int x, int y, const Color &color) {
 
 	// Task 2: Re-implement this function
+  // If we are supersampling, use fill_sample here instead
+  // Return
+  if (this->sample_rate != 0) {
+    fill_sample(x, y, color);
+    return;
+  }
 
 	// check bounds
 	if (x < 0 || x >= width) return;
@@ -78,8 +116,13 @@ void SoftwareRendererImp::set_sample_rate( size_t sample_rate ) {
 
   // Task 2: 
   // You may want to modify this for supersampling support
+  // Initialize sample_buffer here with total size
   this->sample_rate = sample_rate;
-
+  // 4 * width * height -> one_sample_buffer
+  // sample_rate * sample_rate -> total_samples needed
+  // one_sample_buffer * total_samples = sample_buffer
+  this->sample_buffer = NULL;
+  this->sample_buffer = new unsigned char[4 * this->width * this->height * this->sample_rate * this->sample_rate];
 }
 
 void SoftwareRendererImp::set_pixel_buffer( unsigned char* pixel_buffer,
@@ -326,14 +369,14 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
   float end_y = std::max({y0, y1, y2});
 
   // Legs of triangle
-  Vector2D legA(x1 - x0, y1 - y0);
-  Vector2D legB(x2 - x1, y2 - y1);
-  Vector2D legC(x0 - x2, y0 - y2);
+  Vector2D leg0(x1 - x0, y1 - y0);
+  Vector2D leg1(x2 - x1, y2 - y1);
+  Vector2D leg2(x0 - x2, y0 - y2);
 
   // Determine leg order (to account for counter-clockwise or clockwise)
-  Vector2D leg0 = (cross(legA, legB) >= 0) ? legA: Vector2D(x0 - x1, y0 - y1) ;
-  Vector2D leg1 = (cross(legB, legC) >= 0) ? legB: Vector2D(x1 - x2, y1 - y2) ;
-  Vector2D leg2 = (cross(legC, legA) >= 0) ? legC: Vector2D(x2 - x0, y2 - y0) ;
+  // Vector2D leg0 = (cross(legA, legB) >= 0) ? legA: Vector2D(x0 - x1, y0 - y1) ;
+  // Vector2D leg1 = (cross(legB, legC) >= 0) ? legB: Vector2D(x1 - x2, y1 - y2) ;
+  // Vector2D leg2 = (cross(legC, legA) >= 0) ? legC: Vector2D(x2 - x0, y2 - y0) ;
   // Vector2D leg0, leg1, leg2;
   // bool flipped0, flipped1, flipped2;
   // if (cross(legA, legB) >= 0) {
@@ -380,13 +423,15 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
       // Vector2D pt_vec1 = (flipped1) ? Vector2D(x - x2, y - y2) : Vector2D(x - x1, y - y1);
       // Vector2D pt_vec2 = (flipped2) ? Vector2D(x - x0, y - y0) : Vector2D(x - x2, y - y2);
       // // Rasterize if inside AND on line
-      if (dot(pt_vec0, leg0N) <= 0 && 
-          dot(pt_vec1, leg1N) <= 0 && 
-          dot(pt_vec2, leg2N) <= 0) {
+      if (dot(pt_vec0, leg0N) < 0 && 
+          dot(pt_vec1, leg1N) < 0 && 
+          dot(pt_vec2, leg2N) < 0) {
             rasterize_point(x, y, color);
       }
     }
   }
+
+
 
   // Advanced Task
   // Implementing Triangle Edge Rules
@@ -407,6 +452,9 @@ void SoftwareRendererImp::resolve( void ) {
   // Task 2: 
   // Implement supersampling
   // You may also need to modify other functions marked with "Task 2".
+
+  // This is where we should move the points over from the sample buffer to
+  // the pixel buffer, which stores the final info we need
   return;
 
 }

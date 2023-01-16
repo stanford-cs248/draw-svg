@@ -62,7 +62,10 @@ class SoftwareRenderer : public SVGRenderer {
   size_t sample_rate;
 
   // Pixel buffer memory location
-  unsigned char* pixel_buffer; 
+  unsigned char* pixel_buffer;
+
+	// Sample buffer memory location
+	unsigned char* sample_buffer;
 
   // Pixel buffer dimension (in pixels)
   size_t width; size_t height;
