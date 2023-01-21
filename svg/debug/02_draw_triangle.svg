@@ -11,6 +11,8 @@
 
 <!-- Simple triangle that is CW -->
 <polygon fill="#1865ED" points="100,400 300,100 350,500"/>
+<polygon fill="#1865ED" points="200,400 400,100 450,500"/>
+
 
 
 <!-- Simple triangle that is CCW -->
