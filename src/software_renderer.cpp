@@ -285,7 +285,8 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
   ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
 
   // STUDENT IMPLEMENTATION
-  // Determine vertical rasterization
+
+  // // Determine vertical rasterization
   // if (x0 == x1) {
   //   // Fill vertical line from top to bottom (start at higher spot)
   //   float start_y = (y0 <= y1) ? y0: y1;
@@ -305,19 +306,35 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
   // float curr_y = start_y;
 
   // float slope = (end_y - start_y) / (end_x - start_x);
-  // // Iterate through each x-coordinate point in line
-  // for (float x = start_x; x <= end_x; x++) {
-  //   rasterize_point(x, curr_y, color);
-  //   float orig_y = curr_y;
-  //   curr_y += slope;
-  //   if (abs(orig_y - curr_y) > 1) {
+
+  // if (abs(slope) <= 1) {
+  //   /*
+  //     Simple Case:
+  //     Iterate through each x-coordinate point in line
+  //   */
+  //   for (float x = start_x; x <= end_x; x++) {
+  //     rasterize_point(x, curr_y, color);
+  //     float orig_y = curr_y;
+  //     curr_y += slope;
+  //   }
+  // } else {
+  //   // y-changes by more than 1 pixel
+  //   for (float x = start_x; x < end_x; x++) {
+  //     rasterize_point(x, curr_y, color);
+  //     float orig_y = curr_y;
+  //     curr_y += slope;
+  //     /* curr_y should not overflow beyond point boundaries*/
+  //     if (x + 1 == end_x && abs(end_y - curr_y) > 0) {
+  //       curr_y = end_y;
+  //     }
   //     float l_start = (orig_y < curr_y) ? orig_y : curr_y;
   //     float l_end = (orig_y < curr_y) ? curr_y : orig_y;
+
   //     for (float y = l_start; y <= l_end; y++) {
-  //       rasterize_point(x + 0.25, y, color);
+  //       rasterize_point(x + 1, y, color);
   //     }
   //   }
-  // }
+  //}
 
   // TODO: Advanced Task, Drawing Smooth Lines with Line Width
 }
