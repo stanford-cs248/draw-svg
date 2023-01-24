@@ -282,104 +282,104 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           Color color) {
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  //ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
 
   // STUDENT IMPLEMENTATION
   // Determine vertical rasterization
-  if (x0 == x1) {
-    // Fill vertical line from top to bottom (start at higher spot)
-    float start_y = (y0 <= y1) ? y0: y1;
-    float end_y = (y0 <= y1) ? y1: y0;
+  // if (x0 == x1) {
+  //   // Fill vertical line from top to bottom (start at higher spot)
+  //   float start_y = (y0 <= y1) ? y0: y1;
+  //   float end_y = (y0 <= y1) ? y1: y0;
 
-    for (float y = start_y; y <= end_y; y++) {
-      rasterize_point(x0, y, color);
-    }
-    return;
-  }
+  //   for (float y = start_y; y <= end_y; y++) {
+  //     rasterize_point(x0, y, color);
+  //   }
+  //   return;
+  // }
 
-  // Determine horizontal rasterization
-  if (y0 == y1) {
-    // Fill horizontal line from left to right
-    float start_x = (x0 <= x1) ? x0: x1;
-    float end_x = (x0 <= x1) ? x1: x0;
+  // // Determine horizontal rasterization
+  // if (y0 == y1) {
+  //   // Fill horizontal line from left to right
+  //   float start_x = (x0 <= x1) ? x0: x1;
+  //   float end_x = (x0 <= x1) ? x1: x0;
 
-    for (float x = start_x; x <= end_x; x++) {
-      rasterize_point(x, y0, color);
-    }
-    return;
-  }
+  //   for (float x = start_x; x <= end_x; x++) {
+  //     rasterize_point(x, y0, color);
+  //   }
+  //   return;
+  // }
 
-  // For all other lines, follow Bresham's algorithm
-  // Find differences in x, y, and overall slope
-  float dx = x1 - x0;
-  float dy = y1 - y0;
-  float slope = dy / dx;
+  // // For all other lines, follow Bresham's algorithm
+  // // Find differences in x, y, and overall slope
+  // float dx = x1 - x0;
+  // float dy = y1 - y0;
+  // float slope = dy / dx;
 
-  // Use absolute values to generalize slope needs
-  // Helps handle negative, positive, combo, etc.
-  float abs_dx = abs(dx);
-  float abs_dy = abs(dy);
+  // // Use absolute values to generalize slope needs
+  // // Helps handle negative, positive, combo, etc.
+  // float abs_dx = abs(dx);
+  // float abs_dy = abs(dy);
 
-  // Calculate slope error intervals
-  float slope_error_x = 2 * abs_dy - abs_dx;
-  float slope_error_y = 2 * abs_dx - abs_dy;
+  // // Calculate slope error intervals
+  // float slope_error_x = 2 * abs_dy - abs_dx;
+  // float slope_error_y = 2 * abs_dx - abs_dy;
 
-  // Line has a less steep slope (more change along X)
-  if (abs_dy <= abs_dx) {
-    // Decide which way to follow the line
-    float start_x = (x0 <= x1) ? x0: x1;
-    float end_x = (x0 <= x1) ? x1: x0;
-    float curr_y = (x0 <= x1) ? y0: y1;
+  // // Line has a less steep slope (more change along X)
+  // if (abs_dy <= abs_dx) {
+  //   // Decide which way to follow the line
+  //   float start_x = (x0 <= x1) ? x0: x1;
+  //   float end_x = (x0 <= x1) ? x1: x0;
+  //   float curr_y = (x0 <= x1) ? y0: y1;
 
-    // Render starting point
-    rasterize_point(start_x, curr_y, color);
+  //   // Render starting point
+  //   rasterize_point(start_x, curr_y, color);
 
-    // Render the rest of the line
-    for (float x = start_x; x < end_x; x++) {
-      if (slope_error_x < 0) {
-        slope_error_x = slope_error_x + 2 * abs_dy;
-      } else {
-        // Positive
-        if (slope > 0) {
-          curr_y = curr_y + 1;
-        } 
-        // Negative
-        else {
-          curr_y = curr_y - 1;
-        }
-        slope_error_x = slope_error_x + 2 * (abs_dy - abs_dx);
-      }
-      rasterize_point(x, curr_y, color);
-    }
-  } 
-  // Line has a more steep slope (more change along Y)
-  else {
-    // Decide which way to follow the line
-    float start_y = (y0 <= y1) ? y0: y1;
-    float end_y = (y0 <= y1) ? y1: y0;
-    float curr_x = (y0 <= y1) ? x0: x1;
+  //   // Render the rest of the line
+  //   for (float x = start_x; x < end_x; x++) {
+  //     if (slope_error_x < 0) {
+  //       slope_error_x = slope_error_x + 2 * abs_dy;
+  //     } else {
+  //       // Positive
+  //       if (slope > 0) {
+  //         curr_y = curr_y + 1;
+  //       } 
+  //       // Negative
+  //       else {
+  //         curr_y = curr_y - 1;
+  //       }
+  //       slope_error_x = slope_error_x + 2 * (abs_dy - abs_dx);
+  //     }
+  //     rasterize_point(x, curr_y, color);
+  //   }
+  // } 
+  // // Line has a more steep slope (more change along Y)
+  // else {
+  //   // Decide which way to follow the line
+  //   float start_y = (y0 <= y1) ? y0: y1;
+  //   float end_y = (y0 <= y1) ? y1: y0;
+  //   float curr_x = (y0 <= y1) ? x0: x1;
     
-    // Render starting point
-    rasterize_point(curr_x, start_y, color);
+  //   // Render starting point
+  //   rasterize_point(curr_x, start_y, color);
 
-    // Render the rest of the line
-    for (float y = start_y; y < end_y; y++) {
-      if (slope_error_y < 0) {
-        slope_error_y = slope_error_y + 2 * abs_dx;
-      } else {
-        // Positive
-        if (slope > 0) {
-          curr_x = curr_x + 1;
-        } 
-        // Negative
-        else {
-          curr_x = curr_x - 1;
-        }
-        slope_error_y = slope_error_y + 2 * (abs_dx - abs_dy);
-      }
-      rasterize_point(curr_x, y, color);
-    }
-  }
+  //   // Render the rest of the line
+  //   for (float y = start_y; y < end_y; y++) {
+  //     if (slope_error_y < 0) {
+  //       slope_error_y = slope_error_y + 2 * abs_dx;
+  //     } else {
+  //       // Positive
+  //       if (slope > 0) {
+  //         curr_x = curr_x + 1;
+  //       } 
+  //       // Negative
+  //       else {
+  //         curr_x = curr_x - 1;
+  //       }
+  //       slope_error_y = slope_error_y + 2 * (abs_dx - abs_dy);
+  //     }
+  //     rasterize_point(curr_x, y, color);
+  //   }
+  // }
 }
 
 void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
