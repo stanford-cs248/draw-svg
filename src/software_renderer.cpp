@@ -282,61 +282,104 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
                                           Color color) {
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+  //ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
 
   // STUDENT IMPLEMENTATION
+  // Determine vertical rasterization
+  if (x0 == x1) {
+    // Fill vertical line from top to bottom (start at higher spot)
+    float start_y = (y0 <= y1) ? y0: y1;
+    float end_y = (y0 <= y1) ? y1: y0;
 
-  // // Determine vertical rasterization
-  // if (x0 == x1) {
-  //   // Fill vertical line from top to bottom (start at higher spot)
-  //   float start_y = (y0 <= y1) ? y0: y1;
-  //   float end_y = (y0 <= y1) ? y1: y0;
-  //   for (float y = start_y; y <= end_y; y++) {
-  //     rasterize_point(x0, y, color);
-  //   }
-  //   return;
-  // }
+    for (float y = start_y; y <= end_y; y++) {
+      rasterize_point(x0, y, color);
+    }
+    return;
+  }
 
-  // // For all other lines, rasterize from left to right
-  // float start_x = (x0 < x1) ? x0 : x1;
-  // float end_x = (x0 < x1) ? x1 : x0;
-  // float start_y = (start_x == x0) ? y0 : y1;
-  // float end_y = (start_x == x0) ? y1 : y0;
+  // Determine horizontal rasterization
+  if (y0 == y1) {
+    // Fill horizontal line from left to right
+    float start_x = (x0 <= x1) ? x0: x1;
+    float end_x = (x0 <= x1) ? x1: x0;
 
-  // float curr_y = start_y;
+    for (float x = start_x; x <= end_x; x++) {
+      rasterize_point(x, y0, color);
+    }
+    return;
+  }
 
-  // float slope = (end_y - start_y) / (end_x - start_x);
+  // For all other lines, follow Bresham's algorithm
+  // Find differences in x, y, and overall slope
+  float dx = x1 - x0;
+  float dy = y1 - y0;
+  float slope = dy / dx;
 
-  // if (abs(slope) <= 1) {
-  //   /*
-  //     Simple Case:
-  //     Iterate through each x-coordinate point in line
-  //   */
-  //   for (float x = start_x; x <= end_x; x++) {
-  //     rasterize_point(x, curr_y, color);
-  //     float orig_y = curr_y;
-  //     curr_y += slope;
-  //   }
-  // } else {
-  //   // y-changes by more than 1 pixel
-  //   for (float x = start_x; x < end_x; x++) {
-  //     rasterize_point(x, curr_y, color);
-  //     float orig_y = curr_y;
-  //     curr_y += slope;
-  //     /* curr_y should not overflow beyond point boundaries*/
-  //     if (x + 1 == end_x && abs(end_y - curr_y) > 0) {
-  //       curr_y = end_y;
-  //     }
-  //     float l_start = (orig_y < curr_y) ? orig_y : curr_y;
-  //     float l_end = (orig_y < curr_y) ? curr_y : orig_y;
+  // Use absolute values to generalize slope needs
+  // Helps handle negative, positive, combo, etc.
+  float abs_dx = abs(dx);
+  float abs_dy = abs(dy);
 
-  //     for (float y = l_start; y <= l_end; y++) {
-  //       rasterize_point(x + 1, y, color);
-  //     }
-  //   }
-  //}
+  // Calculate slope error intervals
+  float slope_error_x = 2 * abs_dy - abs_dx;
+  float slope_error_y = 2 * abs_dx - abs_dy;
 
-  // TODO: Advanced Task, Drawing Smooth Lines with Line Width
+  // Line has a less steep slope (more change along X)
+  if (abs_dy <= abs_dx) {
+    // Decide which way to follow the line
+    float start_x = (x0 <= x1) ? x0: x1;
+    float end_x = (x0 <= x1) ? x1: x0;
+    float curr_y = (x0 <= x1) ? y0: y1;
+
+    // Render starting point
+    rasterize_point(start_x, curr_y, color);
+
+    // Render the rest of the line
+    for (float x = start_x; x < end_x; x++) {
+      if (slope_error_x < 0) {
+        slope_error_x = slope_error_x + 2 * abs_dy;
+      } else {
+        // Positive
+        if (slope > 0) {
+          curr_y = curr_y + 1;
+        } 
+        // Negative
+        else {
+          curr_y = curr_y - 1;
+        }
+        slope_error_x = slope_error_x + 2 * (abs_dy - abs_dx);
+      }
+      rasterize_point(x, curr_y, color);
+    }
+  } 
+  // Line has a more steep slope (more change along Y)
+  else {
+    // Decide which way to follow the line
+    float start_y = (y0 <= y1) ? y0: y1;
+    float end_y = (y0 <= y1) ? y1: y0;
+    float curr_x = (y0 <= y1) ? x0: x1;
+    
+    // Render starting point
+    rasterize_point(curr_x, start_y, color);
+
+    // Render the rest of the line
+    for (float y = start_y; y < end_y; y++) {
+      if (slope_error_y < 0) {
+        slope_error_y = slope_error_y + 2 * abs_dx;
+      } else {
+        // Positive
+        if (slope > 0) {
+          curr_x = curr_x + 1;
+        } 
+        // Negative
+        else {
+          curr_x = curr_x - 1;
+        }
+        slope_error_y = slope_error_y + 2 * (abs_dx - abs_dy);
+      }
+      rasterize_point(curr_x, y, color);
+    }
+  }
 }
 
 void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
