@@ -88,7 +88,7 @@ This should create a `build` directory with a Visual Studio solution file in it 
 
 Note: to avoid the linking error when building x64 (e.g. LNK4272: library machine type 'x86' conflicts with target machine type 'x64', LNK1104: cannot open file freetype.lib.), please make the following changes to your draw-svg project properties (right click `drawsvg` project in the Solution Explorer sidebar to open Properties).
 ```
-Properties -> Linker -> Input -> edit -> change freetype.lib to freetype_win64.lib
+Properties -> Linker -> Input -> Additional Dependencies -> change freetype.lib to freetype_win64.lib
 ```
 
 If you plan on using Visual Studio to debug your program, you must change `drawsvg` project in the Solution Explorer sidebar as the startup project by right-clicking on it and selecting `Set as StartUp Project`. 
