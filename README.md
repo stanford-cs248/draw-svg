@@ -137,7 +137,7 @@ A table of all the keyboard controls in the **draw** application is provided bel
 
 ### Grading
 
-__The assignment is divided into seven basic tasks and seven advanced tasks, which are described below in the order the course staff suggests you to attempt them. Finishing the basic tasks will result in a grade of 92 points (out of 100 max) on the assignment.__ In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a solid A- letter grade for this part of course. In other words, IT'S OKAY TO NOT SHOOT FOR 100.  Students that have more time, really want to learn more graphics, or want to earn an "A" or "A+" on the assignment, can earn extra points by tackling more advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we are open to making exceptions to this clamp-to-100 policy truly great work! ;-))
+__The assignment is divided into seven basic tasks and seven advanced tasks, which are described below in the order the course staff suggests you to attempt them. Finishing the basic tasks will result in a grade of 94 points (out of 100 max) on the assignment.__ In general the staff views scores in the low 90's as very solid student work, and you can think of that level of effort as corresponding to a mid-to-low A letter grade for this part of course. In other words, IT'S OKAY TO NOT SHOOT FOR 100.  Students that have more time, really want to learn more graphics, or want to earn an "A" or "A+" on the assignment, can earn extra points by tackling more advanced tasks. The final grade for this assigment will be clamped at 100 pts. (And yes, we are open to making exceptions to this clamp-to-100 policy truly great work! ;-))
 
 __What is a "correct" solution:__  Draw-svg is made by humans, and will be graded by humans (the staff) looking at your results. We are not asking for a pixel-perfect recreation of the reference solution. Floating-point arithmetic on different architectures may lead to subtle inconsistencies that may make your solution a few pixels different than the reference. You should instead aim to have the bigger picture down: lines are in the general same area and thickness, no gaps in triangle fills, etc. It should be clear that if we held the two images together side by side, there shouldn't be a major difference to the human eye (we're looking for eye-level differences, not pixel-level differences). If you are unsure about grading, feel free to ask on the class discussion board.
 
@@ -253,9 +253,9 @@ Also observe that after enabling supersampled rendering, something might have go
 **Hint: Consider having separate functions `fill_pixel()` for filling a "pixel" and `fill_sample()` for filling a "sample."**
 A solution that does not anti-alias points and lines is acceptable.)
 
-#### Task 3: Implementing Modeling and Viewing Transforms (12 pts)
+#### Task 3: Implementing Modeling and Viewing Transforms (14 pts)
 
-##### Part 1: Modeling Transforms (6 pts)
+##### Part 1: Modeling Transforms (8 pts)
 
 It is common (and often very useful) to describe objects and shapes in their own local coordinate spaces and then build up more complicated objects by positioning many individual components in a single coordinate space. In this task you will extend the renderer to properly interpret the hierarchy of modeling transforms expressed in SVG files.
 
