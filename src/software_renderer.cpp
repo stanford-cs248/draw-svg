@@ -283,7 +283,51 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
 
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+  // ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+
+  float dx = x1 - x0;
+  float dy = y1 - y0;
+  if (dx == 0 && dy == 0) {
+    rasterize_point(x0, y0, color);
+  }
+
+  // handle slope > 1
+  bool large_slope = false;
+  auto rasterize_point_wrapper = [&](float x, float y, Color color, bool flip) {
+    if (flip) 
+      rasterize_point(y, x, color);
+    else 
+      rasterize_point(x, y, color);
+  };
+  if (abs(dy) > abs(dx)) {
+    large_slope = true;
+    std::swap(x0, y0);
+    std::swap(x1, y1);
+  }
+
+  // handle third and forth quadrant
+  if (x0 > x1) {
+    std::swap(x0, x1);
+    std::swap(y0, y1);
+  }
+
+  // Turn all vectors into the 1st or the 8th octant
+  // update dx dy accordingly
+  dx = x1 - x0;
+  dy = y1 - y0;
+  float slope = dy / dx;
+  
+  // handle two end points
+  rasterize_point_wrapper(x0, y0, color, large_slope);
+  rasterize_point_wrapper(x1, y1, color, large_slope);
+  
+  float cx = floor(x0) + 1.5; float ex = floor(x1) - 0.5;
+  float cy = y0 + slope * (cx - x0);
+  while (cx <= ex) {
+    rasterize_point_wrapper(cx, cy, color, large_slope);
+    cx++;
+    cy += slope;
+  }
 
   // Advanced Task
   // Drawing Smooth Lines with Line Width
