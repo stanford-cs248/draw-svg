@@ -283,7 +283,79 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
 
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+  // ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+
+  float eps = 0;
+  float x;
+  float y;
+  float m = (y1 - y0) / (x1 - x0);
+
+  if (0 <= m && m <= 1) { // Case: 0 <= m <= 1.
+    if (x0 > x1) {
+      rasterize_line(x1, y1, x0, y0, color);
+    } else {
+      y = y0;
+      for (int dx = 0; dx <= (int)round(x1 - x0); dx++) {
+        x = x0 + dx;
+        rasterize_point(x, y, color);
+        if (eps + m < 0.5) {
+          eps += m;
+        } else {
+          y += 1;
+          eps += m - 1;
+        }
+      }
+    }
+  } else if (m > 1) { // Case: m > 1.
+    if (y0 > y1) {
+      rasterize_line(x1, y1, x0, y0, color);
+    } else {
+      x = x0;
+      for (int dy = 0; dy <= (int)round(y1 - y0); dy++) {
+        y = y0 + dy;
+        rasterize_point(x, y, color);
+        if (eps + 1 / m < 0.5) {
+          eps += 1 / m;
+        } else {
+          x += 1;
+          eps += 1 / m - 1;
+        }
+      }
+    }
+  } 
+  else if (m < 0 && m >= -1) { // Case: 0 > m >= -1.
+    if (x1 > x0) {
+      rasterize_line(x1, y1, x0, y0, color);
+    } else {
+      y = y0;
+      for (int dx = 0; dx >= (int)round(x1 - x0); dx--) {
+        x = x0 + dx;
+        rasterize_point(x, y, color);
+        if (eps + m > -0.5) {
+          eps += m;
+        } else {
+          y += 1;
+          eps += m + 1;
+        }
+      }
+    }
+  } else { // Case: m < -1.
+    if (y1 > y0) {
+      rasterize_line(x1, y1, x0, y0, color);
+    } else {
+      x = x0;
+      for (int dy = 0; dy >= (int)round(y1 - y0); dy--) {
+        y = y0 + dy;
+        rasterize_point(x, y, color);
+        if (eps + 1 / m > -0.5) {
+          eps += 1 / m;
+        } else {
+          x += 1;
+          eps += 1 / m + 1;
+        }
+      }
+    }
+  }
 
   // Advanced Task
   // Drawing Smooth Lines with Line Width
