@@ -1,4 +1,5 @@
 .DS_Store
 lib/
 build/
-draw-svg/src/reference/libdrawsvgref_osx.a
+src/reference/libdrawsvgref_osx.a
+src/reference/libdrawsvgref_osx_M1.a
