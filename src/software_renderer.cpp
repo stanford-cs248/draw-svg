@@ -290,68 +290,75 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
   float y;
   float m = (y1 - y0) / (x1 - x0);
 
-  if (0 <= m && m <= 1) { // Case: 0 <= m <= 1.
-    if (x0 > x1) {
-      rasterize_line(x1, y1, x0, y0, color);
-    } else {
-      y = y0;
-      for (int dx = 0; dx <= (int)round(x1 - x0); dx++) {
-        x = x0 + dx;
-        rasterize_point(x, y, color);
-        if (eps + m < 0.5) {
-          eps += m;
-        } else {
-          y += 1;
-          eps += m - 1;
+  // Special case: vertical line.
+  if (x0 == x1) {
+    for (int y = (int)round(min(y0, y1)); y <= (int)round(max(y0, y1)); y++) {
+      rasterize_point(x0, y, color);
+    }
+  } else {
+    if (0 <= m && m <= 1) { // Case: 0 <= m <= 1.
+      if (x0 > x1) {
+        rasterize_line(x1, y1, x0, y0, color);
+      } else {
+        y = y0;
+        for (int dx = 0; dx <= (int)round(x1 - x0); dx++) {
+          x = x0 + dx;
+          rasterize_point(x, y, color);
+          if (eps + m < 0.5) {
+            eps += m;
+          } else {
+            y += 1;
+            eps += m - 1;
+          }
         }
       }
-    }
-  } else if (m > 1) { // Case: m > 1.
-    if (y0 > y1) {
-      rasterize_line(x1, y1, x0, y0, color);
-    } else {
-      x = x0;
-      for (int dy = 0; dy <= (int)round(y1 - y0); dy++) {
-        y = y0 + dy;
-        rasterize_point(x, y, color);
-        if (eps + 1 / m < 0.5) {
-          eps += 1 / m;
-        } else {
-          x += 1;
-          eps += 1 / m - 1;
+    } else if (m > 1) { // Case: m > 1.
+      if (y0 > y1) {
+        rasterize_line(x1, y1, x0, y0, color);
+      } else {
+        x = x0;
+        for (int dy = 0; dy <= (int)round(y1 - y0); dy++) {
+          y = y0 + dy;
+          rasterize_point(x, y, color);
+          if (eps + 1 / m < 0.5) {
+            eps += 1 / m;
+          } else {
+            x += 1;
+            eps += 1 / m - 1;
+          }
         }
       }
-    }
-  } 
-  else if (m < 0 && m >= -1) { // Case: 0 > m >= -1.
-    if (x1 > x0) {
-      rasterize_line(x1, y1, x0, y0, color);
-    } else {
-      y = y0;
-      for (int dx = 0; dx >= (int)round(x1 - x0); dx--) {
-        x = x0 + dx;
-        rasterize_point(x, y, color);
-        if (eps + m > -0.5) {
-          eps += m;
-        } else {
-          y += 1;
-          eps += m + 1;
+    } 
+    else if (m < 0 && m >= -1) { // Case: 0 > m >= -1.
+      if (x1 > x0) {
+        rasterize_line(x1, y1, x0, y0, color);
+      } else {
+        y = y0;
+        for (int dx = 0; dx >= (int)round(x1 - x0); dx--) {
+          x = x0 + dx;
+          rasterize_point(x, y, color);
+          if (eps + m > -0.5) {
+            eps += m;
+          } else {
+            y += 1;
+            eps += m + 1;
+          }
         }
       }
-    }
-  } else { // Case: m < -1.
-    if (y1 > y0) {
-      rasterize_line(x1, y1, x0, y0, color);
-    } else {
-      x = x0;
-      for (int dy = 0; dy >= (int)round(y1 - y0); dy--) {
-        y = y0 + dy;
-        rasterize_point(x, y, color);
-        if (eps + 1 / m > -0.5) {
-          eps += 1 / m;
-        } else {
-          x += 1;
-          eps += 1 / m + 1;
+    } else { // Case: m < -1.
+      if (y1 > y0) {
+        rasterize_line(x1, y1, x0, y0, color);
+      } else {
+        x = x0;
+        for (int dy = 0; dy >= (int)round(y1 - y0); dy--) {
+          y = y0 + dy;
+          rasterize_point(x, y, color);
+          if (eps + 1 / m > -0.5) {
+            eps += 1 / m;
+          } else {
+            x += 1;
+            eps += 1 / m + 1;
+          }
         }
       }
     }
@@ -367,6 +374,36 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
                                               Color color ) {
   // Task 1: 
   // Implement triangle rasterization
+
+  // CCW function
+  auto ccw = [](float x, float y, float ax, float ay, float bx, float by) {
+    float res = -(x - ax) * (by - ay) + (y - ay) * (bx - ax);
+    if (res > 0) return 1;
+    else if (res < 0) return -1;
+    else return 0;
+  };
+
+  // Point inside triangle function
+  auto inside = [=](float x, float y) {
+    int ccw1 = ccw(x, y, x0, y0, x1, y1);
+    int ccw2 = ccw(x, y, x1, y1, x2, y2);
+    int ccw3 = ccw(x, y, x2, y2, x0, y0);
+    return (ccw1 * ccw2 >= 0) && (ccw2 * ccw3 >= 0) && (ccw3 * ccw1 >= 0);
+  };
+
+  // Check all points within bounding box of triangle.
+  float min_x = min(x0, min(x1, x2));
+  float min_y = min(y0, min(y1, y2));
+  float max_x = max(x0, max(x1, x2));
+  float max_y = max(y0, max(y1, y2));
+
+  for (int x = (int)round(min_x); x <= (int)round(max_x); x++) {
+    for (int y = (int)round(min_y); y <= (int)round(max_y); y++) {
+      if (inside(x, y)) {
+        rasterize_point(x, y, color);
+      }
+    }
+  }
 
   // Advanced Task
   // Implementing Triangle Edge Rules
