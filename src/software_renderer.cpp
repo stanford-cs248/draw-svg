@@ -97,6 +97,7 @@ void SoftwareRendererImp::draw_element( SVGElement* element ) {
 
 	// Task 3 (part 1):
 	// Modify this to implement the transformation stack
+  transformation = transformation * element->transform;
 
 	switch (element->type) {
 	case POINT:
@@ -126,6 +127,8 @@ void SoftwareRendererImp::draw_element( SVGElement* element ) {
 	default:
 		break;
 	}
+
+  transformation = transformation * element->transform.inv();
 
 }
 
