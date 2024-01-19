@@ -84,25 +84,22 @@ Color Sampler2DImp::sample_nearest(Texture& tex,
                                    int level) {
 
   // Task 4: Implement nearest neighbour interpolation
+  // return magenta for invalid level
+  if (level >= tex.mipmap.size()) {
+    return Color(1,0,1,1);
+  }
 
-  // Helper functions to convert uv coords to texel index.
   int u_sample_x = (int)floor(u * tex.width);
   int v_sample_y = (int)floor(v * tex.height);
   int i = 4 * (tex.width * v_sample_y + u_sample_x);
-  // cout << "dimensions: " + to_string(tex.width) + " " + to_string(tex.height) + "\n";
-  // cout << "uv_samples: " + to_string(u_sample_x) + " " + to_string(v_sample_y) + "\n";
   Color sample = Color(
     tex.mipmap[level].texels[i],
     tex.mipmap[level].texels[i + 1],
     tex.mipmap[level].texels[i + 2],
     tex.mipmap[level].texels[i + 3]
   );
-  // return Color(
   uint8_to_float( &sample.r, &tex.mipmap[level].texels[i] );
-  // cout << "Color: (" + to_string(sample.r) + "," + to_string(sample.g) + "," + to_string(sample.b) + "," + to_string(sample.a) + ")\n";
   return sample;
-  // return magenta for invalid level
-  // return Color(1,0,1,1);
 
 }
 
@@ -111,6 +108,10 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
                                     int level) {
   
   // Task 4: Implement bilinear filtering
+  // return magenta for invalid level
+  if (level >= tex.mipmap.size()) {
+    return Color(1,0,1,1);
+  }
 
   // Helper functions to convert uv coords to texel index.
   auto uv_to_tex = [](Texture& tex, int u, int v) {
@@ -128,11 +129,11 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
     return sample;
   };
 
-  float x = u * tex.width;
-  float y = v * tex.height;
-  int xl = (int)floor(u * tex.width);
+  float x = u * tex.width - 0.5;
+  float y = v * tex.height - 0.5;
+  int xl = (int)floor(x);
   int xr = xl + 1;
-  int yt = (int)floor(v * tex.height);
+  int yt = (int)floor(y);
   int yb = yt + 1;
   
   int tl_i = uv_to_tex(tex, xl, yt);
@@ -150,10 +151,6 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
 
   Color sample = (1 - (y - floor(y))) * top_blend + (y - floor(y)) * bot_blend;  
   return sample;
-
-  // return magenta for invalid level
-  // return Color(1,0,1,1);
-
 }
 
 Color Sampler2DImp::sample_trilinear(Texture& tex, 
