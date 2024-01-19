@@ -333,13 +333,7 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
   // Drawing Smooth Lines with Line Width
 }
 
-typedef struct {
-  float A;
-  float B;
-  float C;
-} LineFunc;
-
-void createLineFunc(float x0, float y0, float x1, float y1, LineFunc* l) {
+void genLineFunc(float x0, float y0, float x1, float y1, LineFunc* l) {
   if (!l) perror("LineFunc struct not initialized!");
   
   l->A = y1 - y0;
@@ -364,7 +358,7 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
 
   // check points order, make counterclockwise
   LineFunc l01;
-  createLineFunc(x0, y0, x1, y1, &l01);
+  genLineFunc(x0, y0, x1, y1, &l01);
   float test = testSide(x2, y2, &l01);
   if (test > 0) {
     // clockwise, make counter-clockwise for easier processing
@@ -374,9 +368,9 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
   
   // calculate edge formula
   LineFunc edges[3];
-  createLineFunc(x0, y0, x1, y1, &edges[0]);
-  createLineFunc(x1, y1, x2, y2, &edges[1]);
-  createLineFunc(x2, y2, x0, y0, &edges[2]);
+  genLineFunc(x0, y0, x1, y1, &edges[0]);
+  genLineFunc(x1, y1, x2, y2, &edges[1]);
+  genLineFunc(x2, y2, x0, y0, &edges[2]);
 
   // compute bounding box rounding the nearest sample point 
   float sample_size = 1.f / sample_rate;
@@ -428,7 +422,6 @@ next_sample:
   
   // Advanced Task
   // Implementing Triangle Edge Rules
-
 }
 
 void SoftwareRendererImp::rasterize_image( float x0, float y0,
