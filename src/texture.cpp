@@ -84,9 +84,25 @@ Color Sampler2DImp::sample_nearest(Texture& tex,
                                    int level) {
 
   // Task 4: Implement nearest neighbour interpolation
-  
+
+  // Helper functions to convert uv coords to texel index.
+  int u_sample_x = (int)floor(u * tex.width);
+  int v_sample_y = (int)floor(v * tex.height);
+  int i = 4 * (tex.width * v_sample_y + u_sample_x);
+  // cout << "dimensions: " + to_string(tex.width) + " " + to_string(tex.height) + "\n";
+  // cout << "uv_samples: " + to_string(u_sample_x) + " " + to_string(v_sample_y) + "\n";
+  Color sample = Color(
+    tex.mipmap[level].texels[i],
+    tex.mipmap[level].texels[i + 1],
+    tex.mipmap[level].texels[i + 2],
+    tex.mipmap[level].texels[i + 3]
+  );
+  // return Color(
+  uint8_to_float( &sample.r, &tex.mipmap[level].texels[i] );
+  // cout << "Color: (" + to_string(sample.r) + "," + to_string(sample.g) + "," + to_string(sample.b) + "," + to_string(sample.a) + ")\n";
+  return sample;
   // return magenta for invalid level
-  return Color(1,0,1,1);
+  // return Color(1,0,1,1);
 
 }
 
@@ -96,8 +112,47 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
   
   // Task 4: Implement bilinear filtering
 
+  // Helper functions to convert uv coords to texel index.
+  auto uv_to_tex = [](Texture& tex, int u, int v) {
+    return 4 * (tex.width * v + u);
+  };
+
+  auto get_tex_sample = [](Texture& tex, int level, int i) {
+    Color sample = Color(
+      tex.mipmap[level].texels[i],
+      tex.mipmap[level].texels[i + 1],
+      tex.mipmap[level].texels[i + 2],
+      tex.mipmap[level].texels[i + 3]
+    );
+    uint8_to_float( &sample.r, &tex.mipmap[level].texels[i] );
+    return sample;
+  };
+
+  float x = u * tex.width;
+  float y = v * tex.height;
+  int xl = (int)floor(u * tex.width);
+  int xr = xl + 1;
+  int yt = (int)floor(v * tex.height);
+  int yb = yt + 1;
+  
+  int tl_i = uv_to_tex(tex, xl, yt);
+  int tr_i = uv_to_tex(tex, xr, yt);
+  int ll_i = uv_to_tex(tex, xl, yb);
+  int lr_i = uv_to_tex(tex, xr, yb);
+
+  Color tl_sample = get_tex_sample(tex, level, tl_i);
+  Color tr_sample = get_tex_sample(tex, level, tr_i);
+  Color ll_sample = get_tex_sample(tex, level, ll_i);
+  Color lr_sample = get_tex_sample(tex, level, lr_i);
+
+  Color top_blend = (1 - (x - floor(x))) * tl_sample + (x - floor(x)) * tr_sample;
+  Color bot_blend = (1 - (x - floor(x))) * ll_sample + (x - floor(x)) * lr_sample;
+
+  Color sample = (1 - (y - floor(y))) * top_blend + (y - floor(y)) * bot_blend;  
+  return sample;
+
   // return magenta for invalid level
-  return Color(1,0,1,1);
+  // return Color(1,0,1,1);
 
 }
 
