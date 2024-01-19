@@ -119,11 +119,12 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
   };
 
   auto get_tex_sample = [](Texture& tex, int level, int i) {
+    int i_ = max(0, min((int)(4 * tex.width * tex.height - 4), i));
     Color sample = Color(
-      tex.mipmap[level].texels[i],
-      tex.mipmap[level].texels[i + 1],
-      tex.mipmap[level].texels[i + 2],
-      tex.mipmap[level].texels[i + 3]
+      tex.mipmap[level].texels[i_],
+      tex.mipmap[level].texels[i_ + 1],
+      tex.mipmap[level].texels[i_ + 2],
+      tex.mipmap[level].texels[i_ + 3]
     );
     uint8_to_float( &sample.r, &tex.mipmap[level].texels[i] );
     return sample;
@@ -131,9 +132,9 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
 
   float x = u * tex.width - 0.5;
   float y = v * tex.height - 0.5;
-  int xl = (int)floor(x);
+  int xl = floor(x);
   int xr = xl + 1;
-  int yt = (int)floor(y);
+  int yt = floor(y);
   int yb = yt + 1;
   
   int tl_i = uv_to_tex(tex, xl, yt);
@@ -146,10 +147,10 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
   Color ll_sample = get_tex_sample(tex, level, ll_i);
   Color lr_sample = get_tex_sample(tex, level, lr_i);
 
-  Color top_blend = (1 - (x - floor(x))) * tl_sample + (x - floor(x)) * tr_sample;
-  Color bot_blend = (1 - (x - floor(x))) * ll_sample + (x - floor(x)) * lr_sample;
+  Color top_blend = (1 - (x - xl)) * tl_sample + (x - xl) * tr_sample;
+  Color bot_blend = (1 - (x - xl)) * ll_sample + (x - xl) * lr_sample;
 
-  Color sample = (1 - (y - floor(y))) * top_blend + (y - floor(y)) * bot_blend;  
+  Color sample = (1 - (y - yt)) * top_blend + (y - yt) * bot_blend;  
   return sample;
 }
 
