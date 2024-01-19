@@ -423,8 +423,8 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
   // float y;
   for (float x = x0; x <= x1; x++) {
     for (float y = y0; y <= y1; y++) {
-      float u = min((float)1, max((float)0, (float)(x + 0.5 - x0) / (x1 - x0)));
-      float v = min((float)1, max((float)0, (float)(y + 0.5 - y0) / (y1 - y0)));
+      float u = min((float)1, max((float)0, (float)(x - x0) / (x1 - x0)));
+      float v = min((float)1, max((float)0, (float)(y - y0) / (y1 - y0)));
       // Color sample_xy = Color(1,0,0,1);
       // Color sample_xy = sampler->sample_nearest(tex, u, v, 0);
       Color sample_xy = sampler->sample_bilinear(tex, u, v, 0);
