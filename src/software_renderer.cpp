@@ -283,54 +283,134 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
 
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  // ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
 
-  float dx = x1 - x0;
-  float dy = y1 - y0;
-  if (dx == 0 && dy == 0) {
-    rasterize_point(x0, y0, color);
-  }
+  // float dx = x1 - x0;
+  // float dy = y1 - y0;
+  // if (dx == 0 && dy == 0) {
+  //   rasterize_point(x0, y0, color);
+  // }
 
-  // handle slope > 1
-  bool large_slope = false;
-  auto rasterize_point_wrapper = [&](float x, float y, Color color, bool flip) {
-    if (flip) 
-      rasterize_point(y, x, color);
-    else 
-      rasterize_point(x, y, color);
-  };
-  if (abs(dy) > abs(dx)) {
-    large_slope = true;
-    std::swap(x0, y0);
-    std::swap(x1, y1);
-  }
+  // // handle slope > 1
+  // bool large_slope = false;
+  // auto rasterize_point_wrapper = [&](float x, float y, Color color, bool flip) {
+  //   if (flip) 
+  //     rasterize_point(y, x, color);
+  //   else 
+  //     rasterize_point(x, y, color);
+  // };
+  // if (abs(dy) > abs(dx)) {
+  //   large_slope = true;
+  //   std::swap(x0, y0);
+  //   std::swap(x1, y1);
+  // }
 
-  // handle third and forth quadrant
-  if (x0 > x1) {
-    std::swap(x0, x1);
-    std::swap(y0, y1);
-  }
+  // // handle third and forth quadrant
+  // if (x0 > x1) {
+  //   std::swap(x0, x1);
+  //   std::swap(y0, y1);
+  // }
 
-  // Turn all vectors into the 1st or the 8th octant
-  // update dx dy accordingly
-  dx = x1 - x0;
-  dy = y1 - y0;
-  float slope = dy / dx;
+  // // Turn all vectors into the 1st or the 8th octant
+  // // update dx dy accordingly
+  // dx = x1 - x0;
+  // dy = y1 - y0;
+  // float slope = dy / dx;
   
-  // handle two end points
-  rasterize_point_wrapper(x0, y0, color, large_slope);
-  rasterize_point_wrapper(x1, y1, color, large_slope);
+  // // handle two end points
+  // rasterize_point_wrapper(x0, y0, color, large_slope);
+  // rasterize_point_wrapper(x1, y1, color, large_slope);
   
-  float cx = floor(x0) + 1.5; float ex = floor(x1) - 0.5;
-  float cy = y0 + slope * (cx - x0);
-  while (cx <= ex) {
-    rasterize_point_wrapper(cx, cy, color, large_slope);
-    cx++;
-    cy += slope;
-  }
+  // float cx = floor(x0) + 1.5; float ex = floor(x1) - 0.5;
+  // float cy = y0 + slope * (cx - x0);
+  // while (cx <= ex) {
+  //   rasterize_point_wrapper(cx, cy, color, large_slope);
+  //   cx++;
+  //   cy += slope;
+  // }
 
   // Advanced Task
   // Drawing Smooth Lines with Line Width
+  // auto ipart = [](float x) -> int {
+  //   return (int)floor(x);
+  // };
+
+  // auto round = [&](float x) -> int {
+  //   return ipart(x + 0.5);
+  // };
+
+  // auto fpart = [&](float x) -> float {
+  //   return x - ipart(x);
+  // };
+
+  // auto rfpart = [&](float x) -> float {
+  //   return 1 - fpart(x);
+  // };
+
+  // bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
+
+  // if (steep) {
+  //   std::swap(x0, y0);
+  //   std::swap(x1, y1);
+  // }
+  // if (x0 > x1) {
+  //   std::swap(x0, x1);
+  //   std::swap(y0, y1);
+  // }
+
+  // float dx = x1 - x0;
+  // float dy = y1 - y0;
+  // float gradient;
+
+  // if (dx == 0) {
+  //   gradient = 1.0;
+  // } else {
+  //   gradient = dy / dx;
+  // }
+
+  // // handle first endpoint
+  // int xend = round(x0);
+  // float yend = y0 + gradient * (xend - x0);
+  // float xgap = rfpart(x0 + 0.5);
+  // int xpxl1 = xend; // this will be used in the main loop
+  // int ypxl1 = ipart(yend);
+  // if (steep) {
+  //   rasterize_point(ypxl1, xpxl1, color * rfpart(yend) * xgap);
+  //   rasterize_point(ypxl1 + 1, xpxl1, color * fpart(yend) * xgap);
+  // } else {
+  //   rasterize_point(xpxl1, ypxl1, color * rfpart(yend) * xgap);
+  //   rasterize_point(xpxl1, ypxl1 + 1, color * fpart(yend) * xgap);
+  // }
+  // float intery = yend + gradient; // first y-intersection for the main loop
+
+  // // handle second endpoint
+  // xend = round(x1);
+  // yend = y1 + gradient * (xend - x1);
+  // xgap = fpart(x1 + 0.5);
+  // int xpxl2 = xend; // this will be used in the main loop
+  // int ypxl2 = ipart(yend);
+  // if (steep) {
+  //   rasterize_point(ypxl2, xpxl2, color * rfpart(yend) * xgap);
+  //   rasterize_point(ypxl2 + 1, xpxl2, color * fpart(yend) * xgap);
+  // } else {
+  //   rasterize_point(xpxl2, ypxl2, color * rfpart(yend) * xgap);
+  //   rasterize_point(xpxl2, ypxl2 + 1, color * fpart(yend) * xgap);
+  // }
+
+  // // main loop
+  // if (steep) {
+  //   for (int x = xpxl1 + 1; x <= xpxl2 - 1; x++) {
+  //     rasterize_point(ipart(intery), x, color * rfpart(intery));
+  //     rasterize_point(ipart(intery) + 1, x, color * fpart(intery));
+  //     intery += gradient;
+  //   }
+  // } else {
+  //   for (int x = xpxl1 + 1; x <= xpxl2 - 1; x++) {
+  //     rasterize_point(x, ipart(intery), color * rfpart(intery));
+  //     rasterize_point(x, ipart(intery) + 1, color * fpart(intery));
+  //     intery += gradient;
+  //   }
+  // }
 }
 
 void genLineFunc(float x0, float y0, float x1, float y1, LineFunc* l) {

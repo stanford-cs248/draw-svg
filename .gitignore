@@ -1,4 +1,5 @@
 .DS_Store
 lib/
 build/
+build.sh
 .vscode/settings.json
