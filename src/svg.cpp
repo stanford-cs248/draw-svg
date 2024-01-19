@@ -137,6 +137,14 @@ void SVGParser::parseSVG( XMLElement* xml, SVG* svg ) {
   }
 }
 
+static Color premultiplyAlpha(Color c)
+{
+    c.r *= c.a;
+    c.g *= c.a;
+    c.b *= c.a;
+    return c;
+}
+
 void SVGParser::parseElement( XMLElement* xml, SVGElement* element ) {
 
   // parse style
@@ -146,6 +154,7 @@ void SVGParser::parseElement( XMLElement* xml, SVGElement* element ) {
 
   const char* fill_opacity = xml->Attribute( "fill-opacity" );
   if( fill_opacity ) style->fillColor.a = atof( fill_opacity );
+  style->fillColor = premultiplyAlpha(style->fillColor);
 
   const char* stroke = xml->Attribute( "stroke" );
   const char* stroke_opacity = xml->Attribute( "stroke-opacity" );
@@ -156,7 +165,7 @@ void SVGParser::parseElement( XMLElement* xml, SVGElement* element ) {
     style->strokeColor = Color::Black;
     style->strokeColor.a = 0;
   }
-
+  style->strokeColor = premultiplyAlpha(style->strokeColor);
 
   xml->QueryFloatAttribute( "stroke-width",      &style->strokeWidth );
   xml->QueryFloatAttribute( "stroke-miterlimit", &style->miterLimit  );
