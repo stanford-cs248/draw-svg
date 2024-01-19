@@ -283,10 +283,68 @@ void SoftwareRendererImp::rasterize_line( float x0, float y0,
 
   // Task 0: 
   // Implement Bresenham's algorithm (delete the line below and implement your own)
-  ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+  // ref->rasterize_line_helper(x0, y0, x1, y1, width, height, color, this);
+
+  float dx = x1 - x0;
+  float dy = y1 - y0;
+  if (dx == 0 && dy == 0) {
+    rasterize_point(x0, y0, color);
+  }
+
+  // handle slope > 1
+  bool large_slope = false;
+  auto rasterize_point_wrapper = [&](float x, float y, Color color, bool flip) {
+    if (flip) 
+      rasterize_point(y, x, color);
+    else 
+      rasterize_point(x, y, color);
+  };
+  if (abs(dy) > abs(dx)) {
+    large_slope = true;
+    std::swap(x0, y0);
+    std::swap(x1, y1);
+  }
+
+  // handle third and forth quadrant
+  if (x0 > x1) {
+    std::swap(x0, x1);
+    std::swap(y0, y1);
+  }
+
+  // Turn all vectors into the 1st or the 8th octant
+  // update dx dy accordingly
+  dx = x1 - x0;
+  dy = y1 - y0;
+  float slope = dy / dx;
+  
+  // handle two end points
+  rasterize_point_wrapper(x0, y0, color, large_slope);
+  rasterize_point_wrapper(x1, y1, color, large_slope);
+  
+  float cx = floor(x0) + 1.5; float ex = floor(x1) - 0.5;
+  float cy = y0 + slope * (cx - x0);
+  while (cx <= ex) {
+    rasterize_point_wrapper(cx, cy, color, large_slope);
+    cx++;
+    cy += slope;
+  }
 
   // Advanced Task
   // Drawing Smooth Lines with Line Width
+}
+
+void genLineFunc(float x0, float y0, float x1, float y1, LineFunc* l) {
+  if (!l) perror("LineFunc struct not initialized!");
+  
+  l->A = y1 - y0;
+  l->B = x0 - x1;
+  l->C = y0 * (x1 - x0) - x0 * (y1 - y0);
+}
+
+inline float testSide(float x, float y, LineFunc* l) {
+  if (!l) perror("LineFunc struct not initialized!");
+  
+  return l->A * x + l->B * y + l->C;
 }
 
 void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
@@ -296,9 +354,74 @@ void SoftwareRendererImp::rasterize_triangle( float x0, float y0,
   // Task 1: 
   // Implement triangle rasterization
 
+  // TODO: check valid triangle?
+
+  // check points order, make counterclockwise
+  LineFunc l01;
+  genLineFunc(x0, y0, x1, y1, &l01);
+  float test = testSide(x2, y2, &l01);
+  if (test > 0) {
+    // clockwise, make counter-clockwise for easier processing
+    std::swap(x1, x2);
+    std::swap(y1, y2);
+  }
+  
+  // calculate edge formula
+  LineFunc edges[3];
+  genLineFunc(x0, y0, x1, y1, &edges[0]);
+  genLineFunc(x1, y1, x2, y2, &edges[1]);
+  genLineFunc(x2, y2, x0, y0, &edges[2]);
+
+  // compute bounding box rounding the nearest sample point 
+  float sample_size = 1.f / sample_rate;
+  float min_x = (int)(sample_rate * max(0.f, (min(x0, min(x1, x2))))) * sample_size + (sample_size / 2); 
+  float max_x = (int)(sample_rate * min(width - 0.5f, max(x0, max(x1, x2)))) * sample_size + (sample_size / 2);
+  float min_y = (int)(sample_rate * max(0.f, (min(y0, min(y1, y2))))) * sample_size + (sample_size / 2);
+  float max_y = (int)(sample_rate * min(height - 0.5f, max(y0, max(y1, y2)))) * sample_size + (sample_size / 2);
+  
+  // incremental triangle traversal in zigzag order starting from the bottom-left point
+  float cx = min_x; float cy = min_y;
+  float test_vals[3];
+  for (int i = 0; i < 3; i++) {
+    test_vals[i] = testSide(cx, cy, &edges[i]);
+  }
+  bool zig = true;
+
+  while (cy <= max_y) {
+    int sx = (int) cx;
+      int sy = (int) cy;
+
+      for (int i = 0; i < 3; i++) {
+        if (test_vals[i] > 0) goto next_sample;
+      }
+
+      pixel_buffer[4 * (sx + sy * width)] = (uint8_t)(color.r * 255);
+      pixel_buffer[4 * (sx + sy * width) + 1] = (uint8_t)(color.g * 255);
+      pixel_buffer[4 * (sx + sy * width) + 2] = (uint8_t)(color.b * 255);
+      pixel_buffer[4 * (sx + sy * width) + 3] = (uint8_t)(color.a * 255);
+
+next_sample:
+      if (zig && cx < max_x) {
+        cx += sample_size;
+        for (int i = 0; i < 3; i++) {
+          test_vals[i] += edges[i].A;
+        }
+      } else if (!zig && cx > min_x) {
+        cx -= sample_size;
+        for (int i = 0; i < 3; i++) {
+          test_vals[i] -= edges[i].A;
+        }
+      } else {
+        zig = !zig;
+        cy += sample_size;
+        for (int i = 0; i < 3; i++) {
+          test_vals[i] += edges[i].B;
+        }
+      }
+  }
+  
   // Advanced Task
   // Implementing Triangle Edge Rules
-
 }
 
 void SoftwareRendererImp::rasterize_image( float x0, float y0,

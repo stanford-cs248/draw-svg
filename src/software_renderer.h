@@ -306,6 +306,12 @@ private:
 
 }; // class SoftwareRendererRef
 
+// Line functions used in rasterizing triangles
+typedef struct {
+  float A;
+  float B;
+  float C;
+} LineFunc;
 
 } // namespace CS248
 
