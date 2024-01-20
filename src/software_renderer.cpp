@@ -97,6 +97,8 @@ void SoftwareRendererImp::draw_element( SVGElement* element ) {
 
 	// Task 3 (part 1):
 	// Modify this to implement the transformation stack
+  Matrix3x3 previous_transformation = transformation;
+  transformation = transformation * element->transform;
 
 	switch (element->type) {
 	case POINT:
@@ -127,6 +129,7 @@ void SoftwareRendererImp::draw_element( SVGElement* element ) {
 		break;
 	}
 
+  transformation = previous_transformation;
 }
 
 

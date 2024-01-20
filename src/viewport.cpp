@@ -14,6 +14,12 @@ void ViewportImp::set_viewbox( float x, float y, float span ) {
   this->y = y;
   this->span = span; 
 
+  double data[9] = {
+    1 / (2 * span), 0, -(x - span) / (2 * span),
+    0,1 / (2 * span), -(y - span) / (2 * span),
+    0, 0, 1
+  };
+  set_canvas_to_norm(Matrix3x3(data));
 }
 
 void ViewportImp::update_viewbox( float dx, float dy, float scale ) { 
