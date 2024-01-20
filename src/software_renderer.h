@@ -155,6 +155,13 @@ private:
 	// task5 alpha compositing
 	Color alpha_blending(Color pixel_color, Color color);
 
+	// For Task 2 - sample buffer
+	std::vector<unsigned char> sample_buffer;
+	size_t sample_buffer_width;
+	size_t sample_buffer_height;
+
+	void set_sample_buffer(size_t width, size_t height);
+
 	SoftwareRendererRef *ref;
 }; // class SoftwareRendererImp
 
