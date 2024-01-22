@@ -519,7 +519,7 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
                                            Texture& tex ) {
   // Task 4: 
   // Implement image rasterization
-
+  
 }
 
 // resolve samples to pixel buffer
