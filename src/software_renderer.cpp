@@ -536,6 +536,8 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
       float u = (x + 0.5f - x0) * scaleX;
       float v = (y + 0.5f - y0) * scaleY;
 
+      if ((u < 0 || u > 1) || (v < 0 || v > 1)) continue;
+
       Color c = sampler.sample_bilinear(tex, u, v);
       
       pixel_buffer[4 * (x + y * width)] = (uint8_t)(c.r * 255);

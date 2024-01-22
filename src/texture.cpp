@@ -79,14 +79,6 @@ void Sampler2DImp::generate_mips(Texture& tex, int startLevel) {
 
 }
 
-Color get_color(MipLevel mip, int x, int y) {
-  size_t index = 4 * (y * mip.width + x);
-  return Color(mip.texels[index] / 255.f,
-               mip.texels[index + 1] / 255.f,
-               mip.texels[index + 2] / 255.f,
-               mip.texels[index + 3] / 255.f);
-}
-
 Color Sampler2DImp::sample_nearest(Texture& tex, 
                                    float u, float v, 
                                    int level) {
@@ -99,8 +91,12 @@ Color Sampler2DImp::sample_nearest(Texture& tex,
   MipLevel &mip = tex.mipmap[level];
   int texelX = static_cast<int>(u * mip.width);
   int texelY = static_cast<int>(v * mip.height);
+  int texelIndex = 4 * (texelY * mip.width + texelX);
 
-  return get_color(mip, texelX, texelY);
+  return Color(mip.texels[texelIndex] / 255.f,
+               mip.texels[texelIndex + 1] / 255.f,
+               mip.texels[texelIndex + 2] / 255.f,
+               mip.texels[texelIndex + 3] / 255.f);
 }
 
 Color Sampler2DImp::sample_bilinear(Texture& tex, 
@@ -120,6 +116,14 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
   int y0 = static_cast<int>(texelY);
   int x1 = std::min(x0 + 1, static_cast<int>(mip.width) - 1);
   int y1 = std::min(y0 + 1, static_cast<int>(mip.height) - 1);
+
+  auto get_color = [&](MipLevel &mip, int x, int y) {
+    int texelIndex = 4 * (y * mip.width + x);
+    return Color(mip.texels[texelIndex] / 255.f,
+                 mip.texels[texelIndex + 1] / 255.f,
+                 mip.texels[texelIndex + 2] / 255.f,
+                 mip.texels[texelIndex + 3] / 255.f);
+  };
 
   Color c00 = get_color(mip, x0, y0);
   Color c10 = get_color(mip, x1, y0);
