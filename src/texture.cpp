@@ -79,6 +79,14 @@ void Sampler2DImp::generate_mips(Texture& tex, int startLevel) {
 
 }
 
+Color get_color(MipLevel mip, int x, int y) {
+  size_t index = 4 * (y * mip.width + x);
+  return Color(mip.texels[index] / 255.f,
+               mip.texels[index + 1] / 255.f,
+               mip.texels[index + 2] / 255.f,
+               mip.texels[index + 3] / 255.f);
+}
+
 Color Sampler2DImp::sample_nearest(Texture& tex, 
                                    float u, float v, 
                                    int level) {
@@ -88,14 +96,11 @@ Color Sampler2DImp::sample_nearest(Texture& tex,
     return Color(1,0,1,1);
   }
 
-  MipLevel mip = tex.mipmap[level];
+  MipLevel &mip = tex.mipmap[level];
   int texelX = static_cast<int>(u * mip.width);
   int texelY = static_cast<int>(v * mip.height);
 
-  return Color(mip.texels[4 * (texelY * mip.width + texelX) + 0] / 255.f,
-               mip.texels[4 * (texelY * mip.width + texelX) + 1] / 255.f,
-               mip.texels[4 * (texelY * mip.width + texelX) + 2] / 255.f,
-               mip.texels[4 * (texelY * mip.width + texelX) + 3] / 255.f);
+  return get_color(mip, texelX, texelY);
 }
 
 Color Sampler2DImp::sample_bilinear(Texture& tex, 
@@ -103,10 +108,31 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
                                     int level) {
   
   // Task 4: Implement bilinear filtering
+  if (level != 0) { // return magenta for invalid level
+    return Color(1,0,1,1);
+  }
 
-  // return magenta for invalid level
-  return Color(1,0,1,1);
+  MipLevel &mip = tex.mipmap[level];
+  float texelX = u * mip.width;
+  float texelY = v * mip.height;
 
+  int x0 = static_cast<int>(texelX);
+  int y0 = static_cast<int>(texelY);
+  int x1 = std::min(x0 + 1, static_cast<int>(mip.width) - 1);
+  int y1 = std::min(y0 + 1, static_cast<int>(mip.height) - 1);
+
+  Color c00 = get_color(mip, x0, y0);
+  Color c10 = get_color(mip, x1, y0);
+  Color c01 = get_color(mip, x0, y1);
+  Color c11 = get_color(mip, x1, y1);
+
+  float u_ratio = texelX - x0;
+  float v_ratio = texelY - y0;
+
+  Color c0 = c00 * (1 - u_ratio) + c10 * u_ratio;
+  Color c1 = c01 * (1 - u_ratio) + c11 * u_ratio;
+
+  return c0 * (1 - v_ratio) + c1 * v_ratio;
 }
 
 Color Sampler2DImp::sample_trilinear(Texture& tex, 

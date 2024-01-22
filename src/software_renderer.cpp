@@ -519,7 +519,31 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
                                            Texture& tex ) {
   // Task 4: 
   // Implement image rasterization
-  
+  Sampler2DImp sampler;
+
+  int minX = static_cast<int>(std::floor(std::min(x0, x1)));
+  int maxX = static_cast<int>(std::floor(std::max(x0, x1)));
+  int minY = static_cast<int>(std::floor(std::min(y0, y1)));
+  int maxY = static_cast<int>(std::floor(std::max(y0, y1)));
+
+  float scaleX = 1.0f / (x1 - x0);
+  float scaleY = 1.0f / (y1 - y0);
+
+  for (int x = minX; x <= maxX; x++) {
+    for (int y = minY; y <= maxY; y++) {
+      if (x < 0 || x >= width || y < 0 || y >= height) continue;
+
+      float u = (x + 0.5f - x0) * scaleX;
+      float v = (y + 0.5f - y0) * scaleY;
+
+      Color c = sampler.sample_bilinear(tex, u, v);
+      
+      pixel_buffer[4 * (x + y * width)] = (uint8_t)(c.r * 255);
+      pixel_buffer[4 * (x + y * width) + 1] = (uint8_t)(c.g * 255);
+      pixel_buffer[4 * (x + y * width) + 2] = (uint8_t)(c.b * 255);
+      pixel_buffer[4 * (x + y * width) + 3] = (uint8_t)(c.a * 255);
+    }
+  }
 }
 
 // resolve samples to pixel buffer

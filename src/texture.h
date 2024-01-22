@@ -31,7 +31,7 @@ class Sampler2D {
 
   Sampler2D( SampleMethod method ) : method ( method ) { }
 
-  ~Sampler2D();
+  ~Sampler2D() = default;
 
   virtual void generate_mips( Texture& tex, int startLevel ) = 0;
 
