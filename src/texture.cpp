@@ -112,8 +112,8 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
   float texelX = u * mip.width;
   float texelY = v * mip.height;
 
-  int x0 = static_cast<int>(texelX);
-  int y0 = static_cast<int>(texelY);
+  int x0 = std::max(0, static_cast<int>(texelX - 0.5f));
+  int y0 = std::max(0, static_cast<int>(texelY - 0.5f));
   int x1 = std::min(x0 + 1, static_cast<int>(mip.width) - 1);
   int y1 = std::min(y0 + 1, static_cast<int>(mip.height) - 1);
 
@@ -130,8 +130,8 @@ Color Sampler2DImp::sample_bilinear(Texture& tex,
   Color c01 = get_color(mip, x0, y1);
   Color c11 = get_color(mip, x1, y1);
 
-  float u_ratio = texelX - x0;
-  float v_ratio = texelY - y0;
+  float u_ratio = texelX - (x0 + 0.5);
+  float v_ratio = texelY - (y0 + 0.5);
 
   Color c0 = c00 * (1 - u_ratio) + c10 * u_ratio;
   Color c1 = c01 * (1 - u_ratio) + c11 * u_ratio;

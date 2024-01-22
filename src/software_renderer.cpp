@@ -521,10 +521,10 @@ void SoftwareRendererImp::rasterize_image( float x0, float y0,
   // Implement image rasterization
   Sampler2DImp sampler;
 
-  int minX = static_cast<int>(std::floor(std::min(x0, x1)));
-  int maxX = static_cast<int>(std::floor(std::max(x0, x1)));
-  int minY = static_cast<int>(std::floor(std::min(y0, y1)));
-  int maxY = static_cast<int>(std::floor(std::max(y0, y1)));
+  int minX = static_cast<int>(std::floor(x0));
+  int maxX = static_cast<int>(std::floor(x1));
+  int minY = static_cast<int>(std::floor(y0));
+  int maxY = static_cast<int>(std::floor(y1));
 
   float scaleX = 1.0f / (x1 - x0);
   float scaleY = 1.0f / (y1 - y0);
