@@ -44,7 +44,7 @@ In order to ease the process of running on different platforms, we will be using
 
 If you are working on OS X and do not have CMake installed, we recommend installing it through [Homebrew](http://brew.sh/): `$ brew install cmake`.  Note that the following command assumes you've already installed the Homebrew package manager available at: <http://brew.sh/>. You may also need the freetype package `$ brew install freetype`.
 
-**Note: if you are working on new MAC M1, please rename `draw-svg/src/reference/libdrawsvgref_osx_M1.a` to `draw-svg/src/reference/libdrawsvgref_osx.a` to replace the old file.**
+**Note: if you are working on new macOS Apple Silicon (M1, M2, M3, M4, ...), please rename `draw-svg/src/reference/libdrawsvgref_osx_M1.a` to `draw-svg/src/reference/libdrawsvgref_osx.a` to replace the old file.**
 
 If you are working on Linux, you should be able to install dependencies with your system's package manager as needed (you may need cmake and freetype, and possibly others).
 
