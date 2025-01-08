@@ -143,7 +143,7 @@ __What is a "correct" solution:__  Draw-svg is made by humans, and will be grade
 
 ### Friendly Advice from your CAs 
 
-- On canvas we have posted a short introductory video for the assingment, it will walk through some of the starting code and functionality. We recommend you watch it as you get started
+- On canvas we have posted a short introductory video for the assignment, it will walk through some of the starting code and functionality. We recommend you watch it as you get started
 - You can edit `.svg` files directly in a text editor. Take a look at `svg/debug/` folder to see two simple files that you can edit to test the functionality of task 0 and task 1. Feel free to add in your own debugging tests here (these are not graded and merely here to help you).
 - Start early. There is a lot to implement in this assignment, so don't fall behind!
 - Open `draw-svg/CS248/docs/html/index.html` with a browser to see documentation of many utility classes, **especially the ones related to vectors and matrices**.
@@ -285,7 +285,7 @@ To keep things very simple, we are going to constrain this problem to rasterizin
 
 - The image element should cover all screen samples inside the specified rectangle.
 - For each image, texture space spans a [0-1]^2 domain as described in class. That is, given the example above, the mapping from screen-space to texture-space is as follows: `(x0, y0)` in screen space maps to image texture coordinate `(0, 0)` and `(x1, y1)` maps to `(1, 1)`.
-- You may wish to look at the implementation of input texture images in `texture.h` and `texture.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sampler_nearest()`), bilinear (`sampler_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
+- You may wish to look at the implementation of input texture images in `texture.h` and `texture.cpp`. The class `Sampler2D` provides skeleton of methods for nearest-neighbor (`sample_nearest()`), bilinear (`sample_bilinear()`), and trilinear filtering (`sample_trilinear()`). In this task, for each covered sample, the color of the image at the specified sample location should be computed using **bilinear filtering** of the input texture. Therefore you should implement `Sampler2D::sampler_bilinear()` in `texture.cpp` and call it from `rasterize_image()`. (However, we recommend first implementing `Sampler2D::sampler_nearest()` -- as nearest neighbor filtering is simpler and will be given partial credit.)
 - As discussed in class, please assume that image pixels correspond to samples at half-integer coordinates in texture space.
 - The `Texture` struct stored in the `Sampler2D` class maintains multiple image buffers corresponding to a mipmap hierarchy. **In this task, you will only sample from level 0 of the hierarchy: `Texture::mipmap[0]`.** 
 - When bilinear filtering requires access to pixel data that is "off the edge of the image" (e.g, pixel coordinates x=-1,y=-1), please treat the value of these missing pixels as being the same the nearest valid image pixel as in [GL_CLAMP_TO_EDGE](https://open.gl/textures).
