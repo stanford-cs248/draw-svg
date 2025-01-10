@@ -3,7 +3,7 @@
 ![Teaser](misc/teaser.png)
 
 ## Due date
-The assignment is due Jan 25th at 11:59:59 PM.
+The assignment is due Jan 23th at 11:59:59 PM.
 
 ## Overview
 
