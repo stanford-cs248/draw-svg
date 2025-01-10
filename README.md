@@ -38,7 +38,7 @@ This will create a folder with all the source files.
 
 ### Build Instructions
 
-In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. The project can be run by SSH'ing to rice.stanford.edu with your SUNet ID, password, and two-step authentication using MobaXterm (remember to turn on X11 forwarding). It should also be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux or Windows.
+In order to ease the process of running on different platforms, we will be using [CMake](http://www.cmake.org/) for our assignments. You will need a CMake installation of version 2.8+ to build the code for this assignment. It should be relatively easy to build the assignment and work locally on your OSX or 64-bit version of Linux or Windows.
 
 #### OS X/Linux Build Instructions
 
