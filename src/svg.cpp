@@ -190,11 +190,11 @@ void SVGParser::parseElement( XMLElement* xml, SVGElement* element ) {
 
       string type = trans_str.substr(0, paren_l);
       string data = trans_str.substr(paren_l + 1, paren_r - paren_l - 1);
+      replace(data.begin(), data.end(), ',', ' ');
 
       if ( type == "matrix" ) {
         
         string matrix_str = data;
-        replace( matrix_str.begin(), matrix_str.end(), ',', ' ');
 
         stringstream ss (matrix_str);
         float a; float b; float c; float d; float e; float f;
