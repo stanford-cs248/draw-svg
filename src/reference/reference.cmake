@@ -59,6 +59,10 @@ else(DRAWSVG_BUILD_REFERENCE)
 	else()
 		set_property(TARGET drawsvg_ref PROPERTY IMPORTED_LOCATION
 					${CMAKE_CURRENT_SOURCE_DIR}/reference/libdrawsvgref_osx.a)
+     
+		set_property(TARGET drawsvg_ref-debug PROPERTY IMPORTED_LOCATION
+					${CMAKE_CURRENT_SOURCE_DIR}/reference/libdrawsvgref_osx.a)
+
 	endif()
   endif(APPLE)
 
